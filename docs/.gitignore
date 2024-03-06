@@ -1,0 +1,6 @@
+# ignore everything in this folder
+*
+
+#Except for gitignore and Doxyfile
+!.gitignore
+!Doxyfile
