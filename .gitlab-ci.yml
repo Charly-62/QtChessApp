@@ -8,7 +8,7 @@ build:
   script:
     - mkdir -p build
     - cd build
-    - qmake ../muehle/muehle.pro
+    - qmake ../schach/schach.pro
     - make
 
   except:
