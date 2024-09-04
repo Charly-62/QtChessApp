@@ -23,7 +23,7 @@ public:
         /**
      * @brief Constructor for the game instance.
      * @param gui Pointer to the SchachApp (GUI) object.
-     * @param netzwerk Pointer to the Netzwerk object.
+     * @param netzwerkInsance Pointer to the Netzwerk object.
      */
     game(SchachApp* gui, netzwerk* netzwerkInstance);
 

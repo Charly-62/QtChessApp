@@ -1,7 +1,7 @@
 #include "netzwerk.h"
 
-netzwerk::netzwerk(class game* game)
-    : game(game) {
+netzwerk::netzwerk(class game* gameInstance)
+    : gameInstance(gameInstance) {
 
 }
 
@@ -13,6 +13,6 @@ void netzwerk::receiveMove(QByteArray moveData) {
 
 }
 
-void netzwerk::setGame(class game* game) {
-    this->game = game;
+void netzwerk::setGame(class game* gameInstance) {
+    this->gameInstance = gameInstance;
 }

@@ -19,9 +19,9 @@ class netzwerk
 public:
     /**
      * @brief Constructor for the netzwerk class.
-     * @param game Reference to the game instance for handling game moves.
+     * @param gameInstance Reference to the game instance for handling game moves.
      */
-    netzwerk(game* game);
+    netzwerk(game* gameInstance);
 
     /**
      * @brief Sends a move over the network.
@@ -40,12 +40,12 @@ public:
 
     /**
      * @brief Assigns a game instance to the network handler. Just used for initialization.
-     * @param game Reference to the game instance.
+     * @param gameInstance Reference to the game instance.
      */
-    void setGame(game* game);
+    void setGame(game* gameInstance);
 
 private:
-    game* game; /// Reference to the game instance.
+    game* gameInstance; ///< Reference to the game instance.
 
 };
 
