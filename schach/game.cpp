@@ -4,87 +4,94 @@
  */
 
 #include "game.h"
+#include "logik.h"
 #include "piece.h"
 
-game::game(class SchachApp* gui, class netzwerk* netzwerkInstance)
+Game::Game(class SchachApp* gui, class Netzwerk* netzwerkInstance)
     : whiteTurn(true), gui(gui), netzwerkInstance(netzwerkInstance) {
     initBoard();
 }
 
 
-game::~game() {}
+Game::~Game() {}
 
 
-void game::initBoard() {
+void Game::initBoard() {
     // Initialize white pieces
-    board[0][0] = std::make_shared<rook> (true, 0, 0);
-    board[0][1] = std::make_shared<knight> (true, 1, 0);
-    board[0][2] = std::make_shared<bishop> (true, 2, 0);
-    board[0][3] = std::make_shared<queen> (true, 3, 0);
-    board[0][4] = std::make_shared<king> (true, 4, 0);
-    board[0][5] = std::make_shared<bishop> (true, 5, 0);
-    board[0][6] = std::make_shared<knight> (true, 6, 0);
-    board[0][7] = std::make_shared<rook> (true, 7, 0);
+    board[0][0] = std::make_shared<Rook> (true, 0, 0);
+    board[0][1] = std::make_shared<Knight> (true, 1, 0);
+    board[0][2] = std::make_shared<Bishop> (true, 2, 0);
+    board[0][3] = std::make_shared<Queen> (true, 3, 0);
+    board[0][4] = std::make_shared<King> (true, 4, 0);
+    board[0][5] = std::make_shared<Bishop> (true, 5, 0);
+    board[0][6] = std::make_shared<Knight> (true, 6, 0);
+    board[0][7] = std::make_shared<Rook> (true, 7, 0);
 
     // Initialize black pieces
-    board[7][0] = std::make_shared<rook> (false, 0, 7);
-    board[7][1] = std::make_shared<knight> (false, 1, 7);
-    board[7][2] = std::make_shared<bishop> (false, 2, 7);
-    board[7][3] = std::make_shared<queen> (false, 3, 7);
-    board[7][4] = std::make_shared<king> (false, 4, 7);
-    board[7][5] = std::make_shared<bishop> (false, 5, 7);
-    board[7][6] = std::make_shared<knight> (false, 6, 7);
-    board[7][7] = std::make_shared<rook> (false, 7, 7);
+    board[7][0] = std::make_shared<Rook> (false, 0, 7);
+    board[7][1] = std::make_shared<Knight> (false, 1, 7);
+    board[7][2] = std::make_shared<Bishop> (false, 2, 7);
+    board[7][3] = std::make_shared<Queen> (false, 3, 7);
+    board[7][4] = std::make_shared<King> (false, 4, 7);
+    board[7][5] = std::make_shared<Bishop> (false, 5, 7);
+    board[7][6] = std::make_shared<Knight> (false, 6, 7);
+    board[7][7] = std::make_shared<Rook> (false, 7, 7);
 
     // Initialize pawns
     for (int i = 0; i < 8; ++i) {
-        board[1][i] = std::make_shared<pawn> (false, i, 1); // Black pawns
-        board[6][i] = std::make_shared<pawn> (true, i, 6);  // White pawns
+        board[1][i] = std::make_shared<Pawn> (false, i, 1); // Black pawns
+        board[6][i] = std::make_shared<Pawn> (true, i, 6);  // White pawns
     }
 }
 
 
-bool game::tryMove(int s_col, int s_row, int e_col, int e_row) {
-    // Step 1: Check if the source and destination are within bounds (0 to 7)
-    if (s_col < 0 || s_col >= 8 || s_row < 0 || s_row >= 8 ||
-        e_col < 0 || e_col >= 8 || e_row < 0 || e_row >= 8) {
-        return false;  // Move is out of bounds
+MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
+    MoveInfo moveInfo = {s_col, s_row, e_col, e_row, 0x00, 0x00};
+
+    // Check legality of the move
+    if (!logikInstance.isLegal(this, s_col, s_row, e_col, e_row)) {
+        return moveInfo;  // Will handle the error in the future
     }
 
-    // Get pointer to the moving piece
-    std::shared_ptr<piece> movingPiece = board[s_col][s_row];
-
-    // Step 2: Check if there is a piece at the source position
-    if (!movingPiece) {
-        return false;  // No piece to move
+    // Determine consequences (capture, checkmate, etc.)
+    if (logikInstance.isCaptureMove(this, s_col, s_row, e_col, e_row)) {
+        moveInfo.consequences = 0x01;  // schlägt
+    }
+    if (logikInstance.isCheckmate(this, e_col, e_row)) {
+        moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // checkmate or capture and checkmate
+    }
+    if (logikInstance.isCastlingMove(this, s_col, s_row, e_col, e_row)) {
+        moveInfo.consequences = 0x04;  // Rochade
     }
 
-    // Step 3: Get the possible moves for the piece and check if the destination is valid
-    std::vector<std::pair<int, int>> possibleMoves = movingPiece->getPossibleMoves();
-    bool validMove = false;
-    for (const auto& move : possibleMoves) {
-        if (move.first == e_col && move.second == e_row) {
-            validMove = true;
-            break;
-        }
+    // Check for pawn promotion
+    if (logikInstance.isPawnPromotion(this, e_col, e_row)) {
+        moveInfo.promotion = getPawnPromotion();
     }
 
-    // If the move is not valid, return false
-    if (!validMove) {
-        return false;  // Invalid move for this piece
-    }
+    // Apply the move to the board (update the game state)
+    updateBoard(s_col, s_row, e_col, e_row);
 
-    // Step 4: Move the piece to the new position
-    board[e_col][e_row] = movingPiece;   // Place the piece at the new position
-    board[s_col][s_row] = nullptr;       // Clear the old position
+    std::shared_ptr<Piece> movingPiece = getPieceAt(s_col, s_row);
 
     // Chenge the turn (white/black)
     whiteTurn = !whiteTurn;
 
-    return true;  // Successful move
+    return moveInfo;  // Return moveInfo struct
 }
 
 
-std::shared_ptr<piece> game::getPieceAt(int col, int row) const{
+std::shared_ptr<Piece> Game::getPieceAt(int col, int row) const{
     return board[col][row];
+}
+
+
+void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
+    std::shared_ptr<Piece> movingPiece = getPieceAt(s_col, s_row);
+    board[e_col][e_row] = movingPiece;   // Place the piece at the new position
+    board[s_col][s_row] = nullptr;       // Clear the old position
+}
+
+quint8 Game::getPawnPromotion() {
+
 }

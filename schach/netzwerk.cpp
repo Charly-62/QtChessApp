@@ -1,18 +1,18 @@
 #include "netzwerk.h"
 
-netzwerk::netzwerk(class game* gameInstance)
+Netzwerk::Netzwerk(class Game* gameInstance)
     : gameInstance(gameInstance) {
 
 }
 
-void netzwerk::sendMove(int s_col, int s_row, int e_col, int e_row) {
+void Netzwerk::sendMove(int s_col, int s_row, int e_col, int e_row) {
 
 }
 
-void netzwerk::receiveMove(QByteArray moveData) {
+void Netzwerk::receiveMove(QByteArray moveData) {
 
 }
 
-void netzwerk::setGame(class game* gameInstance) {
+void Netzwerk::setGame(class Game* gameInstance) {
     this->gameInstance = gameInstance;
 }

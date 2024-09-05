@@ -6,13 +6,13 @@
 #ifndef LOGIK_H
 #define LOGIK_H
 
-class game;
+class Game;
 
 /**
  * @class logik
  * @brief Handles the logic and rules for move validation in the chess game.
  */
-class logik
+class Logik
 {
 public:
 
@@ -25,7 +25,51 @@ public:
      * @param e_row The ending row of the move.
      * @return True if the move is legal, otherwise false.
      */
-    bool isLegal(const game& game, int s_col, int s_row, int e_col, int e_row) const;
+    bool isLegal(Game* Game, int s_col, int s_row, int e_col, int e_row) const;
+
+    /**
+     * @brief Checks if a move is a capture
+     * @param Game
+     * @param s_col
+     * @param s_row
+     * @param e_col
+     * @param e_row
+     * @return
+     */
+    bool isCaptureMove(Game* Game, int s_col, int s_row, int e_col, int e_row) const;
+
+    /**
+     * @brief Checks if a move end in a checkmate
+     * @param Game
+     * @param s_col
+     * @param s_row
+     * @param e_col
+     * @param e_row
+     * @return
+     */
+    bool isCheckmate(Game* Game, int e_col, int e_row) const;
+
+    /**
+     * @brief Checks if a move is a castling
+     * @param Game
+     * @param s_col
+     * @param s_row
+     * @param e_col
+     * @param e_row
+     * @return
+     */
+    bool isCastlingMove(Game* Game, int s_col, int s_row, int e_col, int e_row) const;
+
+    /**
+     * @brief Checks if a move is a Pawn promotion
+     * @param Game
+     * @param s_col
+     * @param s_row
+     * @param e_col
+     * @param e_row
+     * @return
+     */
+    bool isPawnPromotion(Game* Game, int e_col, int e_row) const;
 
 };
 

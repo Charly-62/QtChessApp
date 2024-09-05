@@ -17,11 +17,11 @@ int main(int argc, char *argv[])
     SchachApp gui;
 
     /// Create the Netzwerk instance (pass the Game instance once it's created)
-    netzwerk netzwerk(nullptr);
+    Netzwerk netzwerk(nullptr);
 
     /// Create the Game instance and pass it to netzwerk
-    game game(&gui, &netzwerk);
-    netzwerk.setGame(&game);
+    Game Game(&gui, &netzwerk);
+    netzwerk.setGame(&Game);
 
     /// Show the GUI
     gui.show();

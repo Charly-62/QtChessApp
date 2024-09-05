@@ -12,7 +12,7 @@
  * @class rook
  * @brief Represents a Rook piece in the chess game.
  */
-class rook : public piece
+class Rook : public Piece
 {
 public:
     /**
@@ -21,7 +21,7 @@ public:
      * @param col Column position of the Rook on the board.
      * @param row Row position of the Rook on the board.
      */
-    rook(bool isWhite, int col, int row) {
+    Rook(bool isWhite, int col, int row) {
         this->isWhite = isWhite;
         this->col = col;
         this->row = row;

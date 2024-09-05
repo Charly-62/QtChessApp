@@ -12,7 +12,7 @@
  * @class knight
  * @brief Represents a Knight piece in the chess game.
  */
-class knight : public piece
+class Knight : public Piece
 {
 public:
     /**
@@ -21,7 +21,7 @@ public:
      * @param col Column position of the Knight on the board.
      * @param row Row position of the Knight on the board.
      */
-    knight(bool isWhite, int col, int row) {
+    Knight(bool isWhite, int col, int row) {
         this->isWhite = isWhite;
         this->col = col;
         this->row = row;

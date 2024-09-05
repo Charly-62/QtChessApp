@@ -14,14 +14,14 @@
  * @class netzwerk
  * @brief Manages network communication between players in the chess game.
  */
-class netzwerk
+class Netzwerk
 {
 public:
     /**
      * @brief Constructor for the netzwerk class.
      * @param gameInstance Reference to the game instance for handling game moves.
      */
-    netzwerk(game* gameInstance);
+    Netzwerk(Game* gameInstance);
 
     /**
      * @brief Sends a move over the network.
@@ -42,10 +42,10 @@ public:
      * @brief Assigns a game instance to the network handler. Just used for initialization.
      * @param gameInstance Reference to the game instance.
      */
-    void setGame(game* gameInstance);
+    void setGame(Game* gameInstance);
 
 private:
-    game* gameInstance; ///< Reference to the game instance.
+    Game* gameInstance; ///< Reference to the game instance.
 
 };
 

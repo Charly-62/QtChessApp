@@ -12,7 +12,7 @@
  * @class pawn
  * @brief Represents a Pawn piece in the chess game.
  */
-class pawn : public piece
+class Pawn : public Piece
 {
 public:
     /**
@@ -21,7 +21,7 @@ public:
      * @param col Column position of the Pawn on the board.
      * @param row Row position of the Pawn on the board.
      */
-    pawn(bool isWhite, int col, int row) {
+    Pawn(bool isWhite, int col, int row) {
         this->isWhite = isWhite;
         this->col = col;
         this->row = row;

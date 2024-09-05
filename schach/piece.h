@@ -13,13 +13,13 @@
  * @class piece
  * @brief Abstract base class representing a generic chess piece.
  */
-class piece
+class Piece
 {
 public:
     /**
      * @brief Virtual destructor for piece.
      */
-    virtual ~piece() {}
+    virtual ~Piece() {}
 
     /**
      * @brief Retrieves the possible moves for the chess piece. (virtual)

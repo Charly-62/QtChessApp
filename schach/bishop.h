@@ -12,7 +12,7 @@
  * @class bishop
  * @brief Represents a Bishop piece in the chess game.
  */
-class bishop : public piece
+class Bishop : public Piece
 {
 public:
     /**
@@ -21,7 +21,7 @@ public:
      * @param col Column position of the Bishop on the board.
      * @param row Row position of the Bishop on the board.
      */
-    bishop(bool isWhite, int col, int row) {
+    Bishop(bool isWhite, int col, int row) {
         this->isWhite = isWhite;
         this->col = col;
         this->row = row;

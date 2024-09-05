@@ -12,7 +12,7 @@
  * @class king
  * @brief Represents a King piece in the chess game.
  */
-class king : public piece
+class King : public Piece
 {
 public:
     /**
@@ -21,7 +21,7 @@ public:
      * @param col Column position of the King on the board.
      * @param row Row position of the King on the board.
      */
-    king(bool isWhite, int col, int row) {
+    King(bool isWhite, int col, int row) {
         this->isWhite = isWhite;
         this->col = col;
         this->row = row;

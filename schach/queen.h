@@ -12,7 +12,7 @@
  * @class queen
  * @brief Represents a Queen piece in the chess game.
  */
-class queen : public piece
+class Queen : public Piece
 {
 public:
     /**
@@ -21,7 +21,7 @@ public:
      * @param col Column position of the Queen on the board.
      * @param row Row position of the Queen on the board.
      */
-    queen(bool isWhite, int col, int row) {
+    Queen(bool isWhite, int col, int row) {
         this->isWhite = isWhite;
         this->col = col;
         this->row = row;
