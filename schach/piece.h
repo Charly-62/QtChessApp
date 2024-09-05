@@ -26,11 +26,18 @@ public:
      * @return A vector of possible moves for the piece.
      */
     virtual std::vector<std::pair<int, int>> getPossibleMoves() const = 0;
+    bool checkIfWhite(){return isWhite;};
+    void setPosition(int newRow, int newCol){row=newRow; col=newCol;};
+
+    //hasMoved getter and setter
+    bool checkMoved(){return hasMoved;};
+    void setMoved(){hasMoved = true;};
 
 protected:
     int col,        ///< Column position of the piece on the board.
         row;        ///< Row position of the piece on the board.
     bool isWhite;   ///< Boolean indicating if the piece is white or black.
+    bool hasMoved = false; ///Boolean if Piece has moved. Used for Castling
 };
 
 #include "pawn.h"
