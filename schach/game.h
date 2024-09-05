@@ -8,7 +8,7 @@
 
 #include "logik.h"
 #include "piece.h"
-#include "qtypes.h"
+#include <qtypes.h>
 #include <memory>
 
 class SchachApp;
