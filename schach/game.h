@@ -8,8 +8,11 @@
 
 #include "logik.h"
 #include "piece.h"
-#include <qtypes.h>
+
 #include <memory>
+#include <QWidget>
+#include <QTcpSocket>
+#include <QDataStream>
 
 class SchachApp;
 class Netzwerk;
