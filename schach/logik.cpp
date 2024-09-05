@@ -38,6 +38,27 @@ bool Logik::isLegal(Game* Game, int s_col, int s_row, int e_col, int e_row) cons
         return false;  // Invalid move for this piece
     }
 
+    //Pinning
+    // Simulate the move
+    std::shared_ptr<Piece> capturedPiece = Game->getPieceAt(e_col, e_row);
+    Game->updateBoard(s_col, s_row, e_col, e_row);
+
+    // Check if the king is in check after the move
+    bool isWhiteTurn = !Game->getWhiteTurn();
+    std::pair<int, int> kingPosition = Game->findKing(isWhiteTurn);
+    bool isCheck = Game->isSquareAttacked(kingPosition.first, kingPosition.second, isWhiteTurn);
+
+    // Revert the move
+    Game->updateBoard(e_col, e_row, s_col, s_row);  // Move piece back
+    if (capturedPiece != nullptr) {
+        Game->getPieceAt(e_col, e_row) = capturedPiece;  // Restore the captured piece
+    }
+
+    // If the king is in check, the move is illegal
+    if (isCheck) {
+        return false;
+    }
+
     return true;
 }
 
