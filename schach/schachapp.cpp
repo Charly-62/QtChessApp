@@ -210,5 +210,5 @@ void SchachApp::on_bConnect_clicked()
 {
     auto ip = ui->leIP->text();
     auto port = ui->spnPort->value();
-    _client.connectToHost(ip, port);
+    // _client.connectToHost(ip, port);
 }

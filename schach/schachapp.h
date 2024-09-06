@@ -59,7 +59,7 @@ private:
     int selectedRow;
     int selectedCol;
     Game* chessGame;
-    MyTCPClient _client;
+    // MyTCPClient _client;
 
     QMap<QPushButton*, QString> originalButtonStyles;
 
