@@ -13,10 +13,7 @@
 
 using namespace std;
 
-<<<<<<< HEAD
 
-=======
->>>>>>> b37b51a32f166f1af288b7031885e6284f6839cf
 void printBoard(const Game&);
 
 
