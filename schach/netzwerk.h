@@ -6,6 +6,7 @@
 #ifndef NETZWERK_H
 #define NETZWERK_H
 
+#include <QObject>
 #include <QTcpSocket>
 
 #include "game.h"
@@ -14,14 +15,16 @@
  * @class netzwerk
  * @brief Manages network communication between players in the chess game.
  */
-class Netzwerk
+class Netzwerk : public QObject
 {
+    Q_OBJECT
+
 public:
     /**
      * @brief Constructor for the netzwerk class.
      * @param gameInstance Reference to the game instance for handling game moves.
      */
-    Netzwerk(Game* gameInstance);
+    Netzwerk(Game* gameInstance, QObject *parent = nullptr);
 
     /**
      * @brief Sends a move over the network.
@@ -46,6 +49,9 @@ public:
 
 private:
     Game* gameInstance; ///< Reference to the game instance.
+
+signals:
+
 
 };
 

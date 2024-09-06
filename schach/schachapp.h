@@ -36,6 +36,8 @@ public:
 private slots:
     void handleSquareClick(int row, int col);
 
+    void on_leIP_textChanged(const QString &arg1);
+
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
     void initializeBoard();

@@ -3,8 +3,14 @@
 #include "piece.h"
 #include "game.h"
 #include <QPushButton>
+
 #include <QDebug>
 #include <iostream>
+
+#include <QHostAddress>
+#include <QStyle>
+
+
 
 SchachApp::SchachApp(QWidget *parent)
     : QWidget(parent)
@@ -144,3 +150,15 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
         }
 
 }
+
+void SchachApp::on_leIP_textChanged(const QString &arg1)
+{
+    QHostAddress address(arg1);
+    QString state = "0";
+    if(QAbstractSocket::IPv4Protocol == address.protocol()) {
+        state = "1";
+    }
+    ui->leIP->setProperty("state", state);
+    style()->polish(ui->leIP);
+}
+

@@ -12,6 +12,7 @@ SOURCES += \
     game.cpp \
     logik.cpp \
     main.cpp \
+    mytcpclient.cpp \
     netzwerk.cpp \
     piece.cpp \
     schachapp.cpp
@@ -22,6 +23,7 @@ HEADERS += \
     king.h \
     knight.h \
     logik.h \
+    mytcpclient.h \
     netzwerk.h \
     pawn.h \
     piece.h \
