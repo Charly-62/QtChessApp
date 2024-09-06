@@ -35,7 +35,7 @@ public:
         std::vector<std::pair<int, int>> moves;
 
         /// Move direction of the pawn (depends on team)
-        int direction = isWhite ? -1 : 1;
+        int direction = isWhite ? 1 : -1;
 
         /// Move one square forward
         moves.push_back({col, row + direction});
@@ -46,7 +46,11 @@ public:
         }
 
         return moves;
-    }
+ }
+   QString getType() const override {
+                return "pawn";
+            }
+
 
 
 

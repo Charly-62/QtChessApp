@@ -8,7 +8,7 @@
 
 #include <vector>
 #include <utility>
-
+#include <QString>
 /**
  * @class piece
  * @brief Abstract base class representing a generic chess piece.
@@ -32,6 +32,8 @@ public:
     //hasMoved getter and setter
     bool checkMoved(){return hasMoved;};
     void setMoved(){hasMoved = true;};
+
+     virtual QString getType() const = 0;
 
 protected:
     int col,        ///< Column position of the piece on the board.

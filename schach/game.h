@@ -24,6 +24,7 @@ struct MoveInfo {
 
     int s_col, s_row, e_col, e_row;
     quint8 consequences, promotion;
+    bool islegal;
 
 };
 

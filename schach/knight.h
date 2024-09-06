@@ -46,6 +46,9 @@ public:
 
         return moves;
     }
+    QString getType() const override {
+            return "horse";
+        }
 };
 
 #endif // KNIGHT_H

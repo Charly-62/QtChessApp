@@ -38,6 +38,9 @@ public:
 
         return moves;
     }
+    QString getType() const override {
+            return "bishop";
+        }
 };
 
 #endif // BISHOP_H

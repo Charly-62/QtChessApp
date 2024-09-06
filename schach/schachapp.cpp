@@ -1,8 +1,10 @@
 #include "schachapp.h"
 #include "ui_schachgui.h"
 #include "piece.h"
+#include "game.h"
 #include <QPushButton>
-
+#include <QDebug>
+#include <iostream>
 
 SchachApp::SchachApp(QWidget *parent)
     : QWidget(parent)
@@ -55,49 +57,25 @@ void SchachApp::initializeBoard()
 }
 
 
-
+// Setup chessboard in GUI
 void SchachApp::setupChessBoard() {
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
-            // Add pieces to the initial board setup
-            if (row == 0) { // White back row
-                setupPieces(row, col, buttons[row][col], true);
-            } else if (row == 1) { // White pawns
-                buttons[row][col]->setIcon(QIcon(":/Figuren/pawnW.png"));
-            } else if (row == 6) { // Black pawns
-                buttons[row][col]->setIcon(QIcon(":/Figuren/pawnB.png"));
-            } else if (row == 7) { // Black back row
-                setupPieces(row, col, buttons[row][col], false);
+            std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);  // Get piece from the game
+            if (piece != nullptr) {  // If there is a piece at this position
+                QString iconName = QString(":/Figuren/") + piece->getType() + (piece->checkIfWhite() ? "W" : "B") + ".png";
+                buttons[row][col]->setIcon(QIcon(iconName));
             }
-
             // Set the icon size and connect the button click to the handler
             buttons[row][col]->setIconSize(QSize(80, 80));
             connect(buttons[row][col], &QPushButton::clicked, [=]() {
-            handleSquareClick(row, col);
+                handleSquareClick(row, col);
             });
         }
     }
 }
 
-void SchachApp::setupPieces(int row, int col, QPushButton* button, bool isWhite) {
-    QString prefix = isWhite ? "W" : "B";
-    QString pieceType;
 
-    if (col == 0 || col == 7)
-        pieceType = "rook";
-    else if (col == 1 || col == 6)
-        pieceType = "horse";
-    else if (col == 2 || col == 5)
-        pieceType = "bishop";
-    else if (col == 3)
-        pieceType = "queen";
-    else if (col == 4)
-        pieceType = "king";
-
-    button->setIcon(QIcon(":/Figuren/" + pieceType + prefix + ".png"));
-    button->setIconSize(QSize(80, 80));
-
-}
 
 void SchachApp::handleSquareClick(int row, int col) {
     QPushButton* clickedButton = buttons[row][col];
@@ -106,40 +84,63 @@ void SchachApp::handleSquareClick(int row, int col) {
         if (!clickedButton->icon().isNull()) { // If there's a piece on the square
             selectedRow = row;
             selectedCol = col;
+            qDebug() << "Selected piece at:" << selectedRow << selectedCol;
           //  clickedButton->setStyleSheet("background-color: yellow;"); // Highlight selected square
         }
     } else { // A piece is selected and a move is attempted
-     //   MoveInfo moveInfo = chessGame->tryMove(selectedCol, selectedRow, col, row);
+        qDebug() << "Attempting to move to:" << row << col;
+       // Attempt to move and get MoveInfo
+                MoveInfo moveInfo = chessGame->tryMove(selectedCol, selectedRow, col, row);
+                qDebug() << "isLegal:" << moveInfo.islegal;
 
-         // Assuming `tryMove` returns valid MoveInfo with valid information indicating success
-     //    if (moveInfo.consequences != 0) { // Adjust this condition based on how you determine a successful move
-            movePiece(selectedRow, selectedCol, row, col);
-     //    } else {
-          // Optionally show an error message or visual feedback for invalid move
-      //    }
+                if (moveInfo.islegal != 0) { // Move is valid
+                    movePiece(selectedRow, selectedCol, row, col);
+                    for (int row = 7; row >= 0; --row) {
+                        for (int col = 0; col < 8; ++col) {
+                            std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);
+                            if (piece) {
+                                char pieceChar = ' ';
+                                if (dynamic_cast<Pawn*>(piece.get())) pieceChar = 'P';
+                                else if (dynamic_cast<Rook*>(piece.get())) pieceChar = 'R';
+                                else if (dynamic_cast<Knight*>(piece.get())) pieceChar = 'N';
+                                else if (dynamic_cast<Bishop*>(piece.get())) pieceChar = 'B';
+                                else if (dynamic_cast<Queen*>(piece.get())) pieceChar = 'Q';
+                                else if (dynamic_cast<King*>(piece.get())) pieceChar = 'K';
+                                std::cout << pieceChar << ' ';
+                            } else {
+                                std::cout << ". ";
+                            }
+                        }
+                        std::cout << std::endl;
+                    }
+                    std::cout << std::endl;
+                    }
 
-               // Reset selected piece state
-         resetButtonStyle(selectedRow, selectedCol);
-         resetButtonStyle(row, col);
-         selectedRow = -1;
-         selectedCol = -1;
-           }
+                // Reset selection
+                selectedRow = -1;
+                selectedCol = -1;
 }
-
+}
 void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     QPushButton* fromButton = buttons[fromRow][fromCol];
     QPushButton* toButton = buttons[toRow][toCol];
-
     // Move the icon from the selected button to the target button
-    toButton->setIcon(fromButton->icon());
-    fromButton->setIcon(QIcon());  // Clear the icon from the original button
+        toButton->setIcon(fromButton->icon());
+        fromButton->setIcon(QIcon());  // Clear the icon from the original button
 
-    resetButtonStyle(fromRow, fromCol);  // Reset the original button style
-    resetButtonStyle(toRow, toCol);  // Reset the target button style
-}
+        // Debugging: Print the move details
+        qDebug() << "Moved piece from:" << fromRow << fromCol << "to:" << toRow << toCol;
 
-void SchachApp::resetButtonStyle(int row, int col) {
-    // Reset the button's background color based on its position
-    bool isWhiteSquare = (row + col) % 2 == 0;
-    buttons[row][col]->setStyleSheet(isWhiteSquare ? "background-color: white;" : "background-color: black;");
+        // Update the internal board state in the Game class
+        //chessGame->updateBoard(fromCol, fromRow, toCol, toRow);
+
+        // Re-fetch the piece and update the icon (ensures any changes are reflected)
+        std::shared_ptr<Piece> movedPiece = chessGame->getPieceAt(toCol, toRow);
+        if (movedPiece != nullptr) {
+            QString iconName = QString(":/Figuren/") + movedPiece->getType() + (movedPiece->checkIfWhite() ? "W" : "B") + ".png";
+            toButton->setIcon(QIcon(iconName));  // Set the correct icon for the piece
+        } else {
+            toButton->setIcon(QIcon());  // Clear icon if no piece exists (for safety)
+        }
+
 }

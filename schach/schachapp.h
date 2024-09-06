@@ -32,6 +32,7 @@ public:
      */
     ~SchachApp();
 
+
 private slots:
     void handleSquareClick(int row, int col);
 
@@ -42,7 +43,6 @@ private:
     void setupPieces(int row, int col, QPushButton* button, bool isWhite);
     void movePiece(int fromRow, int fromCol, int toRow, int toCol);
     void resetButtonStyle(int row, int col);
-
 
     QPushButton* buttons[8][8];
     Piece* board[8][8];

@@ -22,6 +22,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -34,6 +37,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -64,6 +70,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -92,6 +101,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -138,6 +150,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -183,6 +198,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -212,6 +230,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -224,6 +245,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -238,6 +262,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -250,6 +277,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -295,6 +325,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -357,6 +390,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -369,6 +405,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -398,6 +437,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -443,6 +485,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -505,6 +550,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -550,6 +598,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -562,6 +613,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -592,6 +646,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -604,6 +661,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -618,6 +678,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -630,6 +693,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -676,6 +742,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -688,6 +757,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -750,6 +822,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -778,6 +853,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -808,6 +886,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -820,6 +901,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -866,6 +950,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -878,6 +965,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>
@@ -924,6 +1014,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
+   </property>
    <property name="text">
     <string/>
    </property>
@@ -936,6 +1029,9 @@
      <width>51</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(228, 228, 229)</string>
    </property>
    <property name="text">
     <string/>

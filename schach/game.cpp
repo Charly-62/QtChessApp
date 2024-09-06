@@ -39,18 +39,19 @@ void Game::initBoard() {
 
     // Initialize pawns
     for (int i = 0; i < 8; ++i) {
-        board[i][1] = std::make_shared<Pawn> (false, i, 1); // Black pawns
-        board[i][6] = std::make_shared<Pawn> (true, i, 6);  // White pawns
+        board[i][1] = std::make_shared<Pawn> (true, i, 1); // White pawns
+        board[i][6] = std::make_shared<Pawn> (false, i, 6);  // Black pawns
     }
 }
 
 
 MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
-    MoveInfo moveInfo = {s_col, s_row, e_col, e_row, 0x00, 0x00};
+    MoveInfo moveInfo = {s_col, s_row, e_col, e_row, 0x00, 0x00,true};
 
     // Check legality of the move
     if (!logikInstance.isLegal(this, s_col, s_row, e_col, e_row)) {
-        return moveInfo;  // Will handle the error in the future
+        moveInfo.islegal=false;
+        return moveInfo; // Will handle the error in the future
     }
 
     // Determine consequences (capture, checkmate, etc.)

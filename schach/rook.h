@@ -42,6 +42,9 @@ public:
 
         return moves;
     }
+    QString getType() const override {
+            return "rook";
+        }
 };
 
 #endif // ROOK_H
