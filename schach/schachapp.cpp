@@ -2,6 +2,8 @@
 #include "ui_schachgui.h"
 #include "piece.h"
 #include <QPushButton>
+#include <QHostAddress>
+#include <QStyle>
 
 
 SchachApp::SchachApp(QWidget *parent)
@@ -143,3 +145,15 @@ void SchachApp::resetButtonStyle(int row, int col) {
     bool isWhiteSquare = (row + col) % 2 == 0;
     buttons[row][col]->setStyleSheet(isWhiteSquare ? "background-color: white;" : "background-color: black;");
 }
+
+void SchachApp::on_leIP_textChanged(const QString &arg1)
+{
+    QHostAddress address(arg1);
+    QString state = "0";
+    if(QAbstractSocket::IPv4Protocol == address.protocol()) {
+        state = "1";
+    }
+    ui->leIP->setProperty("state", state);
+    style()->polish(ui->leIP);
+}
+

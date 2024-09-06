@@ -1,7 +1,7 @@
 #include "netzwerk.h"
 
-Netzwerk::Netzwerk(class Game* gameInstance)
-    : gameInstance(gameInstance) {
+Netzwerk::Netzwerk(class Game* gameInstance, QObject *parent)
+    : QObject{parent}, gameInstance(gameInstance) {
 
 }
 
