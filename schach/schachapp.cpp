@@ -85,7 +85,14 @@ void SchachApp::setupChessBoard() {
 
 void SchachApp::handleSquareClick(int row, int col) {
     QPushButton* clickedButton = buttons[row][col];
+    std::shared_ptr<Piece> selectedPiece = chessGame->getPieceAt(col, row);
+    if(selectedPiece){
+        std::vector<std::pair<int, int>> possibleMoves = selectedPiece->getPossibleMoves();
 
+        for (const auto& move : possibleMoves) {
+            std::cout << move.first << " " << move.second << std::endl;
+        }
+    }
     if (selectedRow == -1 && selectedCol == -1) { // No piece selected yet
         if (!clickedButton->icon().isNull()) { // If there's a piece on the square
             selectedRow = row;
