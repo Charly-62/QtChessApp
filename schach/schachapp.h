@@ -1,7 +1,11 @@
 #ifndef SCHACHAPP_H
 #define SCHACHAPP_H
-
+#include <QPushButton>
+#include <QGridLayout>
 #include <QWidget>
+#include "game.h"
+#include "piece.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,7 +32,24 @@ public:
      */
     ~SchachApp();
 
+private slots:
+    void handleSquareClick(int row, int col);
+
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
+    void initializeBoard();
+    void setupChessBoard();
+    void setupPieces(int row, int col, QPushButton* button, bool isWhite);
+    void movePiece(int fromRow, int fromCol, int toRow, int toCol);
+    void resetButtonStyle(int row, int col);
+
+
+    QPushButton* buttons[8][8];
+    Piece* board[8][8];
+    int selectedRow;
+    int selectedCol;
+    Game* chessGame;
+
+
 };
 #endif // SCHACHAPP_H
