@@ -131,23 +131,20 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     QPushButton* fromButton = buttons[fromRow][fromCol];
     QPushButton* toButton = buttons[toRow][toCol];
     // Move the icon from the selected button to the target button
-        toButton->setIcon(fromButton->icon());
-        fromButton->setIcon(QIcon());  // Clear the icon from the original button
+    toButton->setIcon(fromButton->icon());
+    fromButton->setIcon(QIcon());  // Clear the icon from the original button
 
-        // Debugging: Print the move details
-        qDebug() << "Moved piece from:" << fromRow << fromCol << "to:" << toRow << toCol;
+     // Debugging: Print the move details
+     qDebug() << "Moved piece from:" << fromRow << fromCol << "to:" << toRow << toCol;
 
-        // Update the internal board state in the Game class
-        //chessGame->updateBoard(fromCol, fromRow, toCol, toRow);
-
-        // Re-fetch the piece and update the icon (ensures any changes are reflected)
-        std::shared_ptr<Piece> movedPiece = chessGame->getPieceAt(toCol, toRow);
-        if (movedPiece != nullptr) {
-            QString iconName = QString(":/Figuren/") + movedPiece->getType() + (movedPiece->checkIfWhite() ? "W" : "B") + ".png";
-            toButton->setIcon(QIcon(iconName));  // Set the correct icon for the piece
-        } else {
-            toButton->setIcon(QIcon());  // Clear icon if no piece exists (for safety)
-        }
+     // Re-fetch the piece and update the icon (ensures any changes are reflected)
+     std::shared_ptr<Piece> movedPiece = chessGame->getPieceAt(toCol, toRow);
+     if (movedPiece != nullptr) {
+        QString iconName = QString(":/Figuren/") + movedPiece->getType() + (movedPiece->checkIfWhite() ? "W" : "B") + ".png";
+        toButton->setIcon(QIcon(iconName));  // Set the correct icon for the piece
+      } else {
+         toButton->setIcon(QIcon());  // Clear icon if no piece exists (for safety)
+      }
 
 }
 
