@@ -15,6 +15,10 @@ bool Logik::isLegal(Game* Game, int s_col, int s_row, int e_col, int e_row) cons
         return false;  // Move is out of bounds
     }
 
+    if(s_col == e_col && s_row == e_row){
+        return false;
+    }
+
     // Get pointer to the moving piece
     std::shared_ptr<Piece> movingPiece = Game->getPieceAt(s_col, s_row);
 

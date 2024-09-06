@@ -13,7 +13,10 @@
 
 using namespace std;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b37b51a32f166f1af288b7031885e6284f6839cf
 void printBoard(const Game&);
 
 
@@ -30,13 +33,6 @@ int main(int argc, char *argv[])
     /// Create the Game instance and pass it to netzwerk
     Game Game(&gui, &netzwerk);
     netzwerk.setGame(&Game);
-
-    //printBoard(Game);
-   // Game.tryMove(4, 1, 4, 2);
-
-   // printBoard(Game);
-
-    cout << "King Location:" << Game.findKing(1).first << " " << Game.findKing(1).second;
 
     /// Show the GUI
     gui.show();
