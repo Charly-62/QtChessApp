@@ -3,9 +3,12 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QWidget>
+#include <QHostAddress>
+#include <QStyle>
+#include "netzwerk.h"
+#include "mytcpclient.h"
 #include "game.h"
 #include "piece.h"
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -38,6 +41,8 @@ private slots:
 
     void on_leIP_textChanged(const QString &arg1);
 
+    void on_bConnect_clicked();
+
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
     void initializeBoard();
@@ -51,6 +56,7 @@ private:
     int selectedRow;
     int selectedCol;
     Game* chessGame;
+    MyTCPClient _client;
 
 
 };

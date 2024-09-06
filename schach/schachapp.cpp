@@ -7,10 +7,6 @@
 #include <QDebug>
 #include <iostream>
 
-#include <QHostAddress>
-#include <QStyle>
-
-
 
 SchachApp::SchachApp(QWidget *parent)
     : QWidget(parent)
@@ -151,14 +147,31 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
 
 }
 
+
+/**
+ * @brief Changes the color of the IPAddress line edit if it is a valid or invalid IPv4 address (maybe add also IPv6 addresses)
+ * @param arg1
+ */
 void SchachApp::on_leIP_textChanged(const QString &arg1)
 {
-    QHostAddress address(arg1);
     QString state = "0";
-    if(QAbstractSocket::IPv4Protocol == address.protocol()) {
-        state = "1";
+
+    if(arg1 == "...") {
+        state = "";
+    } else {
+        QHostAddress address(arg1);
+        if(QAbstractSocket::IPv4Protocol == address.protocol()) {
+            state = "1";
+        }
     }
+
     ui->leIP->setProperty("state", state);
     style()->polish(ui->leIP);
 }
 
+void SchachApp::on_bConnect_clicked()
+{
+    auto ip = ui->leIP->text();
+    auto port = ui->spnPort->value();
+    _client.connectToHost(ip, port);
+}

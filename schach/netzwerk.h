@@ -24,7 +24,7 @@ public:
      * @brief Constructor for the netzwerk class.
      * @param gameInstance Reference to the game instance for handling game moves.
      */
-    Netzwerk(Game* gameInstance, QObject *parent = nullptr);
+    Netzwerk(Game* gameInstance = nullptr, QObject *parent = nullptr);
 
     /**
      * @brief Sends a move over the network.
