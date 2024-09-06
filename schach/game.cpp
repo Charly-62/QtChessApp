@@ -116,7 +116,8 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
     std::shared_ptr<Piece> movingPiece = getPieceAt(s_col, s_row);
     board[e_col][e_row] = movingPiece;   // Place the piece at the new position
     board[s_col][s_row] = nullptr;       // Clear the old position
-    movingPiece->setPosition(e_row, e_col); //change Piece internal Position
+    movingPiece->setPosition(e_row, e_col); // change Piece internal Position
+
 }
 
 quint8 Game::getPawnPromotion() {

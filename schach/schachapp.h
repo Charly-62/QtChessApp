@@ -49,7 +49,10 @@ private:
     void setupChessBoard();
     void setupPieces(int row, int col, QPushButton* button, bool isWhite);
     void movePiece(int fromRow, int fromCol, int toRow, int toCol);
-    void resetButtonStyle(int row, int col);
+    //void resetButtonStyle(int row, int col);
+
+    void highlightPossibleMoves(const std::vector<std::pair<int, int>>& moves);
+     void resetBoardHighlight();
 
     QPushButton* buttons[8][8];
     Piece* board[8][8];
@@ -57,6 +60,8 @@ private:
     int selectedCol;
     Game* chessGame;
     MyTCPClient _client;
+
+    QMap<QPushButton*, QString> originalButtonStyles;
 
 
 };

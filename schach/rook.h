@@ -34,11 +34,48 @@ public:
     std::vector<std::pair<int, int>> getPossibleMoves() const override {
         std::vector<std::pair<int, int>> moves;
 
-        // Rook moves vertically or horizontally any number of spaces
-        for (int i = 0; i < 8; ++i) {
-            if (i != col) moves.push_back({i, row}); // Horizontal
-            if (i != row) moves.push_back({col, i}); // Vertical
-        }
+//        // Check horizontal (left and right)
+//            for (int i = col + 1; i < 8; ++i) {  // Move to the right
+//                if (board.isOccupied(i, row)) {
+//                    if (board.getPiece(i, row)->isWhite() != this->isWhite) {
+//                        moves.push_back({i, row});  // Capture the enemy piece
+//                    }
+//                    break;  // Stop moving if a piece is found
+//                }
+//                moves.push_back({i, row});
+//            }
+
+//            for (int i = col - 1; i >= 0; --i) {  // Move to the left
+//                if (board.isOccupied(i, row)) {
+//                    if (board.getPiece(i, row)->isWhite() != this->isWhite) {
+//                        moves.push_back({i, row});  // Capture the enemy piece
+//                    }
+//                    break;
+//                }
+//                moves.push_back({i, row});
+//            }
+
+//            // Check vertical (up and down)
+//            for (int i = row + 1; i < 8; ++i) {  // Move upwards
+//                if (board.isOccupied(col, i)) {
+//                    if (board.getPiece(col, i)->isWhite() != this->isWhite) {
+//                        moves.push_back({col, i});  // Capture the enemy piece
+//                    }
+//                    break;
+//                }
+//                moves.push_back({col, i});
+//            }
+
+//            for (int i = row - 1; i >= 0; --i) {  // Move downwards
+//                if (board.isOccupied(col, i)) {
+//                    if (board.getPiece(col, i)->isWhite() != this->isWhite) {
+//                        moves.push_back({col, i});  // Capture the enemy piece
+//                    }
+//                    break;
+//                }
+//                moves.push_back({col, i});
+//            }
+
 
         return moves;
     }

@@ -29,13 +29,6 @@ int main(int argc, char *argv[])
     Game Game(&gui, &netzwerk);
     netzwerk.setGame(&Game);
 
-    //printBoard(Game);
-   // Game.tryMove(4, 1, 4, 2);
-
-   // printBoard(Game);
-
-    cout << "King Location:" << Game.findKing(1).first << " " << Game.findKing(1).second;
-
     /// Show the GUI
     gui.show();
 
