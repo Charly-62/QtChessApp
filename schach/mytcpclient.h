@@ -21,7 +21,6 @@ signals:
     void connected();
     void disconnected();
     void stateChanged(QAbstractSocket::SocketState);
-    void errorOccurred(QAbstractSocket::SocketError);
 
 private slots:
     void socket_stateChanged(QAbstractSocket::SocketState);

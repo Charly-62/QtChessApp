@@ -4,7 +4,6 @@ MyTCPClient::MyTCPClient(Game* gameInstance, QObject *parent)
     : Netzwerk(gameInstance, parent) {
     connect(&_socket, &QTcpSocket::connected, this, &MyTCPClient::connected);
     connect(&_socket, &QTcpSocket::disconnected, this, &MyTCPClient::disconnected);
-    connect(&_socket, &QTcpSocket::errorOccurred, this, &MyTCPClient::errorOccurred);
     connect(&_socket, &QTcpSocket::stateChanged, this, &MyTCPClient::socket_stateChanged);
 }
 

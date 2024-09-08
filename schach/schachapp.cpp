@@ -286,7 +286,6 @@ void SchachApp::setDeviceController() {
     connect(client, &MyTCPClient::connected, this, &SchachApp::device_connected);
     connect(client, &MyTCPClient::disconnected, this, &SchachApp::device_disconnected);
     connect(client, &MyTCPClient::stateChanged, this, &SchachApp::device_stateChanged);
-    connect(client, &MyTCPClient::errorOccurred, this, &SchachApp::device_errorOccurred);
     }
 }
 
@@ -303,9 +302,4 @@ void SchachApp::device_disconnected() {
 void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
     QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketState>();
     ui->lstNetzwerkConsole->addItem(metaEnum.valueToKey(state));
-}
-
-void SchachApp::device_errorOccurred(QAbstractSocket::SocketError error) {
-    QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketError>();
-    ui->lstNetzwerkConsole->addItem(metaEnum.valueToKey(error));
 }
