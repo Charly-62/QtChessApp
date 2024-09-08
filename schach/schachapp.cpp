@@ -213,15 +213,21 @@ void SchachApp::on_leIP_textChanged(const QString &arg1)
 
 void SchachApp::on_bConnect_clicked()
 {
-    if(ui->cbHostClient->currentText() == "Client")
+    if(ui->cbHostClient->currentText() == "Client") {
         if(client->isConnected()) {
             client->disconnect();
         } else {
         auto ip = ui->leIP->text();
         auto port = ui->spnPort->value();
         client->connectToHost(ip, port);
+        // Print connection error after some time if disconnected (In online builder gibt SocketError Probleme)
+        QTimer::singleShot(5000, this, [this]() {
+                if(client->state() != QAbstractSocket::ConnectedState) {
+                    ui->lstNetzwerkConsole->addItem("Connection error. Check IP Address or Host availability");
+                }
+                });
         }
-    else if(ui->cbHostClient->currentText() == "Server") {
+    } else if(ui->cbHostClient->currentText() == "Server") {
         if(server->isListening()) {
             // Stop listening if the server is already listening
             server->stopListening();
