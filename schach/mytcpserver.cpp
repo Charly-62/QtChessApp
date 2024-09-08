@@ -1,9 +1,10 @@
 #include "mytcpserver.h"
 
 MyTCPServer::MyTCPServer(Game* gameInstance, QObject *parent)
-    : Netzwerk(gameInstance, parent), server(new QTcpServer(this)), clientSocket(nullptr)
+    : Netzwerk(gameInstance, parent), server(new QTcpServer(this))
 {
     server = new QTcpServer(this);
+    initializeSocket();
     connect(server, &QTcpServer::newConnection, this, &MyTCPServer::onClientConnecting);
 }
 
@@ -27,17 +28,17 @@ void MyTCPServer::stopListening() {
         server->close();
     }
 
-    if(clientSocket) {
-        clientSocket->disconnectFromHost();
-        delete clientSocket;
-        clientSocket = nullptr;
+    if(_socket) {
+        _socket->disconnectFromHost();
+        delete _socket;
+        _socket = nullptr;
     }
 }
 
 void MyTCPServer::onClientConnecting() {
-    clientSocket = server->nextPendingConnection();
-    if(clientSocket) {
-        QHostAddress address = clientSocket->peerAddress();
+    _socket = server->nextPendingConnection();
+    if(_socket) {
+        QHostAddress address = _socket->peerAddress();
         QString clientInfo;
 
         // Save IP as QString according to address type
@@ -56,12 +57,12 @@ void MyTCPServer::onClientConnecting() {
         emit clientStateChanged(clientInfo); // Emit signal to update UI
 
         // Handle client disconnection
-        connect(clientSocket, &QTcpSocket::disconnected, this, &MyTCPServer::onClientDisconnected);
+        connect(_socket, &QTcpSocket::disconnected, this, &MyTCPServer::onClientDisconnected);
     }
 }
 
 void MyTCPServer::onClientDisconnected() {
-    QHostAddress address = clientSocket->peerAddress();
+    QHostAddress address = _socket->peerAddress();
     QString clientInfo;
 
     // Save IP as QString according to address type
@@ -77,8 +78,8 @@ void MyTCPServer::onClientDisconnected() {
         }
     }
     emit clientStateChanged(clientInfo);
-    clientSocket->deleteLater();
-    clientSocket = nullptr;
+    _socket->deleteLater();
+    _socket = nullptr;
 }
 
 bool MyTCPServer::isListening() {

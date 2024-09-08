@@ -5,6 +5,18 @@ Netzwerk::Netzwerk(class Game* gameInstance, QObject *parent)
 
 }
 
+Netzwerk::~Netzwerk() {
+    if(_socket) {
+        delete _socket;
+    }
+}
+
+void Netzwerk::initializeSocket() {
+    if (!_socket) {
+        _socket = new QTcpSocket(this);
+    }
+}
+
 void Netzwerk::sendMove(int s_col, int s_row, int e_col, int e_row) {
 
 }

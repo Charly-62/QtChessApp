@@ -26,7 +26,6 @@ private slots:
     void socket_stateChanged(QAbstractSocket::SocketState);
 
 private:
-    QTcpSocket _socket;
     QString _ip;
     int _port;
 

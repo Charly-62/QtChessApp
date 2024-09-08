@@ -28,7 +28,6 @@ private slots:
 
 private:
     QTcpServer* server;
-    QTcpSocket* clientSocket;
 };
 
 #endif // MYTCPSERVER_H
