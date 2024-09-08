@@ -7,8 +7,8 @@
 #include "logik.h"
 #include "piece.h"
 
-Game::Game(class SchachApp* gui, class Netzwerk* netzwerkInstance)
-    : whiteTurn(true), gui(gui), netzwerkInstance(netzwerkInstance) {
+Game::Game(class SchachApp* gui)
+    : whiteTurn(true), gui(gui) {
     initBoard();
 }
 

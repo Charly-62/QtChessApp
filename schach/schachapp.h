@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QHostAddress>
 #include <QStyle>
-#include "netzwerk.h"
+#include "mytcpserver.h"
 #include "mytcpclient.h"
 #include "game.h"
 #include "piece.h"
@@ -35,6 +35,10 @@ public:
      */
     ~SchachApp();
 
+    Game* getGameInstance() const {
+        return chessGame;
+    }
+
 
 private slots:
     void handleSquareClick(int row, int col);
@@ -42,6 +46,17 @@ private slots:
     void on_leIP_textChanged(const QString &arg1);
 
     void on_bConnect_clicked();
+
+    void on_cbHostClient_currentTextChanged(const QString &mode);
+
+    // Server slots
+    void updateNetzwerkConsole(QString message); // Update UI when the client/server state changes
+
+    // Client slots
+    void device_connected();
+    void device_disconnected();
+    void device_stateChanged(QAbstractSocket::SocketState);
+    void device_errorOccurred(QAbstractSocket::SocketError);
 
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
@@ -52,14 +67,17 @@ private:
     //void resetButtonStyle(int row, int col);
 
     void highlightPossibleMoves(const std::vector<std::pair<int, int>>& moves);
-     void resetBoardHighlight();
+    void resetBoardHighlight();
 
     QPushButton* buttons[8][8];
     Piece* board[8][8];
     int selectedRow;
     int selectedCol;
-    Game* chessGame;
-    // MyTCPClient _client;
+    Game* chessGame = nullptr;
+    MyTCPClient* client = nullptr;
+    MyTCPServer* server = nullptr;
+    QString NetzwerkMode;
+    void setDeviceController();
 
     QMap<QPushButton*, QString> originalButtonStyles;
 

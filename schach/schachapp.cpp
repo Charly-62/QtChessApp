@@ -1,9 +1,10 @@
 #include "schachapp.h"
 #include "ui_schachgui.h"
+#include "mytcpclient.h"
 #include "piece.h"
 #include "game.h"
 #include <QPushButton>
-
+#include <QMetaEnum>
 #include <QDebug>
 #include <iostream>
 
@@ -13,11 +14,16 @@ SchachApp::SchachApp(QWidget *parent)
     , ui(new Ui::SchachApp)
     , selectedRow(-1)
     , selectedCol(-1)
-    ,chessGame(new Game(this,nullptr))
+    , chessGame(new Game(this))
+    , client(nullptr)
+    , server(nullptr)
 {
     ui->setupUi(this);
     initializeBoard();
     setupChessBoard();
+    setDeviceController();
+
+    on_cbHostClient_currentTextChanged("Client");
 }
 
 SchachApp::~SchachApp()
@@ -184,7 +190,6 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
 
 }
 
-
 /**
  * @brief Changes the color of the IPAddress line edit if it is a valid or invalid IPv4 address (maybe add also IPv6 addresses)
  * @param arg1
@@ -208,7 +213,99 @@ void SchachApp::on_leIP_textChanged(const QString &arg1)
 
 void SchachApp::on_bConnect_clicked()
 {
-    auto ip = ui->leIP->text();
-    auto port = ui->spnPort->value();
-    // _client.connectToHost(ip, port);
+    if(ui->cbHostClient->currentText() == "Client")
+        if(client->isConnected()) {
+            client->disconnect();
+        } else {
+        auto ip = ui->leIP->text();
+        auto port = ui->spnPort->value();
+        client->connectToHost(ip, port);
+        }
+    else if(ui->cbHostClient->currentText() == "Server") {
+        if(server->isListening()) {
+            // Stop listening if the server is already listening
+            server->stopListening();
+            ui->bConnect->setText("Start Listening");
+            ui->lstNetzwerkConsole->addItem("Server stopped listening.");
+        } else {
+            // Get the port number from the spnPort widget and start listening
+            int port = ui->spnPort->value();
+            server->startListening(port);
+            ui->bConnect->setText("Stop Listening");
+        }
+    }
+}
+
+void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
+    if(mode == "Client") {
+
+        // Update bConnect button for client
+        ui->bConnect->setText("Connect");
+
+        // Switch to Client mode
+        if(server) {
+            server->stopListening();
+            delete server;
+            server = nullptr;
+            ui->lstNetzwerkConsole->addItem("Switched to Client Mode. Server stopped.");
+        }
+
+        if(!client) {
+            client = new MyTCPClient(chessGame);
+            setDeviceController();
+            ui->lstNetzwerkConsole->addItem("Client initialized.");
+        }
+    } else if (mode == "Server") {
+
+        //Update bConnect button for server
+        ui->bConnect->setText("Start Listening");
+
+        // Switch to Server mode
+        if(client) {
+            client->disconnect();
+            delete client;
+            client = nullptr;
+            ui->lstNetzwerkConsole->addItem("Switched to Server Mode. Client stopped.");
+        }
+
+        if(!server) {
+            server = new MyTCPServer(chessGame);
+            connect(server, &MyTCPServer::clientStateChanged, this, &SchachApp::updateNetzwerkConsole);
+            connect(server, &MyTCPServer::serverStatus, this, &SchachApp::updateNetzwerkConsole);
+            ui->lstNetzwerkConsole->addItem("Server initialized");
+        }
+    }
+}
+
+void SchachApp::updateNetzwerkConsole(QString message) {
+    ui->lstNetzwerkConsole->addItem(message);
+}
+
+void SchachApp::setDeviceController() {
+    if(client) {
+    connect(client, &MyTCPClient::connected, this, &SchachApp::device_connected);
+    connect(client, &MyTCPClient::disconnected, this, &SchachApp::device_disconnected);
+    connect(client, &MyTCPClient::stateChanged, this, &SchachApp::device_stateChanged);
+    connect(client, &MyTCPClient::errorOccurred, this, &SchachApp::device_errorOccurred);
+    }
+}
+
+void SchachApp::device_connected() {
+    ui->lstNetzwerkConsole->addItem("Connected to device");
+    ui->bConnect->setText("Disconnect");
+}
+
+void SchachApp::device_disconnected() {
+    ui->lstNetzwerkConsole->addItem("Disconnected from device");
+    ui->bConnect->setText("Connect");
+}
+
+void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
+    QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketState>();
+    ui->lstNetzwerkConsole->addItem(metaEnum.valueToKey(state));
+}
+
+void SchachApp::device_errorOccurred(QAbstractSocket::SocketError error) {
+    QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketError>();
+    ui->lstNetzwerkConsole->addItem(metaEnum.valueToKey(error));
 }

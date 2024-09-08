@@ -13,8 +13,18 @@ public:
      * @brief Connects to a host
      */
     void connectToHost(QString ip, int port);
+    void disconnect();
+    QAbstractSocket::SocketState state();
+    bool isConnected();
 
 signals:
+    void connected();
+    void disconnected();
+    void stateChanged(QAbstractSocket::SocketState);
+    void errorOccurred(QAbstractSocket::SocketError);
+
+private slots:
+    void socket_stateChanged(QAbstractSocket::SocketState);
 
 private:
     QTcpSocket _socket;

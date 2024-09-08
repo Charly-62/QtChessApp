@@ -41,7 +41,7 @@ public:
      * @param gui Pointer to the SchachApp (GUI) object.
      * @param netzwerkInsance Pointer to the Netzwerk object.
      */
-    explicit Game(SchachApp* gui, Netzwerk* netzwerkInstance);
+    Game(SchachApp* gui);
 
     /**
      * @brief Destructor for the game class.
@@ -109,7 +109,6 @@ private:
     std::shared_ptr<Piece> board[8][8];
     bool whiteTurn;
     SchachApp* gui;
-    Netzwerk* netzwerkInstance;
 
     /**
      * @brief Initializes the chessboard with the pieces in their starting positions.

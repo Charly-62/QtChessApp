@@ -41,12 +41,6 @@ public:
      */
     void receiveMove(QByteArray moveData);
 
-    /**
-     * @brief Assigns a game instance to the network handler. Just used for initialization.
-     * @param gameInstance Reference to the game instance.
-     */
-    void setGame(Game* gameInstance);
-
 private:
     Game* gameInstance; ///< Reference to the game instance.
 
