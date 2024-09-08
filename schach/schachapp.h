@@ -56,7 +56,6 @@ private slots:
     void device_connected();
     void device_disconnected();
     void device_stateChanged(QAbstractSocket::SocketState);
-    void device_errorOccurred(QAbstractSocket::SocketError);
 
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
