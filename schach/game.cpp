@@ -8,8 +8,8 @@
 #include "piece.h"
 #include <iostream>
 
-Game::Game(class SchachApp* gui)
-    : whiteTurn(true), gui(gui) {
+Game::Game(class SchachApp* gui, QObject* parent)
+    : QObject(parent), whiteTurn(true), gui(gui){
     initBoard();
 }
 
@@ -84,8 +84,8 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     //change the Piece hasMoved boolean to true
     movingPiece->setMoved();
 
-    // Chenge the turn (white/black)
-    whiteTurn = !whiteTurn;
+    // Change the turn
+    switchTurn();
 
     return moveInfo;  // Return moveInfo struct
 }
@@ -144,4 +144,26 @@ std::pair<int, int> Game::findKing(bool isWhite) const {
 
     // If no king is found (should never happen in a valid game), return an invalid position (-1, -1)
     return {-1, -1};
+}
+
+void Game::switchTurn() {
+    whiteTurn = !whiteTurn;
+    emit turnSwitched(whiteTurn);
+}
+
+Game* Game::clone() const {
+    Game* clonedGame = new Game(gui);
+
+    // Copy the relevant game state
+    for(int i = 0; i < 8; ++i){
+        for(int j = 0; j < 8; j++){
+            if (board[i][j] != nullptr) {
+                clonedGame->board[i][j] = board[i][j]->clone();
+            }else{
+                clonedGame->board[i][j] = nullptr;
+            }
+        }
+    }
+
+    return clonedGame;
 }

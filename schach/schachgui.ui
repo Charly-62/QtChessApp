@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1083</width>
+    <width>969</width>
     <height>690</height>
    </rect>
   </property>
@@ -1050,7 +1050,7 @@ background-color: rgb(134, 255, 142)
    <property name="geometry">
     <rect>
      <x>600</x>
-     <y>350</y>
+     <y>360</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -1063,7 +1063,7 @@ background-color: rgb(134, 255, 142)
    <property name="geometry">
     <rect>
      <x>600</x>
-     <y>120</y>
+     <y>140</y>
      <width>291</width>
      <height>211</height>
     </rect>
@@ -1159,7 +1159,7 @@ background-color: rgb(134, 255, 142)
      <x>600</x>
      <y>70</y>
      <width>291</width>
-     <height>41</height>
+     <height>56</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout_2">
@@ -1180,8 +1180,29 @@ background-color: rgb(134, 255, 142)
     <item row="0" column="0">
      <widget class="QLabel" name="lblHostClient">
       <property name="text">
-       <string>Play as</string>
+       <string>Play as:</string>
       </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="lblStartingPlayer">
+      <property name="text">
+       <string>Starting Player: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QComboBox" name="cbStartingPlayer">
+      <item>
+       <property name="text">
+        <string>Client</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Server</string>
+       </property>
+      </item>
      </widget>
     </item>
    </layout>

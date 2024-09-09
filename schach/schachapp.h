@@ -50,6 +50,8 @@ private slots:
 
     void on_cbHostClient_currentTextChanged(const QString &mode);
 
+    void on_cbStartingPlayer_currentTextChanged(const QString &startingPlayer);
+
     // Server slots
     void updateNetzwerkConsole(QString message); // Update UI when the client/server state changes
 
@@ -57,6 +59,9 @@ private slots:
     void device_connected();
     void device_disconnected();
     void device_stateChanged(QAbstractSocket::SocketState);
+
+    // Handle turn change
+    void switchTurn();
 
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
@@ -77,8 +82,10 @@ private:
     QString NetzwerkMode;
     void setDeviceController();
 
-
     QMap<QPushButton*, QString> originalButtonStyles;
+
+    bool isLocalTurn;
+    bool isLocalPlayerWhite = true;
 
     QTimer* whiteTimer;
     QTimer* blackTimer;
