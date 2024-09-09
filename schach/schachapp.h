@@ -66,7 +66,7 @@ private:
     void movePiece(int fromRow, int fromCol, int toRow, int toCol);
     //void resetButtonStyle(int row, int col);
 
-    void highlightPossibleMoves(const std::vector<std::pair<int, int>>& moves);
+    void highlightPossibleMove(const std::pair<int, int>& move);
     void resetBoardHighlight();
 
     QPushButton* buttons[8][8];
