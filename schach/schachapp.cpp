@@ -80,18 +80,16 @@ void SchachApp::setupChessBoard() {
         }
     }
 }
-void SchachApp::highlightPossibleMoves(const std::vector<std::pair<int, int>>& moves) {
-    // Store the original styles of the buttons to be highlighted
-    for (const auto& move : moves) {
-        int row = move.second;
-        int col = move.first;
-        QPushButton* button = buttons[row][col];
-        if (button) {
-            if (!originalButtonStyles.contains(button)) {
-                originalButtonStyles[button] = button->styleSheet(); // Store the current style if not already stored
-            }
-            button->setStyleSheet("background-color: red;");
+void SchachApp::highlightPossibleMove(const std::pair<int, int>& move) {
+    int row = move.second;
+    int col = move.first;
+    QPushButton* button = buttons[row][col];
+
+    if (button) {
+        if (!originalButtonStyles.contains(button)) {
+            originalButtonStyles[button] = button->styleSheet(); // Store the current style if not already stored
         }
+        button->setStyleSheet("background-color: red;");
     }
 }
 
@@ -112,8 +110,17 @@ void SchachApp::handleSquareClick(int row, int col) {
     std::shared_ptr<Piece> selectedPiece = chessGame->getPieceAt(col, row);
 
     if(selectedPiece){
-        std::vector<std::pair<int, int>> possibleMoves = selectedPiece->getPossibleMoves();
-        highlightPossibleMoves(possibleMoves);
+        std::vector<std::pair<int, int>> possibleMoves = selectedPiece->getPossibleMoves(chessGame);
+
+        //some "Possible" moves are illegal i.e. pinning and moving while in check
+        //Logik logikObjekt;
+
+            for (const auto& move : possibleMoves) {
+            if(chessGame->logikInstance.isLegal(chessGame, col, row, move.first, move.second)){
+                    highlightPossibleMove(move);
+                }
+            }
+
         for (const auto& move : possibleMoves) {
             std::cout << move.first << " " << move.second << std::endl;
         }

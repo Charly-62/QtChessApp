@@ -31,13 +31,8 @@ public:
      * @brief Retrieves the possible moves for the King.
      * @return A vector of possible moves for the King.
      */
-    std::vector<std::pair<int, int>> getPossibleMoves() const override {
-        std::vector<std::pair<int, int>> moves;
+    std::vector<std::pair<int, int>> getPossibleMoves(const Game* game) const override;
 
-        // Implement possible moves
-
-        return moves;
-    }
     QString getType() const override {
             return "king";
         }

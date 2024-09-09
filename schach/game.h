@@ -104,9 +104,10 @@ public:
     std::pair<int, int> findKing(bool isWhite) const;
 
     bool getWhiteTurn(){return whiteTurn;};
+    std::shared_ptr<Piece> board[8][8];
 
 private:
-    std::shared_ptr<Piece> board[8][8];
+
     bool whiteTurn;
     SchachApp* gui;
     Netzwerk* netzwerkInstance;

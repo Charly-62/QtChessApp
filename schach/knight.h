@@ -31,21 +31,8 @@ public:
      * @brief Retrieves the possible moves for the Knight.
      * @return A vector of possible moves for the Knight.
      */
-    std::vector<std::pair<int, int>> getPossibleMoves() const override {
-        std::vector<std::pair<int, int>> moves;
+    std::vector<std::pair<int, int>> getPossibleMoves(const Game* game) const override;
 
-        // Knight moves in an L-shape
-        moves.push_back({col + 2, row + 1});
-        moves.push_back({col + 2, row - 1});
-        moves.push_back({col - 2, row + 1});
-        moves.push_back({col - 2, row - 1});
-        moves.push_back({col + 1, row + 2});
-        moves.push_back({col - 1, row + 2});
-        moves.push_back({col + 1, row - 2});
-        moves.push_back({col - 1, row - 2});
-
-        return moves;
-    }
     QString getType() const override {
             return "horse";
         }

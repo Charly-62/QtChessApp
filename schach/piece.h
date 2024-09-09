@@ -6,9 +6,14 @@
 #ifndef PIECE_H
 #define PIECE_H
 
+
+
 #include <vector>
 #include <utility>
 #include <QString>
+
+class Game;
+
 /**
  * @class piece
  * @brief Abstract base class representing a generic chess piece.
@@ -25,7 +30,7 @@ public:
      * @brief Retrieves the possible moves for the chess piece. (virtual)
      * @return A vector of possible moves for the piece.
      */
-    virtual std::vector<std::pair<int, int>> getPossibleMoves() const = 0;
+    virtual std::vector<std::pair<int, int>> getPossibleMoves(const Game* game) const = 0;
     bool checkIfWhite(){return isWhite;};
     void setPosition(int newRow, int newCol){row=newRow; col=newCol;};
 
