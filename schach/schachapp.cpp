@@ -217,15 +217,24 @@ void SchachApp::on_bConnect_clicked()
         if(client->isConnected()) {
             client->disconnect();
         } else {
-        auto ip = ui->leIP->text();
-        auto port = ui->spnPort->value();
-        client->connectToHost(ip, port);
-        // Print connection error after some time if disconnected (In online builder gibt SocketError Probleme)
-        QTimer::singleShot(5000, this, [this]() {
-                if(client->state() != QAbstractSocket::ConnectedState) {
-                    ui->lstNetzwerkConsole->addItem("Connection error. Check IP Address or Host availability");
-                }
-                });
+            auto ip = ui->leIP->text();
+            auto port = ui->spnPort->value();
+            client->connectToHost(ip, port);
+            // Print connection error after some time if disconnected (SocketError gibt Probleme im online builder)
+            // Disable bConnect while trying to connect
+            ui->bConnect->setEnabled(false);
+            QTimer::singleShot(500, this, [this]() {
+                if(client->state() == QAbstractSocket::ConnectedState) {
+                    ui->bConnect->setEnabled(true);
+                } else {
+                    QTimer::singleShot(5000, this, [this]() {
+                        if(client->state() != QAbstractSocket::ConnectedState) {
+                            ui->lstNetzwerkConsole->addItem("Connection error. Check IP Address or Host availability");
+                        }
+                        ui->bConnect->setEnabled(true);
+                        });
+            }
+            });
         }
     } else if(ui->cbHostClient->currentText() == "Server") {
         if(server->isListening()) {

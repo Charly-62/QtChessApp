@@ -36,7 +36,7 @@ class Game
 {
 public:
 
-        /**
+     /**
      * @brief Constructor for the game instance.
      * @param gui Pointer to the SchachApp (GUI) object.
      * @param netzwerkInsance Pointer to the Netzwerk object.
