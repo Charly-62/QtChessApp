@@ -8,7 +8,7 @@
 #include "piece.h"
 #include <memory>
 
-bool Logik::isLegal(Game* Game, int s_col, int s_row, int e_col, int e_row) const{
+bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row) const{
     // Step 1: Check if the source and destination are within bounds (0 to 7)
     if (s_col < 0 || s_col >= 8 || s_row < 0 || s_row >= 8 ||
         e_col < 0 || e_col >= 8 || e_row < 0 || e_row >= 8) {
@@ -19,10 +19,10 @@ bool Logik::isLegal(Game* Game, int s_col, int s_row, int e_col, int e_row) cons
         return false;
     }
 
-    bool isWhiteTurn = Game->getWhiteTurn();
+    bool isWhiteTurn = chessGame->getWhiteTurn();
 
     // Get pointer to the moving piece
-    std::shared_ptr<Piece> movingPiece = Game->getPieceAt(s_col, s_row);
+    std::shared_ptr<Piece> movingPiece = chessGame->getPieceAt(s_col, s_row);
 
     // Step 2: Check if there is a piece at the source position
     if (!movingPiece) {
@@ -35,7 +35,7 @@ bool Logik::isLegal(Game* Game, int s_col, int s_row, int e_col, int e_row) cons
     }
 
     // Step 3: Get the possible moves for the piece and check if the destination is valid
-    std::vector<std::pair<int, int>> possibleMoves = movingPiece->getPossibleMoves(Game);
+    std::vector<std::pair<int, int>> possibleMoves = movingPiece->getPossibleMoves(chessGame);
     bool validMove = false;
     for (const auto& move : possibleMoves) {
         if (move.first == e_col && move.second == e_row) {
@@ -49,25 +49,21 @@ bool Logik::isLegal(Game* Game, int s_col, int s_row, int e_col, int e_row) cons
         return false;  // Invalid move for this piece
     }
 
-    // //Pinning
-    // // Simulate the move
-    // std::shared_ptr<Piece> capturedPiece = Game->getPieceAt(e_col, e_row);
-    // Game->updateBoard(s_col, s_row, e_col, e_row);
+     //Pinning
+     // Simulate the move
+     // Create a copy of the game for simulating the move
+     Game* simulatedGame = new Game(*chessGame);  // Use the constructor to initialize essential components
 
-    // // Check if the king is in check after the move
-    // std::pair<int, int> kingPosition = Game->findKing(isWhiteTurn);
-    // bool isCheck = Game->isSquareAttacked(kingPosition.first, kingPosition.second, isWhiteTurn);
+     simulatedGame->updateBoard(s_col, s_row, e_col, e_row);
 
-    // // Revert the move
-    // Game->updateBoard(e_col, e_row, s_col, s_row);  // Move piece back
-    // if (capturedPiece != nullptr) {
-    //     Game->board[s_col][s_row] = capturedPiece;  // Restore the captured piece
-    // }
+     // Check if the king is in check after the move
+     std::pair<int, int> kingPosition = simulatedGame->findKing(isWhiteTurn);
+     bool isCheck = simulatedGame->isSquareAttacked(kingPosition.first, kingPosition.second, isWhiteTurn);
 
-    // // If the king is in check, the move is illegal
-    // if (isCheck) {
-    //     return false;
-    // }
+     // If the king is in check, the move is illegal
+     if (isCheck) {
+         return false;
+     }
 
     return true;
 }

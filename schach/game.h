@@ -41,7 +41,7 @@ public:
      * @param gui Pointer to the SchachApp (GUI) object.
      * @param netzwerkInsance Pointer to the Netzwerk object.
      */
-    explicit Game(SchachApp* gui, Netzwerk* netzwerkInstance);
+    Game(SchachApp* gui, Netzwerk* netzwerkInstance);
 
     /**
      * @brief Destructor for the game class.

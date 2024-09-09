@@ -31,8 +31,13 @@ public:
      * @return A vector of possible moves for the piece.
      */
     virtual std::vector<std::pair<int, int>> getPossibleMoves(const Game* game) const = 0;
+
     bool checkIfWhite(){return isWhite;};
     void setPosition(int newRow, int newCol){row=newRow; col=newCol;};
+
+    int getCol(){return col;};
+    int getRow(){return row;};
+
 
     //hasMoved getter and setter
     bool checkMoved(){return hasMoved;};
