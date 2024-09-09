@@ -1093,6 +1093,9 @@ background-color: rgb(134, 255, 142)
        <property name="inputMask">
         <string>000.000.000.000;_</string>
        </property>
+       <property name="text">
+        <string>127.0.0.1</string>
+       </property>
        <property name="clearButtonEnabled">
         <bool>true</bool>
        </property>
@@ -1116,42 +1119,32 @@ background-color: rgb(134, 255, 142)
        <property name="maximum">
         <number>65535</number>
        </property>
+       <property name="value">
+        <number>12345</number>
+       </property>
       </widget>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
+   <widget class="QPushButton" name="bConnect">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>150</y>
-      <width>271</width>
-      <height>41</height>
+      <y>130</y>
+      <width>269</width>
+      <height>24</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QPushButton" name="bConnect">
-       <property name="text">
-        <string>Connect</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bDisconnect">
-       <property name="text">
-        <string>Disconnect</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string>Connect</string>
+    </property>
    </widget>
   </widget>
   <widget class="QLabel" name="scorelbl">
    <property name="geometry">
     <rect>
-     <x>640</x>
-     <y>520</y>
+     <x>400</x>
+     <y>90</y>
      <width>64</width>
      <height>17</height>
     </rect>
@@ -1164,21 +1157,14 @@ background-color: rgb(134, 255, 142)
    <property name="geometry">
     <rect>
      <x>600</x>
-     <y>400</y>
+     <y>70</y>
      <width>291</width>
      <height>41</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout_2">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Game mode</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="1">
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="cbHostClient">
       <item>
        <property name="text">
         <string>Client</string>
@@ -1189,26 +1175,129 @@ background-color: rgb(134, 255, 142)
         <string>Server</string>
        </property>
       </item>
-      <item>
-       <property name="text">
-        <string>Random Start</string>
-       </property>
-      </item>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="lblHostClient">
+      <property name="text">
+       <string>Play as</string>
+      </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QLabel" name="timerlbl">
+  <widget class="QListWidget" name="lstNetzwerkConsole">
    <property name="geometry">
     <rect>
-     <x>640</x>
-     <y>490</y>
+     <x>600</x>
+     <y>410</y>
+     <width>291</width>
+     <height>241</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblWhiteTimer">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>580</y>
      <width>64</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Timer</string>
+    <string>10:00</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblBlackTimer">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>120</y>
+     <width>64</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>10:00</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="scorelbl_2">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>610</y>
+     <width>64</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Score</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="leName1">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>570</y>
+     <width>113</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Enter Name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblName1">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>580</y>
+     <width>64</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Player 1</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="leName2">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>110</y>
+     <width>113</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Enter name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblName2">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>120</y>
+     <width>64</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Player 2</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblCurrentPlayerName">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>10</y>
+     <width>281</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>CurrentPlayerName</string>
    </property>
   </widget>
  </widget>

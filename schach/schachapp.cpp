@@ -1,9 +1,10 @@
 #include "schachapp.h"
 #include "ui_schachgui.h"
+#include "mytcpclient.h"
 #include "piece.h"
 #include "game.h"
 #include <QPushButton>
-
+#include <QMetaEnum>
 #include <QDebug>
 #include <iostream>
 
@@ -13,11 +14,30 @@ SchachApp::SchachApp(QWidget *parent)
     , ui(new Ui::SchachApp)
     , selectedRow(-1)
     , selectedCol(-1)
-    ,chessGame(new Game(this))
+    , chessGame(new Game(this))
+    , client(nullptr)
+    , server(nullptr)
 {
     ui->setupUi(this);
     initializeBoard();
     setupChessBoard();
+    setDeviceController();
+
+    on_cbHostClient_currentTextChanged("Client");
+
+    whiteTimer = new QTimer(this);  // Create the white player's timer
+    blackTimer = new QTimer(this);  // Create the black player's timer
+    whiteTimeRemaining = 10 * 60;  // Set the initial time to 10 minutes (in seconds)
+    blackTimeRemaining = 10 * 60;  // Set the initial time to 10 minutes (in seconds)
+    isWhiteTurn = true;  // Start with white's turn
+    // Connect the QTimer signals to the corresponding slot functions
+    connect(whiteTimer, &QTimer::timeout, this, &SchachApp::updateWhiteTimer);
+    connect(blackTimer, &QTimer::timeout, this, &SchachApp::updateBlackTimer);
+
+    // Start the timer for the first turn
+    startTurnTimer();
+    //connect(ui->bStart, &QPushButton::clicked, this, &SchachApp::startGame);
+
 }
 
 SchachApp::~SchachApp()
@@ -115,6 +135,12 @@ void SchachApp::handleSquareClick(int row, int col) {
         //some "Possible" moves are illegal i.e. pinning and moving while in check
         //Logik logikObjekt;
 
+        // Reset highlighting if a new piece is selected
+                if (selectedRow != -1 && selectedCol != -1) {
+                    resetBoardHighlight(); // Clear previous highlights
+                }
+
+            // Highlight possible moves for the selected piece
             for (const auto& move : possibleMoves) {
             if(chessGame->logikInstance.isLegal(chessGame, col, row, move.first, move.second)){
                     highlightPossibleMove(move);
@@ -170,6 +196,18 @@ void SchachApp::handleSquareClick(int row, int col) {
                 selectedCol = -1;
 }
 }
+
+void SchachApp::startTurnTimer() {
+    if (isWhiteTurn) {
+        whiteTimer->start(1000);  // Start white player's timer with 1 second interval
+        blackTimer->stop();  // Stop black player's timer
+    } else {
+        blackTimer->start(1000);  // Start black player's timer with 1 second interval
+        whiteTimer->stop();  // Stop white player's timer
+    }
+}
+
+
 void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     QPushButton* fromButton = buttons[fromRow][fromCol];
     QPushButton* toButton = buttons[toRow][toCol];
@@ -189,7 +227,42 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
          toButton->setIcon(QIcon());  // Clear icon if no piece exists (for safety)
       }
 
+     // Switch turns
+        isWhiteTurn = !isWhiteTurn;  // Toggle between white and black turns
+        startTurnTimer();  // Start the timer for the next turn
 }
+
+void SchachApp::updateTimerDisplay(int timeRemaining, bool isWhite) {
+    int minutes = timeRemaining / 60;  // Calculate minutes
+    int seconds = timeRemaining % 60;  // Calculate seconds
+    QString timeString = QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
+
+    if (isWhite) {
+        ui->lblWhiteTimer->setText(timeString);  // Update the white player's timer label
+    } else {
+        ui->lblBlackTimer->setText(timeString);  // Update the black player's timer label
+    }
+}
+void SchachApp::updateWhiteTimer() {
+    if (whiteTimeRemaining > 0) {
+        whiteTimeRemaining--;  // Decrease the remaining time
+        updateTimerDisplay(whiteTimeRemaining, true);  // Update the UI
+    } else {
+        whiteTimer->stop();  // Stop the timer if time runs out
+        //handleTimeOut(true);  // Handle timeout
+    }
+}
+
+void SchachApp::updateBlackTimer() {
+    if (blackTimeRemaining > 0) {
+        blackTimeRemaining--;  // Decrease the remaining time
+        updateTimerDisplay(blackTimeRemaining, false);  // Update the UI
+    } else {
+        blackTimer->stop();  // Stop the timer if time runs out
+        //handleTimeOut(false);  // Handle timeout
+    }
+}
+
 
 
 /**
@@ -215,7 +288,108 @@ void SchachApp::on_leIP_textChanged(const QString &arg1)
 
 void SchachApp::on_bConnect_clicked()
 {
-    auto ip = ui->leIP->text();
-    auto port = ui->spnPort->value();
-    // _client.connectToHost(ip, port);
+    if(ui->cbHostClient->currentText() == "Client") {
+        if(client->isConnected()) {
+            client->disconnect();
+        } else {
+            auto ip = ui->leIP->text();
+            auto port = ui->spnPort->value();
+            client->connectToHost(ip, port);
+            // Print connection error after some time if disconnected (SocketError gibt Probleme im online builder)
+            // Disable bConnect while trying to connect
+            ui->bConnect->setEnabled(false);
+            QTimer::singleShot(500, this, [this]() {
+                if(client->state() == QAbstractSocket::ConnectedState) {
+                    ui->bConnect->setEnabled(true);
+                } else {
+                    QTimer::singleShot(5000, this, [this]() {
+                        if(client->state() != QAbstractSocket::ConnectedState) {
+                            ui->lstNetzwerkConsole->addItem("Connection error. Check IP Address or Host availability");
+                        }
+                        ui->bConnect->setEnabled(true);
+                        });
+            }
+            });
+        }
+    } else if(ui->cbHostClient->currentText() == "Server") {
+        if(server->isListening()) {
+            // Stop listening if the server is already listening
+            server->stopListening();
+            ui->bConnect->setText("Start Listening");
+            ui->lstNetzwerkConsole->addItem("Server stopped listening.");
+        } else {
+            // Get the port number from the spnPort widget and start listening
+            int port = ui->spnPort->value();
+            server->startListening(port);
+            ui->bConnect->setText("Stop Listening");
+        }
+    }
+}
+
+void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
+    if(mode == "Client") {
+
+        // Update bConnect button for client
+        ui->bConnect->setText("Connect");
+
+        // Switch to Client mode
+        if(server) {
+            server->stopListening();
+            delete server;
+            server = nullptr;
+            ui->lstNetzwerkConsole->addItem("Switched to Client Mode. Server stopped.");
+        }
+
+        if(!client) {
+            client = new MyTCPClient(chessGame);
+            setDeviceController();
+            ui->lstNetzwerkConsole->addItem("Client initialized.");
+        }
+    } else if (mode == "Server") {
+
+        //Update bConnect button for server
+        ui->bConnect->setText("Start Listening");
+
+        // Switch to Server mode
+        if(client) {
+            client->disconnect();
+            delete client;
+            client = nullptr;
+            ui->lstNetzwerkConsole->addItem("Switched to Server Mode. Client stopped.");
+        }
+
+        if(!server) {
+            server = new MyTCPServer(chessGame);
+            connect(server, &MyTCPServer::clientStateChanged, this, &SchachApp::updateNetzwerkConsole);
+            connect(server, &MyTCPServer::serverStatus, this, &SchachApp::updateNetzwerkConsole);
+            ui->lstNetzwerkConsole->addItem("Server initialized");
+        }
+    }
+}
+
+void SchachApp::updateNetzwerkConsole(QString message) {
+    ui->lstNetzwerkConsole->addItem(message);
+}
+
+void SchachApp::setDeviceController() {
+    if(client) {
+    connect(client, &MyTCPClient::connected, this, &SchachApp::device_connected);
+    connect(client, &MyTCPClient::disconnected, this, &SchachApp::device_disconnected);
+    connect(client, &MyTCPClient::stateChanged, this, &SchachApp::device_stateChanged);
+    }
+}
+
+void SchachApp::device_connected() {
+    ui->lstNetzwerkConsole->addItem("Connected to device");
+    ui->bConnect->setText("Disconnect");
+}
+
+void SchachApp::device_disconnected() {
+    ui->lstNetzwerkConsole->addItem("Disconnected from device");
+    ui->bConnect->setText("Connect");
+}
+
+void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
+    QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketState>();
+    ui->lstNetzwerkConsole->addItem(metaEnum.valueToKey(state));
 }

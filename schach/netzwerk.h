@@ -26,6 +26,8 @@ public:
      */
     Netzwerk(Game* gameInstance = nullptr, QObject *parent = nullptr);
 
+    virtual ~Netzwerk();
+
     /**
      * @brief Sends a move over the network.
      * @param s_col The starting column of the move.
@@ -42,10 +44,12 @@ public:
     void receiveMove(QByteArray moveData);
 
     /**
-     * @brief Assigns a game instance to the network handler. Just used for initialization.
-     * @param gameInstance Reference to the game instance.
+     * @brief Initializes the socket if it's not already done
      */
-    void setGame(Game* gameInstance);
+    void initializeSocket();
+
+protected:
+    QTcpSocket* _socket = nullptr;
 
 private:
     Game* gameInstance; ///< Reference to the game instance.

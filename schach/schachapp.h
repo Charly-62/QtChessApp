@@ -5,10 +5,11 @@
 #include <QWidget>
 #include <QHostAddress>
 #include <QStyle>
-#include "netzwerk.h"
+#include "mytcpserver.h"
 #include "mytcpclient.h"
 #include "game.h"
 #include "piece.h"
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -35,6 +36,10 @@ public:
      */
     ~SchachApp();
 
+    Game* getGameInstance() const {
+        return chessGame;
+    }
+
 
 private slots:
     void handleSquareClick(int row, int col);
@@ -43,26 +48,48 @@ private slots:
 
     void on_bConnect_clicked();
 
+    void on_cbHostClient_currentTextChanged(const QString &mode);
+
+    // Server slots
+    void updateNetzwerkConsole(QString message); // Update UI when the client/server state changes
+
+    // Client slots
+    void device_connected();
+    void device_disconnected();
+    void device_stateChanged(QAbstractSocket::SocketState);
+
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
     void initializeBoard();
     void setupChessBoard();
     void setupPieces(int row, int col, QPushButton* button, bool isWhite);
     void movePiece(int fromRow, int fromCol, int toRow, int toCol);
-    //void resetButtonStyle(int row, int col);
-
-    void highlightPossibleMove(const std::pair<int, int>& move);;
+    void highlightPossibleMove(const std::pair<int, int>& move);
     void resetBoardHighlight();
 
     QPushButton* buttons[8][8];
     Piece* board[8][8];
     int selectedRow;
     int selectedCol;
-    Game* chessGame;
-    // MyTCPClient _client;
+    Game* chessGame = nullptr;
+    MyTCPClient* client = nullptr;
+    MyTCPServer* server = nullptr;
+    QString NetzwerkMode;
+    void setDeviceController();
+
 
     QMap<QPushButton*, QString> originalButtonStyles;
 
+    QTimer* whiteTimer;
+    QTimer* blackTimer;
+    int whiteTimeRemaining;  // in seconds
+    int blackTimeRemaining;  // in seconds
+    bool isWhiteTurn;
+
+    void updateWhiteTimer();
+    void updateBlackTimer();
+    void updateTimerDisplay(int timeRemaining, bool isWhite);
+    void startTurnTimer();
 
 };
 #endif // SCHACHAPP_H
