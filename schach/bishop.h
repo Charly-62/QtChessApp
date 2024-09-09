@@ -27,6 +27,10 @@ public:
         this->row = row;
     }
 
+    std::shared_ptr<Piece> clone() const override {
+            return std::make_shared<Bishop> (*this); // Correctly implement cloning
+    }
+
     /**
      * @brief Retrieves the possible moves for the Bishop.
      * @return A vector of possible moves for the Bishop.

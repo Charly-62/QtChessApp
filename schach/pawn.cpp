@@ -49,3 +49,5 @@ std::vector<std::pair<int, int>> Pawn::getPossibleMoves(const Game* game) const 
 
     return moves;
 }
+
+
