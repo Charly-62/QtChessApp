@@ -23,11 +23,9 @@ int main(int argc, char *argv[])
     SchachApp gui;
 
     /// Create the Netzwerk instance (pass the Game instance once it's created)
-    Netzwerk netzwerk(nullptr);
 
     /// Create the Game instance and pass it to netzwerk
-    Game Game(&gui, &netzwerk);
-    netzwerk.setGame(&Game);
+    Game Game(&gui);
 
     /// Show the GUI
     gui.show();

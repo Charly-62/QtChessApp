@@ -13,7 +13,7 @@ SchachApp::SchachApp(QWidget *parent)
     , ui(new Ui::SchachApp)
     , selectedRow(-1)
     , selectedCol(-1)
-    ,chessGame(new Game(this,nullptr))
+    ,chessGame(new Game(this))
 {
     ui->setupUi(this);
     initializeBoard();
