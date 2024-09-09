@@ -6,6 +6,7 @@
 #include "game.h"
 #include "logik.h"
 #include "piece.h"
+#include <iostream>
 
 Game::Game(class SchachApp* gui)
     : whiteTurn(true), gui(gui) {
@@ -84,7 +85,6 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     return moveInfo;  // Return moveInfo struct
 }
 
-
 std::shared_ptr<Piece> Game::getPieceAt(int col, int row) const{
     return board[col][row];
 }
@@ -93,12 +93,12 @@ bool Game::isSquareAttacked(int col, int row, bool currentPlayerIsWhite) const {
     // Loop over all squares on the board
     for (int c = 0; c < 8; ++c) {
         for (int r = 0; r < 8; ++r) {
-            std::shared_ptr<Piece> piece = getPieceAt(c, r);
+            std::shared_ptr<Piece> attackingPiece = getPieceAt(c, r);
 
             // Check if there is a piece at (c, r) and it's from the opponent's team
-            if (piece != nullptr && piece->checkIfWhite() != currentPlayerIsWhite) {
+            if (attackingPiece != nullptr && attackingPiece->checkIfWhite() != currentPlayerIsWhite) {
                 // Check if the opponent's piece can move to (col, row)
-                std::vector<std::pair<int, int>> possibleMoves = piece->getPossibleMoves();
+                std::vector<std::pair<int, int>> possibleMoves = attackingPiece->getPossibleMoves(this);
                 for (const auto& move : possibleMoves) {
                     if (move.first == col && move.second == row) {
                         return true; // The square is under attack
@@ -117,7 +117,6 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
     board[e_col][e_row] = movingPiece;   // Place the piece at the new position
     board[s_col][s_row] = nullptr;       // Clear the old position
     movingPiece->setPosition(e_row, e_col); // change Piece internal Position
-
 }
 
 quint8 Game::getPawnPromotion() {

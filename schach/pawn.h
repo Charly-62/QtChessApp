@@ -31,23 +31,9 @@ public:
      * @brief Retrieves the possible moves for the Pawn.
      * @return A vector of possible moves for the Pawn.
      */
-    std::vector<std::pair<int, int>> getPossibleMoves() const override {
-        std::vector<std::pair<int, int>> moves;
+    std::vector<std::pair<int, int>> getPossibleMoves(const Game* game) const override;
 
-        /// Move direction of the pawn (depends on team)
-        int direction = isWhite ? 1 : -1;
-
-        /// Move one square forward
-        moves.push_back({col, row + direction});
-
-        /// Move two squares forward if at the starting position
-        if ((isWhite && row == 6) || (!isWhite && row == 1)) {
-            moves.push_back({col, row + 2 * direction});
-        }
-
-        return moves;
- }
-   QString getType() const override {
+    QString getType() const override {
                 return "pawn";
             }
 

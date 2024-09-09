@@ -9,13 +9,19 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    bishop.cpp \
     game.cpp \
+    king.cpp \
+    knight.cpp \
     logik.cpp \
     main.cpp \
     mytcpclient.cpp \
     mytcpserver.cpp \
     netzwerk.cpp \
+    pawn.cpp \
     piece.cpp \
+    queen.cpp \
+    rook.cpp \
     schachapp.cpp
 
 HEADERS += \
