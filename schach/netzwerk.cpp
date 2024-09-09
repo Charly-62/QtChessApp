@@ -24,7 +24,7 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
 
     quint8 zusatzInfo = (moveInfo.promotion << 4) | (moveInfo.consequences & 0x0F);
 
-    stream << quint8 << quint8(moveInfo.s_col)
+    stream << quint8(0x03) << quint8(moveInfo.s_col)
            << quint8(moveInfo.s_row) << quint8(moveInfo.e_col)
            << quint8(moveInfo.e_row) << zusatzInfo;
 
@@ -41,6 +41,7 @@ void Netzwerk::receiveMove() {
     QByteArray moveData;
     QDataStream stream(&moveData, QIODevice::ReadOnly);
     MoveInfo moveInfo;
+    quint8 command;
     quint8 zusatzinfo;
 
     stream >> command;
