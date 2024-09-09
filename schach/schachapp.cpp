@@ -24,6 +24,20 @@ SchachApp::SchachApp(QWidget *parent)
     setDeviceController();
 
     on_cbHostClient_currentTextChanged("Client");
+
+    whiteTimer = new QTimer(this);  // Create the white player's timer
+    blackTimer = new QTimer(this);  // Create the black player's timer
+    whiteTimeRemaining = 10 * 60;  // Set the initial time to 10 minutes (in seconds)
+    blackTimeRemaining = 10 * 60;  // Set the initial time to 10 minutes (in seconds)
+    isWhiteTurn = true;  // Start with white's turn
+    // Connect the QTimer signals to the corresponding slot functions
+    connect(whiteTimer, &QTimer::timeout, this, &SchachApp::updateWhiteTimer);
+    connect(blackTimer, &QTimer::timeout, this, &SchachApp::updateBlackTimer);
+
+    // Start the timer for the first turn
+    startTurnTimer();
+    //connect(ui->bStart, &QPushButton::clicked, this, &SchachApp::startGame);
+
 }
 
 SchachApp::~SchachApp()
@@ -121,6 +135,12 @@ void SchachApp::handleSquareClick(int row, int col) {
         //some "Possible" moves are illegal i.e. pinning and moving while in check
         //Logik logikObjekt;
 
+        // Reset highlighting if a new piece is selected
+                if (selectedRow != -1 && selectedCol != -1) {
+                    resetBoardHighlight(); // Clear previous highlights
+                }
+
+            // Highlight possible moves for the selected piece
             for (const auto& move : possibleMoves) {
             if(chessGame->logikInstance.isLegal(chessGame, col, row, move.first, move.second)){
                     highlightPossibleMove(move);
@@ -176,6 +196,18 @@ void SchachApp::handleSquareClick(int row, int col) {
                 selectedCol = -1;
 }
 }
+
+void SchachApp::startTurnTimer() {
+    if (isWhiteTurn) {
+        whiteTimer->start(1000);  // Start white player's timer with 1 second interval
+        blackTimer->stop();  // Stop black player's timer
+    } else {
+        blackTimer->start(1000);  // Start black player's timer with 1 second interval
+        whiteTimer->stop();  // Stop white player's timer
+    }
+}
+
+
 void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     QPushButton* fromButton = buttons[fromRow][fromCol];
     QPushButton* toButton = buttons[toRow][toCol];
@@ -195,7 +227,43 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
          toButton->setIcon(QIcon());  // Clear icon if no piece exists (for safety)
       }
 
+     // Switch turns
+        isWhiteTurn = !isWhiteTurn;  // Toggle between white and black turns
+        startTurnTimer();  // Start the timer for the next turn
 }
+
+void SchachApp::updateTimerDisplay(int timeRemaining, bool isWhite) {
+    int minutes = timeRemaining / 60;  // Calculate minutes
+    int seconds = timeRemaining % 60;  // Calculate seconds
+    QString timeString = QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
+
+    if (isWhite) {
+        ui->lblWhiteTimer->setText(timeString);  // Update the white player's timer label
+    } else {
+        ui->lblBlackTimer->setText(timeString);  // Update the black player's timer label
+    }
+}
+void SchachApp::updateWhiteTimer() {
+    if (whiteTimeRemaining > 0) {
+        whiteTimeRemaining--;  // Decrease the remaining time
+        updateTimerDisplay(whiteTimeRemaining, true);  // Update the UI
+    } else {
+        whiteTimer->stop();  // Stop the timer if time runs out
+        //handleTimeOut(true);  // Handle timeout
+    }
+}
+
+void SchachApp::updateBlackTimer() {
+    if (blackTimeRemaining > 0) {
+        blackTimeRemaining--;  // Decrease the remaining time
+        updateTimerDisplay(blackTimeRemaining, false);  // Update the UI
+    } else {
+        blackTimer->stop();  // Stop the timer if time runs out
+        //handleTimeOut(false);  // Handle timeout
+    }
+}
+
+
 
 /**
  * @brief Changes the color of the IPAddress line edit if it is a valid or invalid IPv4 address (maybe add also IPv6 addresses)

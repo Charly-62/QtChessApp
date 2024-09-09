@@ -64,8 +64,6 @@ private:
     void setupChessBoard();
     void setupPieces(int row, int col, QPushButton* button, bool isWhite);
     void movePiece(int fromRow, int fromCol, int toRow, int toCol);
-    //void resetButtonStyle(int row, int col);
-
     void highlightPossibleMove(const std::pair<int, int>& move);
     void resetBoardHighlight();
 
@@ -79,8 +77,19 @@ private:
     QString NetzwerkMode;
     void setDeviceController();
 
+
     QMap<QPushButton*, QString> originalButtonStyles;
 
+    QTimer* whiteTimer;
+    QTimer* blackTimer;
+    int whiteTimeRemaining;  // in seconds
+    int blackTimeRemaining;  // in seconds
+    bool isWhiteTurn;
+
+    void updateWhiteTimer();
+    void updateBlackTimer();
+    void updateTimerDisplay(int timeRemaining, bool isWhite);
+    void startTurnTimer();
 
 };
 #endif // SCHACHAPP_H
