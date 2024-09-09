@@ -8,6 +8,8 @@
 #include "piece.h"
 #include <memory>
 
+#include<iostream>
+
 bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row) const{
     // Step 1: Check if the source and destination are within bounds (0 to 7)
     if (s_col < 0 || s_col >= 8 || s_row < 0 || s_row >= 8 ||
@@ -49,10 +51,21 @@ bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row)
         return false;  // Invalid move for this piece
     }
 
-     //Pinning
+    //Pinning
      // Simulate the move
-     // Create a copy of the game for simulating the move
+     //Create a copy of the game for simulating the move
      Game* simulatedGame = new Game(*chessGame);  // Use the constructor to initialize essential components
+
+     for(int i = 0; i < 8; ++i){
+         for(int j = 0; j < 8; j++){
+             if (chessGame->board[i][j] != nullptr) {
+                simulatedGame->board[i][j] = chessGame->board[i][j]->clone();
+             }else{
+                 simulatedGame->board[i][j] = nullptr;
+             }
+         }
+     }
+
 
      simulatedGame->updateBoard(s_col, s_row, e_col, e_row);
 
@@ -147,6 +160,7 @@ bool Logik::isCheckmate(Game* game, int e_col, int e_row) const {
 
     // Step 4: If no legal moves can prevent the check, it's checkmate
     return true;
+
 }
 
 

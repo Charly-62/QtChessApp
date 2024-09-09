@@ -6,11 +6,10 @@
 #ifndef PIECE_H
 #define PIECE_H
 
-
-
 #include <vector>
 #include <utility>
 #include <QString>
+#include <memory>
 
 class Game;
 
@@ -31,19 +30,15 @@ public:
      * @return A vector of possible moves for the piece.
      */
     virtual std::vector<std::pair<int, int>> getPossibleMoves(const Game* game) const = 0;
-
     bool checkIfWhite(){return isWhite;};
     void setPosition(int newRow, int newCol){row=newRow; col=newCol;};
-
-    int getCol(){return col;};
-    int getRow(){return row;};
-
 
     //hasMoved getter and setter
     bool checkMoved(){return hasMoved;};
     void setMoved(){hasMoved = true;};
 
-     virtual QString getType() const = 0;
+    virtual QString getType() const = 0;
+    virtual std::shared_ptr<Piece> clone() const = 0; // Pure virtual function for cloning
 
 protected:
     int col,        ///< Column position of the piece on the board.

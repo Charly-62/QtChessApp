@@ -8,8 +8,8 @@
 #include "piece.h"
 #include <iostream>
 
-Game::Game(class SchachApp* gui, class Netzwerk* netzwerkInstance)
-    : whiteTurn(true), gui(gui), netzwerkInstance(netzwerkInstance) {
+Game::Game(class SchachApp* gui)
+    : whiteTurn(true), gui(gui) {
     initBoard();
 }
 
@@ -60,6 +60,7 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
         moveInfo.consequences = 0x01;  // schlägt
     }
     if (logikInstance.isCheckmate(this, e_col, e_row)) {
+        std::cout << "checkmate!!!!";
         moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // checkmate or capture and checkmate
     }
     if (logikInstance.isCastlingMove(this, s_col, s_row, e_col, e_row)) {
