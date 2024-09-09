@@ -25,6 +25,14 @@ SchachApp::SchachApp(QWidget *parent)
 
     on_cbHostClient_currentTextChanged("Client");
 
+    // Connect the Netzwerk logMessage signal to updateNetzwerkConsole slot
+    if(client) {
+        connect(client, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
+    }
+    if(server) {
+        connect(server, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
+    }
+
     whiteTimer = new QTimer(this);  // Create the white player's timer
     blackTimer = new QTimer(this);  // Create the black player's timer
     whiteTimeRemaining = 10 * 60;  // Set the initial time to 10 minutes (in seconds)

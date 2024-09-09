@@ -35,13 +35,13 @@ public:
      * @param e_col The ending column of the move.
      * @param e_row The ending row of the move.
      */
-    void sendMove(int s_col, int s_row, int e_col, int e_row);
+    void sendMove(const MoveInfo&);
 
     /**
      * @brief Receives a move from the network.
      * @param moveData The data received over the network containing move information.
      */
-    void receiveMove(QByteArray moveData);
+    void receiveMove();
 
     /**
      * @brief Initializes the socket if it's not already done
@@ -55,7 +55,7 @@ private:
     Game* gameInstance; ///< Reference to the game instance.
 
 signals:
-
+    void logMessage(const QString& message); // Signal to log messages to the NetzwerkConsole
 
 };
 

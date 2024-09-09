@@ -51,11 +51,13 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
 
     // Check legality of the move
     if (!logikInstance.isLegal(this, s_col, s_row, e_col, e_row)) {
-        moveInfo.islegal=false;
-        return moveInfo; // Will handle the error in the future
+        moveInfo.islegal = false;
+        return moveInfo;
     }
 
     // Determine consequences (capture, checkmate, etc.)
+    moveInfo.consequences = 0x00; // schlägt nicht by default
+
     if (logikInstance.isCaptureMove(this, s_col, s_row, e_col, e_row)) {
         moveInfo.consequences = 0x01;  // schlägt
     }
@@ -68,6 +70,8 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     }
 
     // Check for pawn promotion
+    moveInfo.promotion = 0x00; // no promotion by default
+
     if (logikInstance.isPawnPromotion(this, s_col, s_row, e_col, e_row)) {
         moveInfo.promotion = getPawnPromotion();
     }
@@ -121,7 +125,7 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
 }
 
 quint8 Game::getPawnPromotion() {
-    return true;
+    return 0x30;
 }
 
 std::pair<int, int> Game::findKing(bool isWhite) const {
