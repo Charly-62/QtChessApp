@@ -6,11 +6,10 @@
 #ifndef PIECE_H
 #define PIECE_H
 
-
-
 #include <vector>
 #include <utility>
 #include <QString>
+#include <memory>
 
 class Game;
 
@@ -38,7 +37,8 @@ public:
     bool checkMoved(){return hasMoved;};
     void setMoved(){hasMoved = true;};
 
-     virtual QString getType() const = 0;
+    virtual QString getType() const = 0;
+    virtual std::shared_ptr<Piece> clone() const = 0; // Pure virtual function for cloning
 
 protected:
     int col,        ///< Column position of the piece on the board.
