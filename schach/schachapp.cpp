@@ -47,7 +47,7 @@ SchachApp::SchachApp(QWidget *parent)
     connect(blackTimer, &QTimer::timeout, this, &SchachApp::updateBlackTimer);
 
     // Start the timer for the first turn
-    startTurnTimer();
+    //startTurnTimer();
 
     ui->cbPawnPromotion->setCurrentText("Not Selected");
     connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
@@ -506,7 +506,7 @@ void SchachApp::moveReceived() {
 
 // Client version of gameStarted()
 void SchachApp::gameStarted(bool ServerStarts, QString groupNumber) {
-
+        startTurnTimer();
         if(ServerStarts) {
             updateNetzwerkConsole("Server starts the game.");
             updateNetzwerkConsole("Playing against Group " + groupNumber);
@@ -539,4 +539,6 @@ void SchachApp::on_bStart_clicked()
     bool ServerStarts = (ui->cbStartingPlayer->currentText() == "Server");
     server->sendGameStart(ServerStarts);
     updateNetzwerkConsole("Game start message sent. " + ui->cbStartingPlayer->currentText() + " starts.");
+    startTurnTimer();
+
 }
