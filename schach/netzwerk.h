@@ -36,6 +36,7 @@ public:
      * @param e_row The ending row of the move.
      */
     void sendMove(const MoveInfo&);
+    void sendGameStart(bool ServerStarts);
 
     /**
      * @brief Receives a move from the network.
@@ -57,7 +58,7 @@ private:
 signals:
     void logMessage(const QString& message); // Signal to log messages to the NetzwerkConsole
     void moveReceived(MoveInfo moveInfo);
-
+    void gameStarted(bool ServerStarts, QString& groupNumber);
 
 };
 

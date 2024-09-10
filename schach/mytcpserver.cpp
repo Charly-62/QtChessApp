@@ -55,7 +55,6 @@ void MyTCPServer::onClientConnecting() {
         }
 
         emit clientStateChanged(clientInfo); // Emit signal to update UI
-
         // Handle client disconnection
         connect(_socket, &QTcpSocket::disconnected, this, &MyTCPServer::onClientDisconnected);
     }

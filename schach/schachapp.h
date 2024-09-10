@@ -63,6 +63,9 @@ private slots:
     // Handle turn change
     void switchTurn();
 
+    void on_bStart_clicked();
+    void gameStarted(bool, QString);
+
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
     void initializeBoard();
