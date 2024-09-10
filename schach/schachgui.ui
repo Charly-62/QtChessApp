@@ -1049,8 +1049,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QPushButton" name="bStart">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>350</y>
+     <x>630</x>
+     <y>370</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -1062,8 +1062,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QGroupBox" name="grpNetwork">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>120</y>
+     <x>630</x>
+     <y>150</y>
      <width>291</width>
      <height>211</height>
     </rect>
@@ -1156,8 +1156,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QWidget" name="formLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>70</y>
+     <x>630</x>
+     <y>60</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -1189,8 +1189,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QListWidget" name="lstNetzwerkConsole">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>410</y>
+     <x>630</x>
+     <y>430</y>
      <width>291</width>
      <height>241</height>
     </rect>
@@ -1299,6 +1299,100 @@ background-color: rgb(134, 255, 142)
    <property name="text">
     <string>CurrentPlayerName</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="formLayoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>110</y>
+     <width>291</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout_3">
+    <item row="0" column="1">
+     <widget class="QComboBox" name="cbstartingplayer">
+      <item>
+       <property name="text">
+        <string>Client</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Server</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="lblstartingplayer">
+      <property name="text">
+       <string>Who starts</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QGroupBox" name="grpPawnPromotion">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>320</y>
+     <width>131</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Pawn Promotion</string>
+   </property>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>111</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QComboBox" name="cbPawnPromotion">
+       <item>
+        <property name="text">
+         <string>Not Selected</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Queen</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Rook</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Knight</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Bishop</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbPawnPromotion">
+       <property name="text">
+        <string>OK</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
  </widget>
  <resources/>

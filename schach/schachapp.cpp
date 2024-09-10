@@ -7,7 +7,8 @@
 #include <QMetaEnum>
 #include <QDebug>
 #include <iostream>
-
+#include <QEventLoop>
+#include <QComboBox>
 
 SchachApp::SchachApp(QWidget *parent)
     : QWidget(parent)
@@ -36,7 +37,11 @@ SchachApp::SchachApp(QWidget *parent)
 
     // Start the timer for the first turn
     startTurnTimer();
-    //connect(ui->bStart, &QPushButton::clicked, this, &SchachApp::startGame);
+
+    ui->cbPawnPromotion->setCurrentText("Not Selected");
+    connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
+    ui->pbPawnPromotion->setEnabled(false);
+    ui->cbPawnPromotion->setEnabled(false);
 
 }
 
@@ -263,7 +268,44 @@ void SchachApp::updateBlackTimer() {
     }
 }
 
+void SchachApp::onPbPawnPromotionClicked() {
+    QString mode = ui->cbPawnPromotion->currentText();
+    qWarning() << "Current selection:" << mode;
+    quint8 promotionType = 0x00;
+    if (mode == "Queen") {
+        promotionType = 0x40;
+    } else if (mode == "Rook") {
+        promotionType = 0x30;
+    } else if (mode == "Knight") {
+        promotionType = 0x20;
+    } else if (mode == "Bishop") {
+        promotionType = 0x10;
+    }
+    qWarning() << "promotion type:" << promotionType;
+    ui->pbPawnPromotion->setEnabled(false);
+    ui->cbPawnPromotion->setEnabled(false);
+}
 
+quint8 SchachApp::PawnPromotion() {
+    qWarning() << "Select a piece for pawn promotion!";
+//    QString mode = ui->cbPawnPromotion->currentText();
+//    qWarning() << "Current selection:" << mode;
+//    quint8 promotionType = 0x00;
+//    if (mode == "Queen") {
+//        promotionType = 0x40;
+//    } else if (mode == "Rook") {
+//        promotionType = 0x30;
+//    } else if (mode == "Knight") {
+//        promotionType = 0x20;
+//    } else if (mode == "Bishop") {
+//        promotionType = 0x10;
+//    }
+//    qWarning() << "promotion type:" << promotionType;
+//    return promotionType;
+    ui->pbPawnPromotion->setEnabled(true);
+    ui->cbPawnPromotion->setEnabled(true);
+    return selectedPromotionType;
+}
 
 /**
  * @brief Changes the color of the IPAddress line edit if it is a valid or invalid IPv4 address (maybe add also IPv6 addresses)
@@ -331,6 +373,9 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         // Update bConnect button for client
         ui->bConnect->setText("Connect");
+        ui->bStart->setEnabled(false);
+        ui->leIP->setEnabled(true);
+        ui->cbstartingplayer->setEnabled(false);
 
         // Switch to Client mode
         if(server) {
@@ -349,6 +394,9 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         //Update bConnect button for server
         ui->bConnect->setText("Start Listening");
+        ui->bStart->setEnabled(true);
+        ui->leIP->setEnabled(false);
+        ui->cbstartingplayer->setEnabled(true);
 
         // Switch to Server mode
         if(client) {
@@ -393,3 +441,5 @@ void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
     QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketState>();
     ui->lstNetzwerkConsole->addItem(metaEnum.valueToKey(state));
 }
+
+

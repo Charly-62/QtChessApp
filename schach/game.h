@@ -14,6 +14,7 @@
 #include <QTcpSocket>
 #include <QDataStream>
 
+
 class SchachApp;
 class Netzwerk;
 
@@ -115,6 +116,7 @@ private:
      * @brief Initializes the chessboard with the pieces in their starting positions.
      */
     void initBoard();
+
 
 };
 

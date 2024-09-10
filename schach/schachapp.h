@@ -10,6 +10,7 @@
 #include "game.h"
 #include "piece.h"
 #include <QTimer>
+#include <QComboBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,7 +40,7 @@ public:
     Game* getGameInstance() const {
         return chessGame;
     }
-
+    quint8 PawnPromotion();
 
 private slots:
     void handleSquareClick(int row, int col);
@@ -57,6 +58,9 @@ private slots:
     void device_connected();
     void device_disconnected();
     void device_stateChanged(QAbstractSocket::SocketState);
+
+
+    void onPbPawnPromotionClicked();
 
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
@@ -90,6 +94,13 @@ private:
     void updateBlackTimer();
     void updateTimerDisplay(int timeRemaining, bool isWhite);
     void startTurnTimer();
+
+    QComboBox* cbPawnPromotion;
+    quint8 promotionType;
+    quint8 selectedPromotionType;
+
+
+
 
 };
 #endif // SCHACHAPP_H
