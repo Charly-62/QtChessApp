@@ -13,7 +13,7 @@ Netzwerk::~Netzwerk() {
 void Netzwerk::initializeSocket() {
     if (!_socket) {
         _socket = new QTcpSocket(this);
-        qDebug() << "sdkjkj" << connect(_socket, &QTcpSocket::readyRead, this, &Netzwerk::receiveMove);
+        connect(_socket, &QTcpSocket::readyRead, this, &Netzwerk::receiveMove);
     }
 }
 
@@ -49,7 +49,6 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
     //if(_socket && _socket->isOpen()) {
         _socket->write(moveData);
         _socket->flush();
-        qDebug() << "YAY";
         emit logMessage("Move sent successfully.");
     //} else {
         emit logMessage("Socket is not open, cannot send the move.");
