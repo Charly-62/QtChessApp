@@ -31,16 +31,11 @@ void Netzwerk::sendGameStart(bool ServerStarts) {
 }
 
 void Netzwerk::sendMove(const MoveInfo& moveInfo) {
-
     QByteArray moveData;
     QDataStream stream(&moveData, QIODevice::WriteOnly);
-    moveInfo.e_col;
 
     quint8 zusatzInfo = (moveInfo.promotion << 4) | (moveInfo.consequences & 0x0F);
 
-    quint8(0x03) << quint8(moveInfo.s_col)
-           << quint8(moveInfo.s_row) << quint8(moveInfo.e_col)
-           << quint8(moveInfo.e_row) << zusatzInfo;
     stream << quint8(0x03) << quint8(moveInfo.s_col)
            << quint8(moveInfo.s_row) << quint8(moveInfo.e_col)
            << quint8(moveInfo.e_row) << zusatzInfo;
