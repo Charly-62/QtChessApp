@@ -56,6 +56,8 @@ private:
 
 signals:
     void logMessage(const QString& message); // Signal to log messages to the NetzwerkConsole
+    void moveReceived(MoveInfo moveInfo);
+
 
 };
 

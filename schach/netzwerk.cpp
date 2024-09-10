@@ -38,28 +38,33 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
 }
 
 void Netzwerk::receiveMove() {
-    QByteArray moveData;
+    QByteArray moveData = _socket->readAll();
     QDataStream stream(&moveData, QIODevice::ReadOnly);
+
     MoveInfo moveInfo;
     quint8 command;
     quint8 zusatzinfo;
 
-    stream >> command;
+    stream >> command; // receive command first and handle the message differently if it's a move, the start of the game, etc.
     if(command != 0x03) {
         emit logMessage("Not a valid move command.");
         return;
     }
 
-    stream >> moveInfo.s_col >> moveInfo.s_row
-           >> moveInfo.e_col >> moveInfo.e_row
-           >> zusatzinfo;
-    moveInfo.consequences = zusatzinfo & 0x0F; // Lower 4 bits for consequences
-    moveInfo.promotion = (zusatzinfo >> 4) & 0x0F; // Upper 4 bits for promotion
+    if(command == 0x03) {
+        stream >> moveInfo.s_col >> moveInfo.s_row
+               >> moveInfo.e_col >> moveInfo.e_row
+               >> zusatzinfo;
+        moveInfo.consequences = zusatzinfo & 0x0F; // Lower 4 bits for consequences
+        moveInfo.promotion = (zusatzinfo >> 4) & 0x0F; // Upper 4 bits for promotion
 
-    MoveInfo result = gameInstance->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
-    if(!result.islegal) {
-        emit logMessage("Received move is illegal!");
-    } else {
-        emit logMessage("Received valid move!");
+        MoveInfo result = gameInstance->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
+        if(!result.islegal) {
+            emit logMessage("Received move is illegal!");
+        } else {
+            emit logMessage("Received valid move!");
+        }
+
+        emit moveReceived(moveInfo);
     }
 }

@@ -81,6 +81,7 @@ private:
     MyTCPServer* server = nullptr;
     QString NetzwerkMode;
     void setDeviceController();
+    void moveReceived();
 
     QMap<QPushButton*, QString> originalButtonStyles;
 

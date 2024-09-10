@@ -185,9 +185,14 @@ void SchachApp::handleSquareClick(int row, int col) {
                 MoveInfo moveInfo = chessGame->tryMove(selectedCol, selectedRow, col, row);
                 qDebug() << "isLegal:" << moveInfo.islegal;
 
-                if (moveInfo.islegal != 0) { // Move is valid
+                if (moveInfo.islegal == true) { // Move is valid
                     movePiece(selectedRow, selectedCol, row, col);
                     resetBoardHighlight();
+
+                    if(client)
+                        client->sendMove(moveInfo);
+                    if(server)
+                        server->sendMove(moveInfo);
 
                     for (int row = 7; row >= 0; --row) {
                         for (int col = 0; col < 8; ++col) {
@@ -208,7 +213,9 @@ void SchachApp::handleSquareClick(int row, int col) {
                         std::cout << std::endl;
                     }
                     std::cout << std::endl;
-                    }
+                } else {
+                    updateNetzwerkConsole("Illegal move!");
+                }
 
                 // Reset selection
                 selectedRow = -1;
@@ -393,9 +400,11 @@ void SchachApp::on_cbStartingPlayer_currentTextChanged(const QString &startingPl
     if(startingPlayer == "Server") {
         isLocalPlayerWhite = true;
         isLocalTurn = true;
+        updateNetzwerkConsole("You start!");
     } else if(startingPlayer == "Client") {
         isLocalPlayerWhite = false;
         isLocalTurn = false;
+        updateNetzwerkConsole("Opponent starts!");
     }
 
 }
@@ -434,4 +443,38 @@ void SchachApp::switchTurn() {
     } else {
         isLocalTurn = false;
     }
+}
+
+void SchachApp::moveReceived() {
+    // Connect the Netzwerk logMessage signal to updateNetzwerkConsole slot
+    if(client) {
+        connect(client, &Netzwerk::moveReceived, this, [=](const MoveInfo& moveInfo) {
+            MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
+            if(result.islegal) {
+                movePiece(moveInfo.s_row, moveInfo.s_col, moveInfo.e_row, moveInfo.e_col);
+                updateNetzwerkConsole("Opponent's move applied.");
+            } else {
+                updateNetzwerkConsole("Invalid move received");
+            }
+
+            isLocalTurn = true;
+        }
+        );
+    }
+
+    if(server) {
+        connect(server, &Netzwerk::moveReceived, this, [=](const MoveInfo& moveInfo) {
+            MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
+            if(result.islegal) {
+                movePiece(moveInfo.s_row, moveInfo.s_col, moveInfo.e_row, moveInfo.e_col);
+                updateNetzwerkConsole("Opponent's move applied.");
+            } else {
+                updateNetzwerkConsole("Invalid move received");
+            }
+
+            isLocalTurn = true;
+        }
+        );
+    }
+
 }
