@@ -68,7 +68,6 @@ private slots:
     void switchTurn();
 
     void on_bStart_clicked();
-    void gameStarted(bool, QString);
 
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
@@ -88,7 +87,8 @@ private:
     MyTCPServer* server = nullptr;
     QString NetzwerkMode;
     void setDeviceController();
-    void moveReceived();
+    void moveReceived(MoveInfo);
+    void gameStarted(bool, QString);
 
     QMap<QPushButton*, QString> originalButtonStyles;
 

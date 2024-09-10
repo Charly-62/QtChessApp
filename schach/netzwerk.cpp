@@ -13,7 +13,7 @@ Netzwerk::~Netzwerk() {
 void Netzwerk::initializeSocket() {
     if (!_socket) {
         _socket = new QTcpSocket(this);
-        qDebug() << "sdkjkj" << connect(_socket, &QTcpSocket::readyRead, this, &Netzwerk::receiveMove);
+        connect(_socket, &QTcpSocket::readyRead, this, &Netzwerk::receiveMove);
     }
 }
 
@@ -31,7 +31,6 @@ void Netzwerk::sendGameStart(bool ServerStarts) {
 }
 
 void Netzwerk::sendMove(const MoveInfo& moveInfo) {
-
     QByteArray moveData;
     QDataStream stream(&moveData, QIODevice::WriteOnly);
 
@@ -54,6 +53,7 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
 void Netzwerk::receiveMove() {
     emit logMessage("Something received.");
     QByteArray moveData = _socket->readAll();
+    moveData.toHex();
     QDataStream stream(&moveData, QIODevice::ReadOnly);
 
     MoveInfo moveInfo;
