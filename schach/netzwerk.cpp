@@ -21,6 +21,7 @@ void Netzwerk::sendGameStart(bool ServerStarts) {
 
     QByteArray gameStartMessage;
     QDataStream stream(&gameStartMessage, QIODevice::WriteOnly);
+    qDebug() << "GAME" << ServerStarts;
 
     stream << quint8(0x01) << quint8(0x02)
            << quint8(ServerStarts ? 0x00 : 0x01) << quint8(0x01);
@@ -34,26 +35,33 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
 
     QByteArray moveData;
     QDataStream stream(&moveData, QIODevice::WriteOnly);
+    qDebug() << "GAME" << moveInfo.e_col;
 
     quint8 zusatzInfo = (moveInfo.promotion << 4) | (moveInfo.consequences & 0x0F);
 
+    qDebug() << "TEST" << quint8(0x03) << quint8(moveInfo.s_col)
+           << quint8(moveInfo.s_row) << quint8(moveInfo.e_col)
+           << quint8(moveInfo.e_row) << zusatzInfo;
     stream << quint8(0x03) << quint8(moveInfo.s_col)
            << quint8(moveInfo.s_row) << quint8(moveInfo.e_col)
            << quint8(moveInfo.e_row) << zusatzInfo;
 
-    if(_socket && _socket->isOpen()) {
+    //if(_socket && _socket->isOpen()) {
         _socket->write(moveData);
         _socket->flush();
+        qDebug() << "YAY";
         emit logMessage("Move sent successfully.");
-    } else {
+    //} else {
         emit logMessage("Socket is not open, cannot send the move.");
-    }
+    //}
 
 }
 
 void Netzwerk::receiveMove() {
     emit logMessage("Something received.");
+    qDebug() << "RECIEVE";
     QByteArray moveData = _socket->readAll();
+    qDebug() << "R" << moveData.toHex();
     QDataStream stream(&moveData, QIODevice::ReadOnly);
 
     MoveInfo moveInfo;
