@@ -209,40 +209,6 @@ bool Logik::isStalemate(Game* game) const {
 }
 
 
-bool Logik::isCastlingMove(Game* Game, int s_col, int s_row, int e_col, int e_row) const{  
-    std::shared_ptr<Piece> king = Game->getPieceAt(s_col, s_row);
-    std::shared_ptr<Piece> rook = Game->getPieceAt(e_col, e_row);
-
-    if (king == nullptr || dynamic_cast<King*>(king.get()) == nullptr) {
-        return false;
-    }
-    if (rook == nullptr || dynamic_cast<Rook*>(rook.get()) == nullptr) {
-        return false;
-    }
-
-    // Check castling rules
-    if (king->checkMoved() || rook->checkMoved()) {
-        return false;
-    }
-
-    int min_col = std::min(s_col, e_col);
-    int max_col = std::max(s_col, e_col);
-    for (int col = min_col + 1; col < max_col; ++col) {
-        if (Game->getPieceAt(col, s_row) != nullptr) {
-            return false;
-        }
-    }
-
-    // Check if the squares the king will move through are not attacked
-    for (int col = std::min(s_col, e_col); col <= std::max(s_col, e_col); ++col) {
-        if (Game->isSquareAttacked(col, s_row, king->checkIfWhite())) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 
 
 bool Logik::isPawnPromotion(Game* Game, int s_col, int s_row, int e_col, int e_row) const {

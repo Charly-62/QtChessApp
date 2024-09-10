@@ -68,9 +68,6 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
         std::cout << "checkmate!!!!";
         moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // checkmate or capture and checkmate
     }
-    if (logikInstance.isCastlingMove(this, s_col, s_row, e_col, e_row)) {
-        moveInfo.consequences = 0x04;  // Rochade
-    }
 
     // Check for pawn promotion
     moveInfo.promotion = 0x00; // no promotion by default
@@ -143,7 +140,7 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
     }
 
 
-    // Check if the move is an en passant capture
+    // --- EN PASSANT LOGIC ---
     if (movingPiece->getType() == "pawn" && s_col != e_col && getPieceAt(e_col, e_row) == nullptr) {
         // This means the pawn moved diagonally to an empty square, indicating en passant
         int capturedPawnRow = (movingPiece->checkIfWhite()) ? e_row - 1 : e_row + 1;

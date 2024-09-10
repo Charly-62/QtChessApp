@@ -61,17 +61,6 @@ public:
     bool isStalemate(Game* Game) const;
 
     /**
-     * @brief Checks if a move is a castling
-     * @param Game
-     * @param s_col
-     * @param s_row
-     * @param e_col
-     * @param e_row
-     * @return
-     */
-    bool isCastlingMove(Game* Game, int s_col, int s_row, int e_col, int e_row) const;
-
-    /**
      * @brief Checks if a move is a Pawn promotion
      * @param Game
      * @param s_col
