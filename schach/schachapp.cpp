@@ -26,11 +26,21 @@ SchachApp::SchachApp(QWidget *parent)
 
     on_cbHostClient_currentTextChanged("Client");
 
+    // Connect the Netzwerk logMessage signal to updateNetzwerkConsole slot
+    if(client) {
+        connect(client, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
+    }
+    if(server) {
+        connect(server, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
+    }
+
     whiteTimer = new QTimer(this);  // Create the white player's timer
     blackTimer = new QTimer(this);  // Create the black player's timer
     whiteTimeRemaining = 10 * 60;  // Set the initial time to 10 minutes (in seconds)
     blackTimeRemaining = 10 * 60;  // Set the initial time to 10 minutes (in seconds)
     isWhiteTurn = true;  // Start with white's turn
+
+    connect(client, &Netzwerk::gameStarted, this, &SchachApp::gameStarted);
     // Connect the QTimer signals to the corresponding slot functions
     connect(whiteTimer, &QTimer::timeout, this, &SchachApp::updateWhiteTimer);
     connect(blackTimer, &QTimer::timeout, this, &SchachApp::updateBlackTimer);
@@ -43,6 +53,8 @@ SchachApp::SchachApp(QWidget *parent)
     ui->pbPawnPromotion->setEnabled(false);
     ui->cbPawnPromotion->setEnabled(false);
 
+    // Connection to handle the turn switch
+    connect(chessGame, &Game::turnSwitched, this, &SchachApp::switchTurn);
 }
 
 SchachApp::~SchachApp()
@@ -131,6 +143,14 @@ void SchachApp::resetBoardHighlight() {
 
 
 void SchachApp::handleSquareClick(int row, int col) {
+
+    /* Comment out to play around with the gui. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
+    if(!isLocalTurn) {
+        updateNetzwerkConsole("Not your turn!");
+        return;
+    }
+    */
+
     QPushButton* clickedButton = buttons[row][col];
     std::shared_ptr<Piece> selectedPiece = chessGame->getPieceAt(col, row);
 
@@ -171,9 +191,14 @@ void SchachApp::handleSquareClick(int row, int col) {
                 MoveInfo moveInfo = chessGame->tryMove(selectedCol, selectedRow, col, row);
                 qDebug() << "isLegal:" << moveInfo.islegal;
 
-                if (moveInfo.islegal != 0) { // Move is valid
+                if (moveInfo.islegal == true) { // Move is valid
                     movePiece(selectedRow, selectedCol, row, col);
                     resetBoardHighlight();
+
+                    if(client)
+                        client->sendMove(moveInfo);
+                    if(server)
+                        server->sendMove(moveInfo);
 
                     for (int row = 7; row >= 0; --row) {
                         for (int col = 0; col < 8; ++col) {
@@ -194,7 +219,9 @@ void SchachApp::handleSquareClick(int row, int col) {
                         std::cout << std::endl;
                     }
                     std::cout << std::endl;
-                    }
+                } else {
+                    updateNetzwerkConsole("Illegal move!");
+                }
 
                 // Reset selection
                 selectedRow = -1;
@@ -373,9 +400,11 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         // Update bConnect button for client
         ui->bConnect->setText("Connect");
+
         ui->bStart->setEnabled(false);
         ui->leIP->setEnabled(true);
         ui->cbstartingplayer->setEnabled(false);
+
 
         // Switch to Client mode
         if(server) {
@@ -394,6 +423,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         //Update bConnect button for server
         ui->bConnect->setText("Start Listening");
+
         ui->bStart->setEnabled(true);
         ui->leIP->setEnabled(false);
         ui->cbstartingplayer->setEnabled(true);
@@ -442,4 +472,82 @@ void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
     ui->lstNetzwerkConsole->addItem(metaEnum.valueToKey(state));
 }
 
+void SchachApp::switchTurn() {
+    // If the local player is white and it's white's turn, or the local player is black and it's black's turn
+    if((isLocalPlayerWhite && chessGame->getWhiteTurn()) || (!isLocalPlayerWhite && !(chessGame->getWhiteTurn()))) {
+        isLocalTurn = true;
+    } else {
+        isLocalTurn = false;
+    }
+}
 
+void SchachApp::moveReceived() {
+    // Connect the Netzwerk logMessage signal to updateNetzwerkConsole slot
+    if(client) {
+        connect(client, &Netzwerk::moveReceived, this, [=](const MoveInfo& moveInfo) {
+            MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
+            if(result.islegal) {
+                movePiece(moveInfo.s_row, moveInfo.s_col, moveInfo.e_row, moveInfo.e_col);
+                updateNetzwerkConsole("Opponent's move applied.");
+            } else {
+                updateNetzwerkConsole("Invalid move received");
+            }
+
+            isLocalTurn = true;
+        }
+        );
+    }
+
+    if(server) {
+        connect(server, &Netzwerk::moveReceived, this, [=](const MoveInfo& moveInfo) {
+            MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
+            if(result.islegal) {
+                movePiece(moveInfo.s_row, moveInfo.s_col, moveInfo.e_row, moveInfo.e_col);
+                updateNetzwerkConsole("Opponent's move applied.");
+            } else {
+                updateNetzwerkConsole("Invalid move received");
+            }
+
+            isLocalTurn = true;
+        }
+        );
+    }
+
+}
+
+// Client version of gameStarted()
+void SchachApp::gameStarted(bool ServerStarts, QString groupNumber) {
+
+        if(ServerStarts) {
+            updateNetzwerkConsole("Server starts the game.");
+            updateNetzwerkConsole("Playing against Group " + groupNumber);
+            isLocalTurn = false;
+            isLocalPlayerWhite = false;
+        } else {
+            updateNetzwerkConsole("Client starts the game.");
+            updateNetzwerkConsole("Playing against Group " + groupNumber);
+            isLocalTurn = true;
+            isLocalPlayerWhite = true;
+        }
+
+}
+
+// Server version of gameStarted()
+void SchachApp::on_cbStartingPlayer_currentTextChanged(const QString &startingPlayer) {
+
+    if(startingPlayer == "Server") {
+        isLocalPlayerWhite = true;
+        isLocalTurn = true;
+    } else if(startingPlayer == "Client") {
+        isLocalPlayerWhite = false;
+        isLocalTurn = false;
+    }
+
+}
+
+void SchachApp::on_bStart_clicked()
+{
+    bool ServerStarts = (ui->cbStartingPlayer->currentText() == "Server");
+    server->sendGameStart(ServerStarts);
+    updateNetzwerkConsole("Game start message sent. " + ui->cbStartingPlayer->currentText() + " starts.");
+}

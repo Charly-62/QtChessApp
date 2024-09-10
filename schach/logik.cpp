@@ -52,31 +52,21 @@ bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row)
     }
 
     //Pinning
-     // Simulate the move
-     //Create a copy of the game for simulating the move
-     Game* simulatedGame = new Game(*chessGame);  // Use the constructor to initialize essential components
-
-     for(int i = 0; i < 8; ++i){
-         for(int j = 0; j < 8; j++){
-             if (chessGame->board[i][j] != nullptr) {
-                simulatedGame->board[i][j] = chessGame->board[i][j]->clone();
-             }else{
-                 simulatedGame->board[i][j] = nullptr;
-             }
-         }
-     }
+    // Simulate the move
+    //Create a copy of the game for simulating the move
+    Game* simulatedGame = chessGame->clone();
 
 
-     simulatedGame->updateBoard(s_col, s_row, e_col, e_row);
+    simulatedGame->updateBoard(s_col, s_row, e_col, e_row);
 
-     // Check if the king is in check after the move
-     std::pair<int, int> kingPosition = simulatedGame->findKing(isWhiteTurn);
-     bool isCheck = simulatedGame->isSquareAttacked(kingPosition.first, kingPosition.second, isWhiteTurn);
+    // Check if the king is in check after the move
+    std::pair<int, int> kingPosition = simulatedGame->findKing(isWhiteTurn);
+    bool isCheck = simulatedGame->isSquareAttacked(kingPosition.first, kingPosition.second, isWhiteTurn);
 
-     // If the king is in check, the move is illegal
-     if (isCheck) {
-         return false;
-     }
+    // If the king is in check, the move is illegal
+    if (isCheck) {
+        return false;
+    }
 
     return true;
 }
@@ -145,11 +135,11 @@ bool Logik::isCheckmate(Game* game, int e_col, int e_row) const {
                     // Simulate the move and check if it prevents the check
                     if (this->isLegal(game, col, row, moveCol, moveRow)) {
                         // Temporarily make the move on a simulated board
-                        Game tempGame = *game;  // Make a copy of the game
-                        tempGame.updateBoard(col, row, moveCol, moveRow);
+                        Game* tempGame = game->clone();  // Make a copy of the game
+                        tempGame->updateBoard(col, row, moveCol, moveRow);
 
                         // Check if the king is still in check
-                        if (!tempGame.isSquareAttacked(kingCol, kingRow, isWhiteTurn)) {
+                        if (!tempGame->isSquareAttacked(kingCol, kingRow, isWhiteTurn)) {
                             return false;  // The check can be avoided
                         }
                     }

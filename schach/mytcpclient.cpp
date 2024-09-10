@@ -22,7 +22,6 @@ void MyTCPClient::connectToHost(QString ip, int port) {
     _ip = ip;
     _port = port;
     _socket->connectToHost(_ip, _port);
-
 }
 
 

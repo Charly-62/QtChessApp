@@ -11,8 +11,8 @@
 #include <QString>
 #include <QComboBox>
 
-Game::Game(class SchachApp* gui)
-    : whiteTurn(true), gui(gui) {
+Game::Game(class SchachApp* gui, QObject* parent)
+    : QObject(parent), whiteTurn(true), gui(gui){
     initBoard();
 }
 
@@ -54,11 +54,13 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
 
     // Check legality of the move
     if (!logikInstance.isLegal(this, s_col, s_row, e_col, e_row)) {
-        moveInfo.islegal=false;
-        return moveInfo; // Will handle the error in the future
+        moveInfo.islegal = false;
+        return moveInfo;
     }
 
     // Determine consequences (capture, checkmate, etc.)
+    moveInfo.consequences = 0x00; // schlägt nicht by default
+
     if (logikInstance.isCaptureMove(this, s_col, s_row, e_col, e_row)) {
         moveInfo.consequences = 0x01;  // schlägt
     }
@@ -71,6 +73,8 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     }
 
     // Check for pawn promotion
+    moveInfo.promotion = 0x00; // no promotion by default
+
     if (logikInstance.isPawnPromotion(this, s_col, s_row, e_col, e_row)) {
         moveInfo.promotion = getPawnPromotion();
     }
@@ -83,8 +87,8 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     //change the Piece hasMoved boolean to true
     movingPiece->setMoved();
 
-    // Chenge the turn (white/black)
-    whiteTurn = !whiteTurn;
+    // Change the turn
+    switchTurn();
 
     return moveInfo;  // Return moveInfo struct
 }
@@ -125,6 +129,7 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
 
 quint8 Game::getPawnPromotion() {
     return gui->PawnPromotion();
+
 }
 
 
@@ -144,4 +149,26 @@ std::pair<int, int> Game::findKing(bool isWhite) const {
 
     // If no king is found (should never happen in a valid game), return an invalid position (-1, -1)
     return {-1, -1};
+}
+
+void Game::switchTurn() {
+    whiteTurn = !whiteTurn;
+    emit turnSwitched(whiteTurn);
+}
+
+Game* Game::clone() const {
+    Game* clonedGame = new Game(gui);
+
+    // Copy the relevant game state
+    for(int i = 0; i < 8; ++i){
+        for(int j = 0; j < 8; j++){
+            if (board[i][j] != nullptr) {
+                clonedGame->board[i][j] = board[i][j]->clone();
+            }else{
+                clonedGame->board[i][j] = nullptr;
+            }
+        }
+    }
+
+    return clonedGame;
 }

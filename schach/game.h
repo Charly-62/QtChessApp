@@ -10,6 +10,7 @@
 #include "piece.h"
 
 #include <memory>
+#include <QObject>
 #include <QWidget>
 #include <QTcpSocket>
 #include <QDataStream>
@@ -33,8 +34,9 @@ struct MoveInfo {
  * @class game
  * @brief Manages the state of the chess game.
  */
-class Game
+class Game : public QObject
 {
+    Q_OBJECT
 public:
 
      /**
@@ -42,7 +44,7 @@ public:
      * @param gui Pointer to the SchachApp (GUI) object.
      * @param netzwerkInsance Pointer to the Netzwerk object.
      */
-    Game(SchachApp* gui);
+    Game(SchachApp* gui, QObject* parent = nullptr);
 
     /**
      * @brief Destructor for the game class.
@@ -107,15 +109,23 @@ public:
     bool getWhiteTurn(){return whiteTurn;};
     std::shared_ptr<Piece> board[8][8];
 
+    Game* clone() const;
+
 private:
 
     bool whiteTurn;
     SchachApp* gui;
+    void switchTurn();
 
     /**
      * @brief Initializes the chessboard with the pieces in their starting positions.
      */
     void initBoard();
+
+
+signals:
+
+    void turnSwitched(bool whiteTurn);
 
 
 };
