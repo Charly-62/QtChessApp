@@ -109,11 +109,31 @@ public:
     bool getWhiteTurn(){return whiteTurn;};
     std::shared_ptr<Piece> board[8][8];
 
+    bool getCheck(bool isWhite) const{
+        if(isWhite){
+            return whiteKingChecked;
+        }
+        return blackKingChecked;
+    }
+
+    void setCheck(bool check, bool isWhite) {
+        if(isWhite){
+            whiteKingChecked = check;
+        }else{
+            blackKingChecked = check;
+        }
+    }
+
     Game* clone() const;
+
+    //the int value is the column of lastMoveWasTwoSquarePawnMove // 8 means lastMoveWasTwoSquarePawnMove is false
+    int lastMoveWasTwoSquarePawnMove = 8;
 
 private:
 
     bool whiteTurn;
+    bool whiteKingChecked;
+    bool blackKingChecked;
     SchachApp* gui;
     void switchTurn();
 

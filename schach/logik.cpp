@@ -51,6 +51,17 @@ bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row)
         return false;  // Invalid move for this piece
     }
 
+    //check if King is in check
+    std::pair<int, int> kingPosition = chessGame->findKing(isWhiteTurn);
+    std::pair<int, int> b_kingPosition = chessGame->findKing(!isWhiteTurn);
+
+    bool isCheck = chessGame->isSquareAttacked(kingPosition.first, kingPosition.second, isWhiteTurn);
+    bool b_isCheck = chessGame->isSquareAttacked(b_kingPosition.first, kingPosition.second, !isWhiteTurn);
+
+    chessGame->setCheck(isCheck, isWhiteTurn);
+    chessGame->setCheck(b_isCheck, !isWhiteTurn);
+
+
     //Pinning
     // Simulate the move
     //Create a copy of the game for simulating the move
@@ -60,11 +71,11 @@ bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row)
     simulatedGame->updateBoard(s_col, s_row, e_col, e_row);
 
     // Check if the king is in check after the move
-    std::pair<int, int> kingPosition = simulatedGame->findKing(isWhiteTurn);
-    bool isCheck = simulatedGame->isSquareAttacked(kingPosition.first, kingPosition.second, isWhiteTurn);
+    std::pair<int, int> simulKingPosition = simulatedGame->findKing(isWhiteTurn);
+    bool simulIsCheck = simulatedGame->isSquareAttacked(simulKingPosition.first, simulKingPosition.second, isWhiteTurn);
 
     // If the king is in check, the move is illegal
-    if (isCheck) {
+    if (simulIsCheck) {
         return false;
     }
 
@@ -150,7 +161,6 @@ bool Logik::isCheckmate(Game* game, int e_col, int e_row) const {
 
     // Step 4: If no legal moves can prevent the check, it's checkmate
     return true;
-
 }
 
 
@@ -198,40 +208,6 @@ bool Logik::isStalemate(Game* game) const {
     return true;
 }
 
-
-bool Logik::isCastlingMove(Game* Game, int s_col, int s_row, int e_col, int e_row) const{  
-    std::shared_ptr<Piece> king = Game->getPieceAt(s_col, s_row);
-    std::shared_ptr<Piece> rook = Game->getPieceAt(e_col, e_row);
-
-    if (king == nullptr || dynamic_cast<King*>(king.get()) == nullptr) {
-        return false;
-    }
-    if (rook == nullptr || dynamic_cast<Rook*>(rook.get()) == nullptr) {
-        return false;
-    }
-
-    // Check castling rules
-    if (king->checkMoved() || rook->checkMoved()) {
-        return false;
-    }
-
-    int min_col = std::min(s_col, e_col);
-    int max_col = std::max(s_col, e_col);
-    for (int col = min_col + 1; col < max_col; ++col) {
-        if (Game->getPieceAt(col, s_row) != nullptr) {
-            return false;
-        }
-    }
-
-    // Check if the squares the king will move through are not attacked
-    for (int col = std::min(s_col, e_col); col <= std::max(s_col, e_col); ++col) {
-        if (Game->isSquareAttacked(col, s_row, king->checkIfWhite())) {
-            return false;
-        }
-    }
-
-    return true;
-}
 
 
 

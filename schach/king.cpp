@@ -29,5 +29,43 @@ std::vector<std::pair<int, int>> King::getPossibleMoves(const Game* game) const 
         }
     }
 
+    // // Castling logic
+    if (!checkMoved() && !game->getCheck(isWhite)) {  // King hasn't moved and is not in check
+
+        // Kingside castling (towards the right rook)
+        if (col == 4 && ((isWhite && row == 0) || (!isWhite && row == 7))) {  // King is in starting position
+            // Check if the right rook is in place and hasn't moved
+            std::shared_ptr<Piece> rightRook = game->getPieceAt(7, row);
+            if (rightRook && rightRook->getType() == "rook" && !rightRook->checkMoved() && rightRook->checkIfWhite() == isWhite) {
+                // Check if the squares between the king and the rook are empty
+                if (game->getPieceAt(5, row) == nullptr && game->getPieceAt(6, row) == nullptr) {
+                    // Check if the king is not moving through or into check
+                    if (!game->isSquareAttacked(4, row, isWhite) &&
+                        !game->isSquareAttacked(5, row, isWhite) &&
+                        !game->isSquareAttacked(6, row, isWhite)) {
+                        moves.push_back({6, row});  // Kingside castling move
+                    }
+                }
+            }
+        }
+
+        // Queenside castling (towards the left rook)
+        if (col == 4 && ((isWhite && row == 0) || (!isWhite && row == 7))) {  // King is in starting position
+            // Check if the left rook is in place and hasn't moved
+            std::shared_ptr<Piece> leftRook = game->getPieceAt(0, row);
+            if (leftRook && leftRook->getType() == "rook" && !leftRook->checkMoved() && leftRook->checkIfWhite() == isWhite) {
+                // Check if the squares between the king and the rook are empty
+                if (game->getPieceAt(1, row) == nullptr && game->getPieceAt(2, row) == nullptr && game->getPieceAt(3, row) == nullptr) {
+                    // Check if the king is not moving through or into check
+                    if (!game->isSquareAttacked(4, row, isWhite) &&
+                        !game->isSquareAttacked(3, row, isWhite) &&
+                        !game->isSquareAttacked(2, row, isWhite)) {
+                        moves.push_back({2, row});  // Queenside castling move
+                    }
+                }
+            }
+        }
+    }
+
     return moves;
 }

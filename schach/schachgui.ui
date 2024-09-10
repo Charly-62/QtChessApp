@@ -1046,24 +1046,11 @@ background-color: rgb(134, 255, 142)
     <string/>
    </property>
   </widget>
-  <widget class="QPushButton" name="bStart">
-   <property name="geometry">
-    <rect>
-     <x>630</x>
-     <y>370</y>
-     <width>291</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Start Game</string>
-   </property>
-  </widget>
   <widget class="QGroupBox" name="grpNetwork">
    <property name="geometry">
     <rect>
-     <x>630</x>
-     <y>150</y>
+     <x>650</x>
+     <y>140</y>
      <width>291</width>
      <height>211</height>
     </rect>
@@ -1324,9 +1311,9 @@ background-color: rgb(134, 255, 142)
   <widget class="QGroupBox" name="grpPawnPromotion">
    <property name="geometry">
     <rect>
-     <x>489</x>
+     <x>490</x>
      <y>260</y>
-     <width>131</width>
+     <width>141</width>
      <height>121</height>
     </rect>
    </property>
@@ -1338,7 +1325,7 @@ background-color: rgb(134, 255, 142)
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>111</width>
+      <width>119</width>
       <height>71</height>
      </rect>
     </property>
@@ -1381,6 +1368,19 @@ background-color: rgb(134, 255, 142)
      </item>
     </layout>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="bStart">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>360</y>
+     <width>291</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Start Game</string>
+   </property>
   </widget>
  </widget>
  <resources/>

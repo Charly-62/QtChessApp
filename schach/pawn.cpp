@@ -47,6 +47,25 @@ std::vector<std::pair<int, int>> Pawn::getPossibleMoves(const Game* game) const 
         }
     }
 
+    // En Passant Capture Logic
+    if (row == (isWhite ? 4 : 3)) {  // En passant only possible on the 5th rank for white and 4th rank for black
+        // Check left side
+        if (col > 0) {
+            std::shared_ptr<Piece> leftPawn = game->getPieceAt(col - 1, row);
+            if (leftPawn != nullptr && leftPawn->checkIfWhite() != isWhite && leftPawn->getType() == "pawn" && game->lastMoveWasTwoSquarePawnMove == col-1) {
+                moves.push_back({col - 1, row + direction});  // Capture en passant
+            }
+        }
+
+        // Check right side
+        if (col < 7) {
+            std::shared_ptr<Piece> rightPawn = game->getPieceAt(col + 1, row);
+            if (rightPawn != nullptr && rightPawn->checkIfWhite() != isWhite && rightPawn->getType() == "pawn" && game->lastMoveWasTwoSquarePawnMove == col+1) {
+                moves.push_back({col + 1, row + direction});  // Capture en passant
+            }
+        }
+    }
+
     return moves;
 }
 

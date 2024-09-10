@@ -38,8 +38,8 @@ public:
     std::vector<std::pair<int, int>> getPossibleMoves(const Game* game) const override;
 
     QString getType() const override {
-            return "king";
-        }
+        return "king";
+    }
 };
 
 #endif // KING_H
