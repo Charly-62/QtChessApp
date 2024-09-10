@@ -6,6 +6,7 @@
 #include "game.h"
 #include "logik.h"
 #include "piece.h"
+#include "schachapp.h"
 #include <iostream>
 
 Game::Game(class SchachApp* gui, QObject* parent)
@@ -125,7 +126,8 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
 }
 
 quint8 Game::getPawnPromotion() {
-    return 0x30;
+    //return 0x30;
+    return gui->PawnPromotion();
 }
 
 std::pair<int, int> Game::findKing(bool isWhite) const {

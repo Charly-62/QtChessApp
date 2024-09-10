@@ -4,6 +4,7 @@
 #include "piece.h"
 #include "game.h"
 #include <QPushButton>
+#include <QComboBox>
 #include <QMetaEnum>
 #include <QDebug>
 #include <iostream>
@@ -46,7 +47,11 @@ SchachApp::SchachApp(QWidget *parent)
 
     // Start the timer for the first turn
     startTurnTimer();
-    //connect(ui->bStart, &QPushButton::clicked, this, &SchachApp::startGame);
+
+    ui->cbPawnPromotion->setCurrentText("Not Selected");
+    connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
+    ui->pbPawnPromotion->setEnabled(false);
+    ui->cbPawnPromotion->setEnabled(false);
 
     // Connection to handle the turn switch
     connect(chessGame, &Game::turnSwitched, this, &SchachApp::switchTurn);
@@ -290,7 +295,31 @@ void SchachApp::updateBlackTimer() {
     }
 }
 
-
+void SchachApp::onPbPawnPromotionClicked(){
+    QString mode = ui-> cbPawnPromotion->currentText();
+    qWarning()<<"Current Selection:"<<mode;
+    quint8 promotionType = 0x00;
+    if (mode == "Queen"){
+        promotionType = 0x40;
+    }
+    else if (mode == "Rook"){
+        promotionType = 0x30;
+    }
+    else if (mode == "Knight"){
+        promotionType = 0x20;
+    }
+    else if (mode == "Bishop"){
+        promotionType = 0x10;
+    }
+    qWarning()<<"promotion type:"<<promotionType;
+    ui->pbPawnPromotion->setEnabled(false);
+    ui->cbPawnPromotion->setEnabled(false);
+}
+quint8 SchachApp:: PawnPromotion(){
+    qWarning()<<"Select a piece for pawn promotion";
+    ui->pbPawnPromotion->setEnabled(true);
+    ui->cbPawnPromotion->setEnabled(true);
+}
 
 /**
  * @brief Changes the color of the IPAddress line edit if it is a valid or invalid IPv4 address (maybe add also IPv6 addresses)
