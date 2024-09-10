@@ -1049,8 +1049,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QPushButton" name="bStart">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>360</y>
+     <x>630</x>
+     <y>370</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -1062,8 +1062,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QGroupBox" name="grpNetwork">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>140</y>
+     <x>630</x>
+     <y>150</y>
      <width>291</width>
      <height>211</height>
     </rect>

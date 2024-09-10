@@ -42,6 +42,7 @@ public:
     }
 
     quint8 PawnPromotion();
+
 private slots:
     void handleSquareClick(int row, int col);
 
@@ -61,13 +62,13 @@ private slots:
     void device_disconnected();
     void device_stateChanged(QAbstractSocket::SocketState);
 
+    void onPbPawnPromotionClicked();
+
     // Handle turn change
     void switchTurn();
 
     void on_bStart_clicked();
     void gameStarted(bool, QString);
-
-    void onPbPawnPromotionClicked();
 
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.

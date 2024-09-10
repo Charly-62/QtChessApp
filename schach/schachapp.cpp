@@ -8,7 +8,8 @@
 #include <QMetaEnum>
 #include <QDebug>
 #include <iostream>
-
+#include <QEventLoop>
+#include <QComboBox>
 
 SchachApp::SchachApp(QWidget *parent)
     : QWidget(parent)
@@ -319,6 +320,7 @@ quint8 SchachApp:: PawnPromotion(){
     qWarning()<<"Select a piece for pawn promotion";
     ui->pbPawnPromotion->setEnabled(true);
     ui->cbPawnPromotion->setEnabled(true);
+
 }
 
 /**
@@ -387,8 +389,11 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         // Update bConnect button for client
         ui->bConnect->setText("Connect");
-        ui->cbStartingPlayer->setEnabled(false);
+
         ui->bStart->setEnabled(false);
+        ui->leIP->setEnabled(true);
+        ui->cbStartingPlayer->setEnabled(false);
+
 
         // Switch to Client mode
         if(server) {
@@ -407,8 +412,10 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         //Update bConnect button for server
         ui->bConnect->setText("Start Listening");
-        ui->cbStartingPlayer->setEnabled(true);
+
         ui->bStart->setEnabled(true);
+        ui->leIP->setEnabled(false);
+        ui->cbStartingPlayer->setEnabled(true);
 
         // Switch to Server mode
         if(client) {
