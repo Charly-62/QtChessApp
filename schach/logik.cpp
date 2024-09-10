@@ -150,7 +150,6 @@ bool Logik::isCheckmate(Game* game, int e_col, int e_row) const {
 
     // Step 4: If no legal moves can prevent the check, it's checkmate
     return true;
-
 }
 
 

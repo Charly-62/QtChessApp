@@ -39,10 +39,7 @@ public:
 
     QString getType() const override {
                 return "pawn";
-            }
-
-
-
+    }
 
 };
 

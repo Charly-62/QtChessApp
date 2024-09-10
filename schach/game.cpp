@@ -79,14 +79,6 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     // Apply the move to the board (update the game state)
     updateBoard(s_col, s_row, e_col, e_row);
 
-    std::shared_ptr<Piece> movingPiece = getPieceAt(e_col, e_row);
-
-    //change the Piece hasMoved boolean to true
-    movingPiece->setMoved();
-
-    // Change the turn
-    switchTurn();
-
     return moveInfo;  // Return moveInfo struct
 }
 
@@ -98,6 +90,7 @@ bool Game::isSquareAttacked(int col, int row, bool currentPlayerIsWhite) const {
     // Loop over all squares on the board
     for (int c = 0; c < 8; ++c) {
         for (int r = 0; r < 8; ++r) {
+
             std::shared_ptr<Piece> attackingPiece = getPieceAt(c, r);
 
             // Check if there is a piece at (c, r) and it's from the opponent's team
@@ -119,9 +112,39 @@ bool Game::isSquareAttacked(int col, int row, bool currentPlayerIsWhite) const {
 
 void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
     std::shared_ptr<Piece> movingPiece = getPieceAt(s_col, s_row);
+
+
+    // Check if the move is an en passant capture
+    if (movingPiece->getType() == "pawn" && s_col != e_col && getPieceAt(e_col, e_row) == nullptr) {
+        // This means the pawn moved diagonally to an empty square, indicating en passant
+        int capturedPawnRow = (movingPiece->checkIfWhite()) ? e_row - 1 : e_row + 1;
+        std::shared_ptr<Piece> capturedPawn = getPieceAt(e_col, capturedPawnRow);
+
+        // Ensure the captured piece is an opponent's pawn (this should always be true, but we check for safety)
+        if (capturedPawn != nullptr && capturedPawn->getType() == "pawn" && capturedPawn->checkIfWhite() != movingPiece->checkIfWhite() && e_col == this->lastMoveWasTwoSquarePawnMove) {
+            // Remove the captured pawn from the board
+            board[e_col][capturedPawnRow] = nullptr;
+        }
+    }
+
     board[e_col][e_row] = movingPiece;   // Place the piece at the new position
     board[s_col][s_row] = nullptr;       // Clear the old position
     movingPiece->setPosition(e_row, e_col); // change Piece internal Position
+
+    if (movingPiece->getType() == "pawn") {  // Check if the moving piece is a pawn
+        int rowDifference = abs(e_row - s_row);
+        // Check if the move was exactly two squares vertically
+        if (rowDifference == 2) {
+            this->lastMoveWasTwoSquarePawnMove = e_col;
+        }
+    }else{
+        this->lastMoveWasTwoSquarePawnMove =  8;
+    }
+
+    //change the Piece hasMoved boolean to true
+    movingPiece->setMoved();
+    // Change the turn
+    switchTurn();
 }
 
 quint8 Game::getPawnPromotion() {

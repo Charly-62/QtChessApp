@@ -110,6 +110,9 @@ public:
 
     Game* clone() const;
 
+    //the in value is the column of lastMoveWasTwoSquarePawnMove // 8 means lastMoveWasTwoSquarePawnMove is false
+    int lastMoveWasTwoSquarePawnMove = 8;
+
 private:
 
     bool whiteTurn;
