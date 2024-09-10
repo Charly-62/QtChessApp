@@ -82,6 +82,8 @@ private:
     Piece* board[8][8];
     int selectedRow;
     int selectedCol;
+    int previouslySelectedCol;
+    int previouslySelectedRow;
     Game* chessGame = nullptr;
     MyTCPClient* client = nullptr;
     MyTCPServer* server = nullptr;

@@ -16,6 +16,8 @@ SchachApp::SchachApp(QWidget *parent)
     , ui(new Ui::SchachApp)
     , selectedRow(-1)
     , selectedCol(-1)
+    , previouslySelectedCol(-1)
+    , previouslySelectedRow(-1)
     , chessGame(new Game(this))
     , client(nullptr)
     , server(nullptr)
@@ -46,8 +48,7 @@ SchachApp::SchachApp(QWidget *parent)
     connect(whiteTimer, &QTimer::timeout, this, &SchachApp::updateWhiteTimer);
     connect(blackTimer, &QTimer::timeout, this, &SchachApp::updateBlackTimer);
 
-    // Start the timer for the first turn
-    //startTurnTimer();
+
 
     ui->cbPawnPromotion->setCurrentText("Not Selected");
     connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
@@ -124,9 +125,9 @@ void SchachApp::highlightPossibleMove(const std::pair<int, int>& move) {
     QPushButton* button = buttons[row][col];
 
     if (button) {
-        if (!originalButtonStyles.contains(button)) {
-            originalButtonStyles[button] = button->styleSheet(); // Store the current style if not already stored
-        }
+     if (!originalButtonStyles.contains(button)) {
+          originalButtonStyles[button] = button->styleSheet(); // Store the current style if not already stored
+       }
         button->setStyleSheet("background-color: red;");
     }
 }
@@ -139,93 +140,120 @@ void SchachApp::resetBoardHighlight() {
             button->setStyleSheet(it.value()); // Reset to original style
         }
     }
+    originalButtonStyles.clear(); // Clear the map after resetting
 }
 
 void SchachApp::handleSquareClick(int row, int col) {
-
-    /* Comment out to play around with the gui. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
-    if(!isLocalTurn) {
-        updateNetzwerkConsole("Not your turn!");
-        return;
-    }
-    */
+    // Comment out to play around with the GUI. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
+//    if (!isLocalTurn) {
+//        updateNetzwerkConsole("Not your turn!");
+//        return;
+//    }
 
     QPushButton* clickedButton = buttons[row][col];
     std::shared_ptr<Piece> selectedPiece = chessGame->getPieceAt(col, row);
 
-    if(selectedPiece){
-        std::vector<std::pair<int, int>> possibleMoves = selectedPiece->getPossibleMoves(chessGame);
-
-        //some "Possible" moves are illegal i.e. pinning and moving while in check
-        //Logik logikObjekt;
-
-        // Reset highlighting if a new piece is selected
-                if (selectedRow != -1 && selectedCol != -1) {
-                    resetBoardHighlight(); // Clear previous highlights
-                }
-
+    if ((selectedRow == -1 && selectedCol == -1) || (selectedPiece && ((selectedPiece->checkIfWhite() && !isWhiteTurn) || (!selectedPiece->checkIfWhite() && isWhiteTurn)))){
+        if (selectedPiece && ((selectedPiece->checkIfWhite() && isWhiteTurn) ||(!selectedPiece->checkIfWhite() && !isWhiteTurn))) {
+            selectedRow = row;
+            selectedCol = col;
+            qDebug() << "Selected piece at:" << selectedCol << selectedRow;
             // Highlight possible moves for the selected piece
+            std::vector<std::pair<int, int>> possibleMoves = selectedPiece->getPossibleMoves(chessGame);
+            resetBoardHighlight();  // Clear previous highlights
             for (const auto& move : possibleMoves) {
-            if(chessGame->logikInstance.isLegal(chessGame, col, row, move.first, move.second)){
+                if (chessGame->logikInstance.isLegal(chessGame, col, row, move.first, move.second)) {
                     highlightPossibleMove(move);
                 }
             }
+            // Debug output for possible moves
+            for (const auto& move : possibleMoves) {
+                std::cout << move.first << " " << move.second << std::endl;
+            }
 
-        for (const auto& move : possibleMoves) {
-            std::cout << move.first << " " << move.second << std::endl;
+            previouslySelectedRow = row;
+            previouslySelectedCol = col;
         }
-    }
+    } else if (selectedRow != -1 && selectedCol != -1) {
+            if (selectedPiece &&
+                        ((selectedPiece->checkIfWhite() && isWhiteTurn) ||
+                        (!selectedPiece->checkIfWhite() && !isWhiteTurn))) {
+                if (selectedRow != row || selectedCol != col) {
+                     // Clear previous selection highlights if a new piece is selected
+                     resetBoardHighlight();
+                     selectedRow = row;
+                     selectedCol = col;
+                     qDebug() << "Selected new piece at:" << selectedCol << selectedRow;
 
-    if (selectedRow == -1 && selectedCol == -1) { // No piece selected yet
-        if (!clickedButton->icon().isNull()) { // If there's a piece on the square
-            selectedRow = row;
-            selectedCol = col;
-            qDebug() << "Selected piece at:" << selectedRow << selectedCol;
-          //  clickedButton->setStyleSheet("background-color: yellow;"); // Highlight selected square
+                     // Highlight possible moves for the newly selected piece
+                     std::vector<std::pair<int, int>> possibleMoves = selectedPiece->getPossibleMoves(chessGame);
 
-        }
-    } else { // A piece is selected and a move is attempted
-        qDebug() << "Attempting to move to:" << row << col;
-       // Attempt to move and get MoveInfo
-                MoveInfo moveInfo = chessGame->tryMove(selectedCol, selectedRow, col, row);
-                qDebug() << "isLegal:" << moveInfo.islegal;
+                     for (const auto& move : possibleMoves) {
+                         if (chessGame->logikInstance.isLegal(chessGame, col, row, move.first, move.second)) {
+                             highlightPossibleMove(move);
+                         }
+                     }
 
-                if (moveInfo.islegal == true) { // Move is valid
-                    movePiece(selectedRow, selectedCol, row, col);
-                    resetBoardHighlight();
-                    if(client)
-                        client->sendMove(moveInfo);
-                    if(server)
-                        server->sendMove(moveInfo);
+                     // Debug output for possible moves
+                     for (const auto& move : possibleMoves) {
+                         std::cout << move.first << " " << move.second << std::endl;
+                     }
 
-                    for (int row = 7; row >= 0; --row) {
-                        for (int col = 0; col < 8; ++col) {
-                            std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);
-                            if (piece) {
-                                char pieceChar = ' ';
-                                if (dynamic_cast<Pawn*>(piece.get())) pieceChar = 'P';
-                                else if (dynamic_cast<Rook*>(piece.get())) pieceChar = 'R';
-                                else if (dynamic_cast<Knight*>(piece.get())) pieceChar = 'N';
-                                else if (dynamic_cast<Bishop*>(piece.get())) pieceChar = 'B';
-                                else if (dynamic_cast<Queen*>(piece.get())) pieceChar = 'Q';
-                                else if (dynamic_cast<King*>(piece.get())) pieceChar = 'K';
-                                std::cout << pieceChar << ' ';
-                            } else {
-                                std::cout << ". ";
-                            }
-                        }
-                        std::cout << std::endl;
+                     previouslySelectedRow = row;
+                     previouslySelectedCol = col;
+                     return;  // Exit early to avoid processing a move
+                 }
+             }
+
+        qDebug() << "Attempting to move to:" << col << row;
+
+        // Attempt to move and get MoveInfo
+        MoveInfo moveInfo = chessGame->tryMove(selectedCol, selectedRow, col, row);
+        qDebug() << "isLegal:" << moveInfo.islegal;
+
+        if (moveInfo.islegal) {  // Move is valid
+            movePiece(selectedRow, selectedCol, row, col);
+            resetBoardHighlight();
+
+            if (client) {
+                client->sendMove(moveInfo);
+            }
+            if (server) {
+                server->sendMove(moveInfo);
+            }
+
+            // Debug output for the board state
+            for (int row = 7; row >= 0; --row) {
+                for (int col = 0; col < 8; ++col) {
+                    std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);
+                    if (piece) {
+                        char pieceChar = ' ';
+                        if (dynamic_cast<Pawn*>(piece.get())) pieceChar = 'P';
+                        else if (dynamic_cast<Rook*>(piece.get())) pieceChar = 'R';
+                        else if (dynamic_cast<Knight*>(piece.get())) pieceChar = 'N';
+                        else if (dynamic_cast<Bishop*>(piece.get())) pieceChar = 'B';
+                        else if (dynamic_cast<Queen*>(piece.get())) pieceChar = 'Q';
+                        else if (dynamic_cast<King*>(piece.get())) pieceChar = 'K';
+                        std::cout << pieceChar << ' ';
+                    } else {
+                        std::cout << ". ";
                     }
-                    std::cout << std::endl;
-                } else {
-                    updateNetzwerkConsole("Illegal move!");
                 }
+                std::cout << std::endl;
+            }
+            std::cout << std::endl;
+        } else {
+            updateNetzwerkConsole("Illegal move!");
+        }
 
-                // Reset selection
-                selectedRow = -1;
-                selectedCol = -1;
+        // Reset selection
+        selectedRow = -1;
+        selectedCol = -1;
+
+    }
 }
-}
+
+
 
 void SchachApp::startTurnTimer() {
     if (isWhiteTurn) {
@@ -245,16 +273,36 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     fromButton->setIcon(QIcon());  // Clear the icon from the original button
 
      // Debugging: Print the move details
-     qDebug() << "Moved piece from:" << fromRow << fromCol << "to:" << toRow << toCol;
+     qDebug() << "Moved piece from:" << fromCol << fromRow << "to:" << toCol << toRow;
 
-     // Re-fetch the piece and update the icon (ensures any changes are reflected)
-     std::shared_ptr<Piece> movedPiece = chessGame->getPieceAt(toCol, toRow);
-     if (movedPiece != nullptr) {
-        QString iconName = QString(":/Figuren/") + movedPiece->getType() + (movedPiece->checkIfWhite() ? "W" : "B") + ".png";
-        toButton->setIcon(QIcon(iconName));  // Set the correct icon for the piece
-      } else {
-         toButton->setIcon(QIcon());  // Clear icon if no piece exists (for safety)
-      }
+     // Re-fetch all pieces and update the icons on the board
+     for (int row = 0; row < 8; ++row) {
+         for (int col = 0; col < 8; ++col) {
+             QPushButton* button = buttons[row][col];
+             std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);  // Get piece from the game
+
+             if (piece != nullptr) {
+                 QString iconName = QString(":/Figuren/") + piece->getType() + (piece->checkIfWhite() ? "W" : "B") + ".png";
+                 button->setIcon(QIcon(iconName));  // Set the correct icon for the piece
+             } else {
+                 button->setIcon(QIcon());  // Clear icon if no piece exists
+             }
+         }
+     }
+
+// ////////////////////////////////7
+
+//     // Re-fetch the piece and update the icon (ensures any changes are reflected)
+//     std::shared_ptr<Piece> movedPiece = chessGame->getPieceAt(toCol, toRow);
+//     if (movedPiece != nullptr) {
+//        QString iconName = QString(":/Figuren/") + movedPiece->getType() + (movedPiece->checkIfWhite() ? "W" : "B") + ".png";
+//        toButton->setIcon(QIcon(iconName));  // Set the correct icon for the piece
+//      } else {
+//         toButton->setIcon(QIcon());  // Clear icon if no piece exists (for safety)
+//      }
+
+
+// ///////////////////////////////7
 
      // Switch turns
         isWhiteTurn = !isWhiteTurn;  // Toggle between white and black turns
@@ -317,7 +365,7 @@ quint8 SchachApp:: PawnPromotion(){
     qWarning()<<"Select a piece for pawn promotion";
     ui->pbPawnPromotion->setEnabled(true);
     ui->cbPawnPromotion->setEnabled(true);
-
+    return promotionType;
 }
 
 /**
