@@ -6,7 +6,10 @@
 #include "game.h"
 #include "logik.h"
 #include "piece.h"
+#include "schachapp.h"
 #include <iostream>
+#include <QString>
+#include <QComboBox>
 
 Game::Game(class SchachApp* gui, QObject* parent)
     : QObject(parent), whiteTurn(true), gui(gui){
@@ -125,8 +128,12 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
 }
 
 quint8 Game::getPawnPromotion() {
-    return 0x30;
+
+    //return 0x30;
+    return gui->PawnPromotion();
+
 }
+
 
 std::pair<int, int> Game::findKing(bool isWhite) const {
     // Loop through the entire board (assuming 8x8 board)
