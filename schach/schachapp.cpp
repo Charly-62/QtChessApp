@@ -318,6 +318,7 @@ quint8 SchachApp:: PawnPromotion(){
     ui->pbPawnPromotion->setEnabled(true);
     ui->cbPawnPromotion->setEnabled(true);
 
+    return promotionType;
 }
 
 /**

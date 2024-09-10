@@ -34,7 +34,7 @@ public:
     void setPosition(int newRow, int newCol){row=newRow; col=newCol;};
 
     //hasMoved getter and setter
-    bool checkMoved(){return hasMoved;};
+    bool checkMoved() const{return hasMoved;};
     void setMoved(){hasMoved = true;};
 
     virtual QString getType() const = 0;

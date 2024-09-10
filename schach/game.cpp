@@ -93,16 +93,18 @@ bool Game::isSquareAttacked(int col, int row, bool currentPlayerIsWhite) const {
     // Loop over all squares on the board
     for (int c = 0; c < 8; ++c) {
         for (int r = 0; r < 8; ++r) {
+            if (c != col || r != row){
+                std::shared_ptr<Piece> attackingPiece = getPieceAt(c, r);
 
-            std::shared_ptr<Piece> attackingPiece = getPieceAt(c, r);
+                // Check if there is a piece at (c, r) and it's from the opponent's team
+                if (attackingPiece != nullptr && attackingPiece->checkIfWhite() != currentPlayerIsWhite) {
 
-            // Check if there is a piece at (c, r) and it's from the opponent's team
-            if (attackingPiece != nullptr && attackingPiece->checkIfWhite() != currentPlayerIsWhite) {
-                // Check if the opponent's piece can move to (col, row)
-                std::vector<std::pair<int, int>> possibleMoves = attackingPiece->getPossibleMoves(this);
-                for (const auto& move : possibleMoves) {
-                    if (move.first == col && move.second == row) {
-                        return true; // The square is under attack
+                    // Check if the opponent's piece can move to (col, row)
+                    std::vector<std::pair<int, int>> possibleMoves = attackingPiece->getPossibleMoves(this);
+                    for (const auto& move : possibleMoves) {
+                        if (move.first == col && move.second == row) {
+                            return true; // The square is under attack
+                        }
                     }
                 }
             }
@@ -115,6 +117,30 @@ bool Game::isSquareAttacked(int col, int row, bool currentPlayerIsWhite) const {
 
 void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
     std::shared_ptr<Piece> movingPiece = getPieceAt(s_col, s_row);
+
+    // --- CASTLING LOGIC ---
+    if (movingPiece->getType() == "king") {
+        // Castling occurs if the king moves two squares left (queenside) or right (kingside)
+        if (abs(e_col - s_col) == 2) {
+            // Determine if it's kingside or queenside castling
+            if (e_col == 6) {  // Kingside castling (king moves to column 6)
+                // Move the rook from column 7 to column 5
+                std::shared_ptr<Piece> rook = getPieceAt(7, s_row);
+                board[5][s_row] = rook;
+                board[7][s_row] = nullptr;
+                rook->setPosition(s_row, 5);
+                rook->setMoved();  // Mark the rook as having moved
+            }
+            else if (e_col == 2) {  // Queenside castling (king moves to column 2)
+                // Move the rook from column 0 to column 3
+                std::shared_ptr<Piece> rook = getPieceAt(0, s_row);
+                board[3][s_row] = rook;
+                board[0][s_row] = nullptr;
+                rook->setPosition(s_row, 3);
+                rook->setMoved();  // Mark the rook as having moved
+            }
+        }
+    }
 
 
     // Check if the move is an en passant capture
