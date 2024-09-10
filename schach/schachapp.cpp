@@ -4,10 +4,12 @@
 #include "piece.h"
 #include "game.h"
 #include <QPushButton>
+#include <QComboBox>
 #include <QMetaEnum>
 #include <QDebug>
 #include <iostream>
-
+#include <QEventLoop>
+#include <QComboBox>
 
 SchachApp::SchachApp(QWidget *parent)
     : QWidget(parent)
@@ -45,8 +47,12 @@ SchachApp::SchachApp(QWidget *parent)
     connect(blackTimer, &QTimer::timeout, this, &SchachApp::updateBlackTimer);
 
     // Start the timer for the first turn
-    startTurnTimer();
-    //connect(ui->bStart, &QPushButton::clicked, this, &SchachApp::startGame);
+    //startTurnTimer();
+
+    ui->cbPawnPromotion->setCurrentText("Not Selected");
+    connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
+    ui->pbPawnPromotion->setEnabled(false);
+    ui->cbPawnPromotion->setEnabled(false);
 
     // Connection to handle the turn switch
     connect(chessGame, &Game::turnSwitched, this, &SchachApp::switchTurn);
@@ -135,8 +141,6 @@ void SchachApp::resetBoardHighlight() {
     }
 }
 
-
-
 void SchachApp::handleSquareClick(int row, int col) {
 
     /* Comment out to play around with the gui. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
@@ -189,7 +193,6 @@ void SchachApp::handleSquareClick(int row, int col) {
                 if (moveInfo.islegal == true) { // Move is valid
                     movePiece(selectedRow, selectedCol, row, col);
                     resetBoardHighlight();
-
                     if(client)
                         client->sendMove(moveInfo);
                     if(server)
@@ -234,7 +237,6 @@ void SchachApp::startTurnTimer() {
     }
 }
 
-
 void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     QPushButton* fromButton = buttons[fromRow][fromCol];
     QPushButton* toButton = buttons[toRow][toCol];
@@ -270,6 +272,7 @@ void SchachApp::updateTimerDisplay(int timeRemaining, bool isWhite) {
         ui->lblBlackTimer->setText(timeString);  // Update the black player's timer label
     }
 }
+
 void SchachApp::updateWhiteTimer() {
     if (whiteTimeRemaining > 0) {
         whiteTimeRemaining--;  // Decrease the remaining time
@@ -290,7 +293,32 @@ void SchachApp::updateBlackTimer() {
     }
 }
 
+void SchachApp::onPbPawnPromotionClicked(){
+    QString mode = ui-> cbPawnPromotion->currentText();
+    qWarning()<<"Current Selection:"<<mode;
+    quint8 promotionType = 0x00;
+    if (mode == "Queen"){
+        promotionType = 0x40;
+    }
+    else if (mode == "Rook"){
+        promotionType = 0x30;
+    }
+    else if (mode == "Knight"){
+        promotionType = 0x20;
+    }
+    else if (mode == "Bishop"){
+        promotionType = 0x10;
+    }
+    qWarning()<<"promotion type:"<<promotionType;
+    ui->pbPawnPromotion->setEnabled(false);
+    ui->cbPawnPromotion->setEnabled(false);
+}
+quint8 SchachApp:: PawnPromotion(){
+    qWarning()<<"Select a piece for pawn promotion";
+    ui->pbPawnPromotion->setEnabled(true);
+    ui->cbPawnPromotion->setEnabled(true);
 
+}
 
 /**
  * @brief Changes the color of the IPAddress line edit if it is a valid or invalid IPv4 address (maybe add also IPv6 addresses)
@@ -358,8 +386,11 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         // Update bConnect button for client
         ui->bConnect->setText("Connect");
-        ui->cbStartingPlayer->setEnabled(false);
+
         ui->bStart->setEnabled(false);
+        ui->leIP->setEnabled(true);
+        ui->cbStartingPlayer->setEnabled(false);
+
 
         // Switch to Client mode
         if(server) {
@@ -373,13 +404,16 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             client = new MyTCPClient(chessGame);
             setDeviceController();
             ui->lstNetzwerkConsole->addItem("Client initialized.");
+            connect(client, &Netzwerk::gameStarted, this, &SchachApp::gameStarted);
         }
     } else if (mode == "Server") {
 
         //Update bConnect button for server
         ui->bConnect->setText("Start Listening");
-        ui->cbStartingPlayer->setEnabled(true);
+
         ui->bStart->setEnabled(true);
+        ui->leIP->setEnabled(false);
+        ui->cbStartingPlayer->setEnabled(true);
 
         // Switch to Server mode
         if(client) {
@@ -396,6 +430,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             ui->lstNetzwerkConsole->addItem("Server initialized");
         }
     }
+    moveReceived();
 }
 
 void SchachApp::updateNetzwerkConsole(QString message) {
@@ -470,7 +505,7 @@ void SchachApp::moveReceived() {
 
 // Client version of gameStarted()
 void SchachApp::gameStarted(bool ServerStarts, QString groupNumber) {
-
+        startTurnTimer();
         if(ServerStarts) {
             updateNetzwerkConsole("Server starts the game.");
             updateNetzwerkConsole("Playing against Group " + groupNumber);
@@ -503,4 +538,6 @@ void SchachApp::on_bStart_clicked()
     bool ServerStarts = (ui->cbStartingPlayer->currentText() == "Server");
     server->sendGameStart(ServerStarts);
     updateNetzwerkConsole("Game start message sent. " + ui->cbStartingPlayer->currentText() + " starts.");
+    startTurnTimer();
+
 }

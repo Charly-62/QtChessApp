@@ -24,14 +24,14 @@ void MyTCPServer::startListening(int port) {
 }
 
 void MyTCPServer::stopListening() {
-    if(server->isListening()) {
-        server->close();
-    }
-
     if(_socket) {
         _socket->disconnectFromHost();
-        delete _socket;
-        _socket = nullptr;
+        //delete _socket;
+        //_socket = nullptr;
+    }
+
+    if(server->isListening()) {
+        server->close();
     }
 }
 
@@ -57,6 +57,7 @@ void MyTCPServer::onClientConnecting() {
         emit clientStateChanged(clientInfo); // Emit signal to update UI
         // Handle client disconnection
         connect(_socket, &QTcpSocket::disconnected, this, &MyTCPServer::onClientDisconnected);
+        connect(_socket, &QTcpSocket::readyRead, this, &Netzwerk::receiveMove);
     }
 }
 

@@ -15,6 +15,7 @@
 #include <QTcpSocket>
 #include <QDataStream>
 
+
 class SchachApp;
 class Netzwerk;
 
@@ -124,9 +125,11 @@ private:
      */
     void initBoard();
 
+
 signals:
 
     void turnSwitched(bool whiteTurn);
+
 
 };
 

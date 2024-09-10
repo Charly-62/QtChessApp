@@ -1049,8 +1049,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QPushButton" name="bStart">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>360</y>
+     <x>630</x>
+     <y>370</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -1062,8 +1062,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QGroupBox" name="grpNetwork">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>140</y>
+     <x>630</x>
+     <y>150</y>
      <width>291</width>
      <height>211</height>
     </rect>
@@ -1156,10 +1156,10 @@ background-color: rgb(134, 255, 142)
   <widget class="QWidget" name="formLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>600</x>
+     <x>650</x>
      <y>70</y>
      <width>291</width>
-     <height>56</height>
+     <height>65</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout_2">
@@ -1210,7 +1210,7 @@ background-color: rgb(134, 255, 142)
   <widget class="QListWidget" name="lstNetzwerkConsole">
    <property name="geometry">
     <rect>
-     <x>600</x>
+     <x>650</x>
      <y>410</y>
      <width>291</width>
      <height>241</height>
@@ -1320,6 +1320,67 @@ background-color: rgb(134, 255, 142)
    <property name="text">
     <string>CurrentPlayerName</string>
    </property>
+  </widget>
+  <widget class="QGroupBox" name="grpPawnPromotion">
+   <property name="geometry">
+    <rect>
+     <x>489</x>
+     <y>260</y>
+     <width>131</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Pawn Promotion</string>
+   </property>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>111</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QComboBox" name="cbPawnPromotion">
+       <item>
+        <property name="text">
+         <string>Not Selected</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Queen</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Rook</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Knight</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Bishop</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbPawnPromotion">
+       <property name="text">
+        <string>OK</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
  </widget>
  <resources/>
