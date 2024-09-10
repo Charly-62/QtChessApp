@@ -141,8 +141,6 @@ void SchachApp::resetBoardHighlight() {
     }
 }
 
-
-
 void SchachApp::handleSquareClick(int row, int col) {
 
     /* Comment out to play around with the gui. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
@@ -195,7 +193,6 @@ void SchachApp::handleSquareClick(int row, int col) {
                 if (moveInfo.islegal == true) { // Move is valid
                     movePiece(selectedRow, selectedCol, row, col);
                     resetBoardHighlight();
-
                     if(client)
                         client->sendMove(moveInfo);
                     if(server)
@@ -240,7 +237,6 @@ void SchachApp::startTurnTimer() {
     }
 }
 
-
 void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     QPushButton* fromButton = buttons[fromRow][fromCol];
     QPushButton* toButton = buttons[toRow][toCol];
@@ -276,6 +272,7 @@ void SchachApp::updateTimerDisplay(int timeRemaining, bool isWhite) {
         ui->lblBlackTimer->setText(timeString);  // Update the black player's timer label
     }
 }
+
 void SchachApp::updateWhiteTimer() {
     if (whiteTimeRemaining > 0) {
         whiteTimeRemaining--;  // Decrease the remaining time
@@ -407,6 +404,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             client = new MyTCPClient(chessGame);
             setDeviceController();
             ui->lstNetzwerkConsole->addItem("Client initialized.");
+            connect(client, &Netzwerk::gameStarted, this, &SchachApp::gameStarted);
         }
     } else if (mode == "Server") {
 
@@ -432,6 +430,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             ui->lstNetzwerkConsole->addItem("Server initialized");
         }
     }
+    moveReceived();
 }
 
 void SchachApp::updateNetzwerkConsole(QString message) {
