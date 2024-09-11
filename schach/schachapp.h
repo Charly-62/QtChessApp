@@ -107,6 +107,7 @@ private:
     void updateBlackTimer();
     void updateTimerDisplay(int timeRemaining, bool isWhite);
     void startTurnTimer();
+    void updatecurrentPlayerLabel();
 
     QComboBox* cbPawnPromotion;
     quint8 promotionType;

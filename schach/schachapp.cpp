@@ -53,7 +53,7 @@ SchachApp::SchachApp(QWidget *parent)
     connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
     ui->pbPawnPromotion->setEnabled(false);
     ui->cbPawnPromotion->setEnabled(false);
-
+    ui->lblCurrentPlayerName->setText("Welcome to a new game ");
     // Connection to handle the turn switch
     connect(chessGame, &Game::turnSwitched, this, &SchachApp::switchTurn);
 }
@@ -260,6 +260,13 @@ void SchachApp::startTurnTimer() {
         whiteTimer->stop();  // Stop white player's timer
     }
 }
+void SchachApp::updatecurrentPlayerLabel() {
+    if (isWhiteTurn) {
+        ui->lblCurrentPlayerName->setText("White's Turn");
+    } else {
+        ui->lblCurrentPlayerName->setText("Black's Turn");
+    }
+}
 
 void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     QPushButton* fromButton = buttons[fromRow][fromCol];
@@ -303,7 +310,10 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
      // Switch turns
         isWhiteTurn = !isWhiteTurn;  // Toggle between white and black turns
         startTurnTimer();  // Start the timer for the next turn
+        updatecurrentPlayerLabel();
 }
+
+
 
 void SchachApp::updateTimerDisplay(int timeRemaining, bool isWhite) {
     int minutes = timeRemaining / 60;  // Calculate minutes
@@ -535,6 +545,7 @@ void SchachApp::moveReceived(MoveInfo moveInfo) {
 // Client version of gameStarted()
 void SchachApp::gameStarted(bool ServerStarts, QString groupNumber) {
         startTurnTimer();
+        updatecurrentPlayerLabel();
         if(ServerStarts) {
             updateNetzwerkConsole("Server starts the game.");
             updateNetzwerkConsole("Playing against Group " + groupNumber);
@@ -567,4 +578,5 @@ void SchachApp::on_bStart_clicked()
     server->sendGameStart(ServerStarts);
     updateNetzwerkConsole("Game start message sent. " + ui->cbStartingPlayer->currentText() + " starts.");
     startTurnTimer();
+    updatecurrentPlayerLabel();
 }
