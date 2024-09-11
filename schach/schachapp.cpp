@@ -53,7 +53,8 @@ SchachApp::SchachApp(QWidget *parent)
     connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
     ui->pbPawnPromotion->setEnabled(false);
     ui->cbPawnPromotion->setEnabled(false);
-    ui->lblCurrentPlayerName->setText("Welcome to a new game ");
+    setWelcomeMessage();
+    //ui->lblCurrentPlayerName->setText("Welcome to a new game ");
     // Connection to handle the turn switch
     connect(chessGame, &Game::turnSwitched, this, &SchachApp::switchTurn);
 }
@@ -66,6 +67,30 @@ SchachApp::~SchachApp()
                 delete board[row][col];
             }
      }
+}
+
+void SchachApp::setWelcomeMessage()
+{
+    QFont font;
+        font.setBold(true);
+        font.setPointSize(16); // Increase the font size
+        font.setFamily("Arial"); // Set a font family, like Arial or any other you prefer
+
+        ui->lblCurrentPlayerName->setFont(font);
+        ui->lblCurrentPlayerName->setText("Welcome to a New Game!");
+
+        // Center the text
+        ui->lblCurrentPlayerName->setAlignment(Qt::AlignCenter);
+
+        // Set a gradient background and text color
+        ui->lblCurrentPlayerName->setStyleSheet(
+            "color: #ffffff;" // Text color
+            "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3a3a3a, stop:1 #000000);" // Gradient background
+            "padding: 10px;" // Padding around the text
+            "border-radius: 10px;" // Rounded corners
+        );
+
+
 }
 
 void SchachApp::initializeBoard()
@@ -261,13 +286,32 @@ void SchachApp::startTurnTimer() {
         whiteTimer->stop();  // Stop white player's timer
     }
 }
+
+// /////////BASIC ONE
+//void SchachApp::updatecurrentPlayerLabel() {
+//    if (isWhiteTurn) {
+//        ui->lblCurrentPlayerName->setText("White's Turn");
+//    } else {
+//        ui->lblCurrentPlayerName->setText("Black's Turn");
+//    }
+//}
+
+
+// /////////IMPROVED ONE
 void SchachApp::updatecurrentPlayerLabel() {
+    QFont font;
+    font.setBold(true); // Make the font bold
+    ui->lblCurrentPlayerName->setFont(font);
+
     if (isWhiteTurn) {
-        ui->lblCurrentPlayerName->setText("White's Turn");
+        ui->lblCurrentPlayerName->setText("♔ White's Turn");
+        ui->lblCurrentPlayerName->setStyleSheet("color: #ffffff; background-color: #000000; padding: 5px; border-radius: 5px;");
     } else {
-        ui->lblCurrentPlayerName->setText("Black's Turn");
+        ui->lblCurrentPlayerName->setText("♚ Black's Turn");
+        ui->lblCurrentPlayerName->setStyleSheet("color: #000000; background-color: #ffffff; padding: 5px; border-radius: 5px;");
     }
 }
+
 
 void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     QPushButton* fromButton = buttons[fromRow][fromCol];
