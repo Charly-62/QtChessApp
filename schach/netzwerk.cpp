@@ -36,14 +36,20 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
 
     quint8 zusatzInfo = (moveInfo.promotion << 4) | (moveInfo.consequences & 0x0F);
 
-    stream << quint8(0x03) << quint8(moveInfo.s_col)
-           << quint8(moveInfo.s_row) << quint8(moveInfo.e_col)
-           << quint8(moveInfo.e_row) << zusatzInfo;
+    stream << quint8(0x03)
+           << quint8(0x05)
+           << quint8(moveInfo.s_col)
+           << quint8(moveInfo.s_row)
+           << quint8(moveInfo.e_col)
+           << quint8(moveInfo.e_row)
+           << zusatzInfo;
+
+    moveData.toHex();
 
     if(_socket && _socket->isOpen()) {
-        qDebug() << moveData;
         _socket->write(moveData);
         _socket->flush();
+        qDebug() << "Move sent: " << moveData;
         emit logMessage("Move sent successfully.");
     } else {
         emit logMessage("Socket is not open, cannot send the move.");
@@ -52,20 +58,17 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
 }
 
 void Netzwerk::receiveMove() {
-    emit logMessage("Something received.");
     QByteArray moveData = _socket->readAll();
-    moveData.toHex();
     QDataStream stream(&moveData, QIODevice::ReadOnly);
 
     MoveInfo moveInfo;
-    quint8 command;
-    quint8 zusatzinfo;
+    quint8 length, command;
 
     stream >> command; // receive command first and handle the message differently if it's a move, the start of the game, etc.
 
     // Game Start command
     if(command == 0x01) {
-        quint8 length, StartingPlayer, groupNumber;
+        quint8 StartingPlayer, groupNumber;
         stream >> length >> StartingPlayer >> groupNumber;
 
         QString group = QString::number(groupNumber);
@@ -75,15 +78,30 @@ void Netzwerk::receiveMove() {
 
     // Move command
     if(command == 0x03) {
-        stream >> moveInfo.s_col >> moveInfo.s_row
-               >> moveInfo.e_col >> moveInfo.e_row
-               >> zusatzinfo;
-        moveInfo.consequences = zusatzinfo & 0x0F; // Lower 4 bits for consequences
-        moveInfo.promotion = (zusatzinfo >> 4) & 0x0F; // Upper 4 bits for promotion
+        quint8 startCol, startRow, endCol, endRow, zusatzinfo; // store received data in to quint8
 
-        MoveInfo result = gameInstance->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
-        if(!result.islegal) {
+        stream >> length
+               >> startCol
+               >> startRow
+               >> endCol
+               >> endRow
+               >> zusatzinfo;
+
+        moveInfo.s_col = static_cast<int> (startCol);
+        moveInfo.s_row = static_cast<int> (startRow);
+        moveInfo.e_col = static_cast<int> (endCol);
+        moveInfo.e_row = static_cast<int> (endRow);
+
+        moveInfo.consequences = static_cast<int> (zusatzinfo & 0x0F); // Lower 4 bits for consequences
+        moveInfo.promotion = static_cast<int> ((zusatzinfo >> 4) & 0x0F); // Upper 4 bits for promotion
+
+        qDebug() << "Move received: " << "Length: " << length << ", s_col: " << moveInfo.s_col << ", s_row: " << moveInfo.s_row << ", e_col: " << moveInfo.e_col << ", e_row: " << moveInfo.e_row << ", zusatzinfo: " << zusatzinfo;
+
+        moveInfo.islegal = gameInstance->logikInstance.isLegal(gameInstance, startCol, startRow, endCol, endRow);
+
+        if(!moveInfo.islegal) {
             emit logMessage("Received move is illegal!");
+            return;
         } else {
             emit logMessage("Received valid move.");
         }

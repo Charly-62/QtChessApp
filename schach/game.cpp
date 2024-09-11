@@ -75,7 +75,6 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     if (logikInstance.isPawnPromotion(this, s_col, s_row, e_col, e_row)) {
         moveInfo.promotion = getPawnPromotion();
     }
-
     // Apply the move to the board (update the game state)
     updateBoard(s_col, s_row, e_col, e_row);
 
