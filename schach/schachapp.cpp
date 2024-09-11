@@ -29,14 +29,6 @@ SchachApp::SchachApp(QWidget *parent)
 
     on_cbHostClient_currentTextChanged("Client");
 
-    // Connect the Netzwerk logMessage signal to updateNetzwerkConsole slot
-    if(client) {
-        connect(client, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
-    }
-    if(server) {
-        connect(server, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
-    }
-
     whiteTimer = new QTimer(this);  // Create the white player's timer
     blackTimer = new QTimer(this);  // Create the black player's timer
     whiteTimeRemaining = 10 * 60;  // Set the initial time to 10 minutes (in seconds)
@@ -169,10 +161,10 @@ void SchachApp::resetBoardHighlight() {
 
 void SchachApp::handleSquareClick(int row, int col) {
     // Comment out to play around with the GUI. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
-//    if (!isLocalTurn) {
-//        updateNetzwerkConsole("Not your turn!");
-//        return;
-//    }
+    // if (!isLocalTurn) {
+    //     updateNetzwerkConsole("Not your turn!");
+    //     return;
+    // }
 
     QPushButton* clickedButton = buttons[row][col];
     std::shared_ptr<Piece> selectedPiece = chessGame->getPieceAt(col, row);
@@ -490,6 +482,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             client = new MyTCPClient(chessGame);
             setDeviceController();
             ui->lstNetzwerkConsole->addItem("Client initialized.");
+            connect(client, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
             connect(client, &Netzwerk::gameStarted, this, &SchachApp::gameStarted);
             connect(client, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
         }
@@ -514,6 +507,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             server = new MyTCPServer(chessGame);
             ui->lstNetzwerkConsole->addItem("Server initialized");
             connect(server, &MyTCPServer::clientStateChanged, this, &SchachApp::updateNetzwerkConsole);
+            connect(server, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &MyTCPServer::serverStatus, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
         }

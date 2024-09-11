@@ -41,6 +41,7 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
            << quint8(moveInfo.e_row) << zusatzInfo;
 
     if(_socket && _socket->isOpen()) {
+        qDebug() << moveData;
         _socket->write(moveData);
         _socket->flush();
         emit logMessage("Move sent successfully.");
