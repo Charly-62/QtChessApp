@@ -151,9 +151,10 @@ void SchachApp::handleSquareClick(int row, int col) {
 
     QPushButton* clickedButton = buttons[row][col];
     std::shared_ptr<Piece> selectedPiece = chessGame->getPieceAt(col, row);
-
-    if ((selectedRow == -1 && selectedCol == -1) || (selectedPiece && ((selectedPiece->checkIfWhite() && !isWhiteTurn) || (!selectedPiece->checkIfWhite() && isWhiteTurn)))){
-        if (selectedPiece && ((selectedPiece->checkIfWhite() && isWhiteTurn) ||(!selectedPiece->checkIfWhite() && !isWhiteTurn))) {
+    // if no piece is selected yet
+    if (selectedRow == -1 && selectedCol == -1) {
+        // select the piece of the actual player
+       if (selectedPiece && ((selectedPiece->checkIfWhite() && isWhiteTurn) || (!selectedPiece->checkIfWhite() && !isWhiteTurn))) {
             selectedRow = row;
             selectedCol = col;
             qDebug() << "Selected piece at:" << selectedCol << selectedRow;
@@ -164,45 +165,42 @@ void SchachApp::handleSquareClick(int row, int col) {
                 if (chessGame->logikInstance.isLegal(chessGame, col, row, move.first, move.second)) {
                     highlightPossibleMove(move);
                 }
+                // Debug output for possible moves
+                for (const auto& move : possibleMoves) {
+                    std::cout << move.first << " " << move.second << std::endl;
+                }
+
+                previouslySelectedRow = row;
+                previouslySelectedCol = col;
             }
-            // Debug output for possible moves
-            for (const auto& move : possibleMoves) {
-                std::cout << move.first << " " << move.second << std::endl;
-            }
+         }
+      }else{ // if a piece is already selected
 
-            previouslySelectedRow = row;
-            previouslySelectedCol = col;
-        }
-    } else if (selectedRow != -1 && selectedCol != -1) {
-            if (selectedPiece &&
-                        ((selectedPiece->checkIfWhite() && isWhiteTurn) ||
-                        (!selectedPiece->checkIfWhite() && !isWhiteTurn))) {
-                if (selectedRow != row || selectedCol != col) {
-                     // Clear previous selection highlights if a new piece is selected
-                     resetBoardHighlight();
-                     selectedRow = row;
-                     selectedCol = col;
-                     qDebug() << "Selected new piece at:" << selectedCol << selectedRow;
+              // if another piece of the atual player is selected
+            if (selectedPiece && ((selectedPiece->checkIfWhite() && isWhiteTurn) || (!selectedPiece->checkIfWhite() && !isWhiteTurn))) {
+                // Clear previous selection highlights if a new piece is selected
+                resetBoardHighlight();
+                selectedRow = row;
+                selectedCol = col;
+                qDebug() << "Selected new piece at:" << selectedCol << selectedRow;
 
-                     // Highlight possible moves for the newly selected piece
-                     std::vector<std::pair<int, int>> possibleMoves = selectedPiece->getPossibleMoves(chessGame);
+                // Highlight possible moves for the newly selected piece
+                std::vector<std::pair<int, int>> possibleMoves = selectedPiece->getPossibleMoves(chessGame);
 
-                     for (const auto& move : possibleMoves) {
-                         if (chessGame->logikInstance.isLegal(chessGame, col, row, move.first, move.second)) {
-                             highlightPossibleMove(move);
-                         }
-                     }
+                for (const auto& move : possibleMoves) {
+                    if (chessGame->logikInstance.isLegal(chessGame, col, row, move.first, move.second)) {
+                        highlightPossibleMove(move);
+                    }
+                }
 
-                     // Debug output for possible moves
-                     for (const auto& move : possibleMoves) {
-                         std::cout << move.first << " " << move.second << std::endl;
-                     }
+                // Debug output for possible moves
+                for (const auto& move : possibleMoves) {
+                    std::cout << move.first << " " << move.second << std::endl;
+                }
 
-                     previouslySelectedRow = row;
-                     previouslySelectedCol = col;
-                     return;  // Exit early to avoid processing a move
-                 }
-             }
+                previouslySelectedRow = row;
+                previouslySelectedCol = col;
+                } else { // Si the case is empty or has an oppenent piece, attempt the movement
 
         qDebug() << "Attempting to move to:" << col << row;
 
@@ -248,10 +246,9 @@ void SchachApp::handleSquareClick(int row, int col) {
         // Reset selection
         selectedRow = -1;
         selectedCol = -1;
-
+        }
     }
 }
-
 
 
 void SchachApp::startTurnTimer() {
