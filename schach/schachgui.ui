@@ -1130,8 +1130,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QLabel" name="scorelbl">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>90</y>
+     <x>390</x>
+     <y>130</y>
      <width>64</width>
      <height>17</height>
     </rect>
@@ -1146,7 +1146,7 @@ background-color: rgb(134, 255, 142)
      <x>650</x>
      <y>70</y>
      <width>291</width>
-     <height>65</height>
+     <height>70</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout_2">
@@ -1207,8 +1207,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QLabel" name="lblWhiteTimer">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>580</y>
+     <x>390</x>
+     <y>570</y>
      <width>64</width>
      <height>17</height>
     </rect>
@@ -1220,8 +1220,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QLabel" name="lblBlackTimer">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>120</y>
+     <x>390</x>
+     <y>110</y>
      <width>64</width>
      <height>17</height>
     </rect>
@@ -1233,8 +1233,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QLabel" name="scorelbl_2">
    <property name="geometry">
     <rect>
-     <x>400</x>
-     <y>610</y>
+     <x>390</x>
+     <y>590</y>
      <width>64</width>
      <height>17</height>
     </rect>
@@ -1248,12 +1248,12 @@ background-color: rgb(134, 255, 142)
     <rect>
      <x>180</x>
      <y>570</y>
-     <width>113</width>
+     <width>131</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Enter Name</string>
+    <string>Enter your name</string>
    </property>
   </widget>
   <widget class="QLabel" name="lblName1">
@@ -1274,12 +1274,12 @@ background-color: rgb(134, 255, 142)
     <rect>
      <x>190</x>
      <y>110</y>
-     <width>113</width>
+     <width>131</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Enter name</string>
+    <string>Enter your name</string>
    </property>
   </widget>
   <widget class="QLabel" name="lblName2">
@@ -1325,8 +1325,8 @@ background-color: rgb(134, 255, 142)
      <rect>
       <x>10</x>
       <y>40</y>
-      <width>119</width>
-      <height>71</height>
+      <width>122</width>
+      <height>72</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">

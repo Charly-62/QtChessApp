@@ -303,13 +303,32 @@ void SchachApp::updatecurrentPlayerLabel() {
     font.setBold(true); // Make the font bold
     ui->lblCurrentPlayerName->setFont(font);
 
-    if (isWhiteTurn) {
-        ui->lblCurrentPlayerName->setText("♔ White's Turn");
-        ui->lblCurrentPlayerName->setStyleSheet("color: #ffffff; background-color: #000000; padding: 5px; border-radius: 5px;");
+    QString whitePlayerName = ui->leName1->text(); // Get white player's name
+    QString blackPlayerName = ui->leName2->text(); // Get black player's name
+
+    QString labelText;
+    QString style;
+
+    if (whitePlayerName != "Enter your name" && blackPlayerName != "Enter your name") {
+        if (isWhiteTurn) {
+            labelText = "♔ " + whitePlayerName + "'s Turn";
+            style = "color: #ffffff; background-color: #000000; padding: 5px; border-radius: 5px;";
+        } else {
+            labelText = "♚ " + blackPlayerName + "'s Turn";
+            style = "color: #000000; background-color: #ffffff; padding: 5px; border-radius: 5px;";
+        }
     } else {
-        ui->lblCurrentPlayerName->setText("♚ Black's Turn");
-        ui->lblCurrentPlayerName->setStyleSheet("color: #000000; background-color: #ffffff; padding: 5px; border-radius: 5px;");
+        if (isWhiteTurn) {
+            labelText = "♔ White's Turn";
+            style = "color: #ffffff; background-color: #000000; padding: 5px; border-radius: 5px;";
+        } else {
+            labelText = "♚ Black's Turn";
+            style = "color: #000000; background-color: #ffffff; padding: 5px; border-radius: 5px;";
+        }
     }
+
+    ui->lblCurrentPlayerName->setText(labelText);
+    ui->lblCurrentPlayerName->setStyleSheet(style);
 }
 
 
