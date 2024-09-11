@@ -241,6 +241,7 @@ void SchachApp::handleSquareClick(int row, int col) {
             std::cout << std::endl;
         } else {
             updateNetzwerkConsole("Illegal move!");
+            resetBoardHighlight();  // Clear previous highlights
         }
 
         // Reset selection
@@ -292,20 +293,6 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
              }
          }
      }
-
-// ////////////////////////////////7
-
-//     // Re-fetch the piece and update the icon (ensures any changes are reflected)
-//     std::shared_ptr<Piece> movedPiece = chessGame->getPieceAt(toCol, toRow);
-//     if (movedPiece != nullptr) {
-//        QString iconName = QString(":/Figuren/") + movedPiece->getType() + (movedPiece->checkIfWhite() ? "W" : "B") + ".png";
-//        toButton->setIcon(QIcon(iconName));  // Set the correct icon for the piece
-//      } else {
-//         toButton->setIcon(QIcon());  // Clear icon if no piece exists (for safety)
-//      }
-
-
-// ///////////////////////////////7
 
      // Switch turns
         isWhiteTurn = !isWhiteTurn;  // Toggle between white and black turns
