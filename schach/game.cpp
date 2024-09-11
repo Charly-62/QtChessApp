@@ -199,6 +199,7 @@ std::pair<int, int> Game::findKing(bool isWhite) const {
 }
 
 void Game::switchTurn() {
+    qDebug() << "isWhiteTurn switched in Game";
     whiteTurn = !whiteTurn;
     emit turnSwitched(whiteTurn);
 }

@@ -161,10 +161,10 @@ void SchachApp::resetBoardHighlight() {
 
 void SchachApp::handleSquareClick(int row, int col) {
     // Comment out to play around with the GUI. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
-    // if (!isLocalTurn) {
-    //     updateNetzwerkConsole("Not your turn!");
-    //     return;
-    // }
+    if (!isLocalTurn) {
+        updateNetzwerkConsole("Not your turn!");
+        return;
+    }
 
     QPushButton* clickedButton = buttons[row][col];
     std::shared_ptr<Piece> selectedPiece = chessGame->getPieceAt(col, row);
@@ -351,6 +351,7 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
      }
 
      // Switch turns
+     qDebug() << "isWhiteTurn switched in SchachApp";
         isWhiteTurn = !isWhiteTurn;  // Toggle between white and black turns
         startTurnTimer();  // Start the timer for the next turn
         updatecurrentPlayerLabel();
