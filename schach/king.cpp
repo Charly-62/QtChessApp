@@ -29,7 +29,7 @@ std::vector<std::pair<int, int>> King::getPossibleMoves(const Game* game) const 
         }
     }
 
-    // // Castling logic
+    // Castling logic
     if (!checkMoved() && !game->getCheck(isWhite)) {  // King hasn't moved and is not in check
 
         // Kingside castling (towards the right rook)

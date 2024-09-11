@@ -190,8 +190,9 @@ void SchachApp::handleSquareClick(int row, int col) {
                 previouslySelectedRow = row;
                 previouslySelectedCol = col;
             }
-         }
-      }else{ // if a piece is already selected
+        }
+
+    }else{ // if a piece is already selected
 
               // if another piece of the atual player is selected
             if (selectedPiece && ((selectedPiece->checkIfWhite() && isWhiteTurn) || (!selectedPiece->checkIfWhite() && !isWhiteTurn))) {
