@@ -64,9 +64,6 @@ private slots:
 
     void onPbPawnPromotionClicked();
 
-    // Handle turn change
-    void switchTurn();
-
     void on_bStart_clicked();
 
 private:

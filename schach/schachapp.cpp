@@ -47,8 +47,7 @@ SchachApp::SchachApp(QWidget *parent)
     ui->cbPawnPromotion->setEnabled(false);
     setWelcomeMessage();
     //ui->lblCurrentPlayerName->setText("Welcome to a new game ");
-    // Connection to handle the turn switch
-    connect(chessGame, &Game::turnSwitched, this, &SchachApp::switchTurn);
+
 }
 
 SchachApp::~SchachApp()
@@ -577,17 +576,6 @@ void SchachApp::device_disconnected() {
 void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
     QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketState>();
     ui->lstNetzwerkConsole->addItem(metaEnum.valueToKey(state));
-}
-
-void SchachApp::switchTurn() {
-    // If the local player is white and it's white's turn, or the local player is black and it's black's turn
-//    if((isLocalPlayerWhite && chessGame->getWhiteTurn()) || (!isLocalPlayerWhite && !(chessGame->getWhiteTurn()))) {
-//        isLocalTurn = true;
-//    } else {
-//        isLocalTurn = false;
-//    }
-
-    //isLocalTurn = !isLocalTurn;
 }
 
 void SchachApp::moveReceived(MoveInfo moveInfo) {
