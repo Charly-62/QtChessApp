@@ -408,7 +408,7 @@ void SchachApp::onPbPawnPromotionClicked(int rowPawnPromotion){
 }
 
 quint8 SchachApp::PawnPromotion(int row){
-    if((row == 7 && isLocalPlayerWhite)|| (row == 0 && !isLocalPlayerWhite)) {
+    if((row == 7 && isLocalPlayerWhite) || (row == 0 && !isLocalPlayerWhite) || isLocalGame) {
         qWarning()<<"Select a piece for pawn promotion";
         ui->pbPawnPromotion->setEnabled(true);
         ui->cbPawnPromotion->setEnabled(true);
