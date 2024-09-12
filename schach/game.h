@@ -139,12 +139,6 @@ private:
      */
     void initBoard();
 
-
-signals:
-
-    void turnSwitched();
-
-
 };
 
 #endif // GAME_H

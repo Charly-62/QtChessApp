@@ -173,8 +173,6 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
 }
 
 
-
-
 std::pair<int, int> Game::findKing(bool isWhite) const {
     // Loop through the entire board (assuming 8x8 board)
     for (int row = 0; row < 8; ++row) {
@@ -196,7 +194,6 @@ std::pair<int, int> Game::findKing(bool isWhite) const {
 void Game::switchTurn() {
     qDebug() << "isWhiteTurn switched in Game";
     whiteTurn = !whiteTurn;
-    emit turnSwitched();
 }
 
 Game* Game::clone() const {

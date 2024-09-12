@@ -221,6 +221,7 @@ bool Logik::isPawnPromotion(Game* Game, int s_col, int s_row, int e_col, int e_r
             (!piece->checkIfWhite() && e_row == 0)) {
             Game->rowPawnPromotion = e_row;
             return true;
+
         }
     }
 
