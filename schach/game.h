@@ -106,7 +106,10 @@ public:
      */
     std::pair<int, int> findKing(bool isWhite) const;
 
-    bool getWhiteTurn(){return whiteTurn;};
+    bool getWhiteTurn(){
+        return whiteTurn;
+    }
+
     std::shared_ptr<Piece> board[8][8];
 
     bool getCheck(bool isWhite) const{
@@ -128,6 +131,7 @@ public:
 
     //the int value is the column of lastMoveWasTwoSquarePawnMove // 8 means lastMoveWasTwoSquarePawnMove is false
     int lastMoveWasTwoSquarePawnMove = 8;
+    void switchTurn();
 
 private:
 
@@ -135,7 +139,6 @@ private:
     bool whiteKingChecked;
     bool blackKingChecked;
     SchachApp* gui;
-    void switchTurn();
 
     /**
      * @brief Initializes the chessboard with the pieces in their starting positions.
@@ -145,7 +148,7 @@ private:
 
 signals:
 
-    void turnSwitched(bool whiteTurn);
+    void turnSwitched();
 
 
 };

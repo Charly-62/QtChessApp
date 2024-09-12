@@ -112,6 +112,7 @@ bool Game::isSquareAttacked(int col, int row, bool currentPlayerIsWhite) const {
 
 
 void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
+    qDebug() << "updateBoard";
     std::shared_ptr<Piece> movingPiece = getPieceAt(s_col, s_row);
 
     // --- CASTLING LOGIC ---
@@ -169,7 +170,6 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
     //change the Piece hasMoved boolean to true
     movingPiece->setMoved();
     // Change the turn
-    switchTurn();
 }
 
 quint8 Game::getPawnPromotion() {
@@ -201,7 +201,7 @@ std::pair<int, int> Game::findKing(bool isWhite) const {
 void Game::switchTurn() {
     qDebug() << "isWhiteTurn switched in Game";
     whiteTurn = !whiteTurn;
-    emit turnSwitched(whiteTurn);
+    emit turnSwitched();
 }
 
 Game* Game::clone() const {

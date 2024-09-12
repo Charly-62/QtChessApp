@@ -1162,6 +1162,11 @@ background-color: rgb(134, 255, 142)
         <string>Server</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Local</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item row="0" column="0">

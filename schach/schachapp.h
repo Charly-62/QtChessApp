@@ -94,14 +94,14 @@ private:
 
     QMap<QPushButton*, QString> originalButtonStyles;
 
-    bool isLocalTurn;
-    bool isLocalPlayerWhite = true;
+    //bool isLocalTurn;
+    bool isLocalPlayerWhite = false;
+    bool isLocalGame = false;
 
     QTimer* whiteTimer;
     QTimer* blackTimer;
     int whiteTimeRemaining;  // in seconds
     int blackTimeRemaining;  // in seconds
-    bool isWhiteTurn;
 
     void updateWhiteTimer();
     void updateBlackTimer();
