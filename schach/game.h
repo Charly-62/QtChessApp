@@ -91,13 +91,6 @@ public:
     bool isSquareAttacked(int col, int row, bool currentPlayerIsWhite) const;
 
     /**
-     * @brief Gets the info about promotion to send it via TCP/IP
-     * [TODO] Implementation and define parameters
-     * @return Info about promotion to send it via TCP/IP
-     */
-    quint8 getPawnPromotion();
-
-    /**
      * @brief Finds the position of the King on the board for the specified team.
      *
      * @param isWhite True if searching for the white king, false for the black king.
@@ -132,6 +125,7 @@ public:
     //the int value is the column of lastMoveWasTwoSquarePawnMove // 8 means lastMoveWasTwoSquarePawnMove is false
     int lastMoveWasTwoSquarePawnMove = 8;
     void switchTurn();
+    int rowPawnPromotion;
 
 private:
 

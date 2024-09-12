@@ -219,6 +219,7 @@ bool Logik::isPawnPromotion(Game* Game, int s_col, int s_row, int e_col, int e_r
         // Assume white pawns promote on row 7 and black pawns on row 0
         if ((piece->checkIfWhite() && e_row == 7) ||
             (!piece->checkIfWhite() && e_row == 0)) {
+            Game->rowPawnPromotion = e_row;
             return true;
         }
     }

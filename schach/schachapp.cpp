@@ -387,7 +387,7 @@ void SchachApp::updateBlackTimer() {
     }
 }
 
-void SchachApp::onPbPawnPromotionClicked(){
+void SchachApp::onPbPawnPromotionClicked(int rowPawnPromotion){
     QString mode = ui-> cbPawnPromotion->currentText();
     qWarning()<<"Current Selection:"<<mode;
     quint8 promotionType = 0x00;
@@ -408,10 +408,12 @@ void SchachApp::onPbPawnPromotionClicked(){
     ui->cbPawnPromotion->setEnabled(false);
 }
 
-quint8 SchachApp::PawnPromotion(){
-    qWarning()<<"Select a piece for pawn promotion";
-    ui->pbPawnPromotion->setEnabled(true);
-    ui->cbPawnPromotion->setEnabled(true);
+quint8 SchachApp::PawnPromotion(int row){
+    if((row == 7 && isLocalPlayerWhite)|| (row == 0 && !isLocalPlayerWhite)) {
+        qWarning()<<"Select a piece for pawn promotion";
+        ui->pbPawnPromotion->setEnabled(true);
+        ui->cbPawnPromotion->setEnabled(true);
+    }
     return promotionType;
 }
 

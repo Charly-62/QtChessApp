@@ -41,7 +41,7 @@ public:
         return chessGame;
     }
 
-    quint8 PawnPromotion();
+    quint8 PawnPromotion(int rowPawnPromotion);
 
 private slots:
     void handleSquareClick(int row, int col);
@@ -62,7 +62,7 @@ private slots:
     void device_disconnected();
     void device_stateChanged(QAbstractSocket::SocketState);
 
-    void onPbPawnPromotionClicked();
+    void onPbPawnPromotionClicked(int rowPawnPromotion);
 
     // Handle turn change
     void switchTurn();

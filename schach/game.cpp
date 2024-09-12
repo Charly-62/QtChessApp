@@ -73,7 +73,7 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     moveInfo.promotion = 0x00; // no promotion by default
 
     if (logikInstance.isPawnPromotion(this, s_col, s_row, e_col, e_row)) {
-        moveInfo.promotion = getPawnPromotion();
+        moveInfo.promotion = gui->PawnPromotion(rowPawnPromotion);
     }
     // Apply the move to the board (update the game state)
     updateBoard(s_col, s_row, e_col, e_row);
@@ -172,12 +172,7 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
     // Change the turn
 }
 
-quint8 Game::getPawnPromotion() {
 
-    //return 0x30;
-    return gui->PawnPromotion();
-
-}
 
 
 std::pair<int, int> Game::findKing(bool isWhite) const {

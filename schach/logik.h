@@ -71,6 +71,8 @@ public:
      */
     bool isPawnPromotion(Game* Game, int s_col, int s_row, int e_col, int e_row) const;
 
+
+
 };
 
 #endif // LOGIK_H
