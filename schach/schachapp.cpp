@@ -531,7 +531,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
         //Update bConnect button for server
         ui->bConnect->setText("Start Listening");
 
-        ui->bStart->setEnabled(true);
+        ui->bStart->setEnabled(false);
         ui->leIP->setEnabled(false);
         ui->cbStartingPlayer->setEnabled(true);
 
@@ -547,6 +547,9 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             server = new MyTCPServer(chessGame);
             ui->lstNetzwerkConsole->addItem("Server initialized");
             connect(server, &MyTCPServer::clientStateChanged, this, &SchachApp::updateNetzwerkConsole);
+            connect(server, &MyTCPServer::clientStateChanged, this, [=]() {
+                    ui->bStart->setEnabled(true);
+                });
             connect(server, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &MyTCPServer::serverStatus, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
@@ -669,4 +672,10 @@ void SchachApp::on_bStart_clicked()
         server->sendGameStart(ServerStarts);
         updateNetzwerkConsole("Game start message sent. " + ui->cbStartingPlayer->currentText() + " starts.");
     }
+}
+
+// pbClearNetzwerkConsole
+void SchachApp::on_pushButton_clicked()
+{
+    ui->lstNetzwerkConsole->clear();
 }
