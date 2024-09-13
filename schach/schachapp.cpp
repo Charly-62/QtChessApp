@@ -302,29 +302,44 @@ void SchachApp::handleSquareClick(int row, int col) {
     }
 }
 
-
 void SchachApp::startTurnTimer() {
-    if ((isLocalPlayerWhite && chessGame->getWhiteTurn()) ||
-        (!isLocalPlayerWhite && !chessGame->getWhiteTurn())) {
-        player1Timer->start(1000);  // Start player 1's timer
-        player2Timer->stop();       // Stop player 2's timer
-    } else {
-        player2Timer->start(1000);  // Start player 2's timer
-        player1Timer->stop();       // Stop player 1's timer
-    }
+ if (isLocalGame){
+     if (chessGame->getWhiteTurn()) {
+         player1Timer->start(1000);  // Start player 1's timer
+         player2Timer->stop();       // Stop player 2's timer
+     } else {
+         player2Timer->start(1000);  // Start player 2's timer
+         player1Timer->stop();       // Stop player 1's timer
+     }
+ }else {
+     if ((isLocalPlayerWhite && chessGame->getWhiteTurn()) ||
+         (!isLocalPlayerWhite && !chessGame->getWhiteTurn())) {
+         player1Timer->start(1000);  // Start player 1's timer
+         player2Timer->stop();       // Stop player 2's timer
+     } else {
+         player2Timer->start(1000);  // Start player 2's timer
+         player1Timer->stop();       // Stop player 1's timer
+     }
+ }
 }
 
 void SchachApp::updateTimerDisplay(int timeRemaining) {
     int minutes = timeRemaining / 60;  // Calculate minutes
     int seconds = timeRemaining % 60;  // Calculate seconds
     QString timeString = QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
-
-    // Update the correct player's timer
-    if ((isLocalPlayerWhite && chessGame->getWhiteTurn()) ||
-            (!isLocalPlayerWhite && !chessGame->getWhiteTurn())) {
-        ui->lblPlayer1Timer->setText(timeString);  // Update player 1's timer label
+    if (isLocalGame) {
+        if (chessGame->getWhiteTurn()) {
+            ui->lblPlayer1Timer->setText(timeString);  // Update player 1's timer label
+        } else {
+            ui->lblPlayer2Timer->setText(timeString);  // Update player 2's timer label
+        }
     } else {
-        ui->lblPlayer2Timer->setText(timeString);  // Update player 2's timer label
+        if ((isLocalPlayerWhite && chessGame->getWhiteTurn()) ||
+            (!isLocalPlayerWhite && !chessGame->getWhiteTurn())) {
+            ui->lblPlayer1Timer->setText(timeString);  // Update player 1's timer label
+        } else {
+            ui->lblPlayer2Timer->setText(timeString);  // Update player 2's timer label
+        }
     }
 }
 
@@ -348,70 +363,23 @@ void SchachApp::updatePlayer2Timer() {
     }
 }
 
-
-
-
-//void SchachApp::updateTimerDisplay(int timeRemaining, bool isWhite) {
-//    int minutes = timeRemaining / 60;  // Calculate minutes
-//    int seconds = timeRemaining % 60;  // Calculate seconds
-//    QString timeString = QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(seconds, 2, 10, QChar('0'));
-
-//    if (isWhite) {
-//        ui->lblWhiteTimer->setText(timeString);  // Update the white player's timer label
-//    } else {
-//        ui->lblBlackTimer->setText(timeString);  // Update the black player's timer label
-//    }
-//}
-
-//void SchachApp::updateWhiteTimer() {
-//    if (whiteTimeRemaining > 0) {
-//        whiteTimeRemaining--;  // Decrease the remaining time
-//        updateTimerDisplay(whiteTimeRemaining, true);  // Update the UI
-//    } else {
-//        whiteTimer->stop();  // Stop the timer if time runs out
-//        //handleTimeOut(true);  // Handle timeout
-//    }
-//}
-
-//void SchachApp::updateBlackTimer() {
-//    if (blackTimeRemaining > 0) {
-//        blackTimeRemaining--;  // Decrease the remaining time
-//        updateTimerDisplay(blackTimeRemaining, false);  // Update the UI
-//    } else {
-//        blackTimer->stop();  // Stop the timer if time runs out
-//        //handleTimeOut(false);  // Handle timeout
-//    }
-//}
-
-
-// /////////BASIC ONE
-//void SchachApp::updatecurrentPlayerLabel() {
-//    if (chessGame->getWhiteTurn()) {
-//        ui->lblCurrentPlayerName->setText("White's Turn");
-//    } else {
-//        ui->lblCurrentPlayerName->setText("Black's Turn");
-//    }
-//}
-
-
-// /////////IMPROVED ONE
 void SchachApp::updatecurrentPlayerLabel() {
     QFont font;
     font.setBold(true); // Make the font bold
     ui->lblCurrentPlayerName->setFont(font);
 
-    QString whitePlayerName = ui->leName1->text(); // Get white player's name
-    QString blackPlayerName = ui->leName2->text(); // Get black player's name
+    QString Player1Name = ui->leName1->text(); // Get white player's name
+    QString Player2Name = ui->leName2->text(); // Get black player's name
 
     QString labelText;
     QString style;
 
-    if (whitePlayerName != "Enter your name" && blackPlayerName != "Enter your name") {
+    if (Player1Name != "Enter your name" && Player2Name != "Enter the opponent's name") {
         if (chessGame->getWhiteTurn()) {
-            labelText = "♔ " + whitePlayerName + "'s Turn";
+            labelText = "♔ " + Player1Name + "'s Turn";
             style = "color: #ffffff; background-color: #000000; padding: 5px; border-radius: 5px;";
         } else {
-            labelText = "♚ " + blackPlayerName + "'s Turn";
+            labelText = "♚ " + Player2Name + "'s Turn";
             style = "color: #000000; background-color: #ffffff; padding: 5px; border-radius: 5px;";
         }
     } else {
