@@ -394,6 +394,26 @@ void SchachApp::updatecurrentPlayerLabel() {
             style = "color: #000000; background-color: #ffffff; padding: 5px; border-radius: 5px;";
         }
     }
+    if (isLocalGame) {
+        if (player2TimeRemaining <= 0){
+            labelText = "White WINS";
+         }else if (player1TimeRemaining <= 0){
+            labelText = "Black WINS";
+         }
+
+    } else {
+        if ((isLocalPlayerWhite && chessGame->getWhiteTurn()) ||
+            (!isLocalPlayerWhite && !chessGame->getWhiteTurn())) {
+            if (player1TimeRemaining <= 0){
+                        labelText = "You Lose";
+                     }
+        } else {
+            if (player1TimeRemaining <= 0){
+                        labelText = "You Win";
+                     }
+        }
+    }
+
     if (chessGame->isCheckmate == true){
         if (chessGame->getWhiteTurn()){
             labelText = "Black WINS";
