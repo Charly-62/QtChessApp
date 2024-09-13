@@ -693,7 +693,6 @@ void SchachApp::moveReceived(MoveInfo moveInfo) {
 
         // Format and display the move
         addMoveToHistory(moveInfo);
-
     } else {
         updateNetzwerkConsole("Invalid move received");
     }
