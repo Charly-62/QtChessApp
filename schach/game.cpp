@@ -120,6 +120,23 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
         qWarning() <<"game choose promotion!";
         moveInfo.promotion = gui->PawnPromotion(rowPawnPromotion);
         qWarning() << "game promotion!" << moveInfo.promotion;
+
+        switch(moveInfo.promotion){
+            case 16:
+                board[s_col][s_row] = std::make_shared<Bishop> (true, s_col, s_row);
+            break;
+            case 32:
+                board[s_col][s_row] = std::make_shared<Knight> (true, s_col, s_row);
+            break;
+            case 48:
+                board[s_col][s_row] = std::make_shared<Rook> (true, s_col, s_row);
+            break;
+            case 64:
+                board[s_col][s_row] = std::make_shared<Queen> (true, s_col, s_row);
+            break;
+        }
+
+
         }
         // Apply the move to the board (update the game state)
         updateBoard(s_col, s_row, e_col, e_row);
