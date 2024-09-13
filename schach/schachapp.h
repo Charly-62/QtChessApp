@@ -11,6 +11,8 @@
 #include "piece.h"
 #include <QTimer>
 #include <QComboBox>
+#include <QStackedWidget>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -111,6 +113,11 @@ private:
     QComboBox* cbPawnPromotion;
     quint8 promotionType;
     quint8 selectedPromotionType;
+
+
+    QStackedWidget* swpawnpromotion ;
+    QWidget* defaultpage ;
+    QWidget* pawnpromotionpage ;
 
     void undoMove();
 

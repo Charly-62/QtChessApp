@@ -1277,7 +1277,7 @@ background-color: rgb(134, 255, 142)
   <widget class="QLabel" name="lblCurrentPlayerName">
    <property name="geometry">
     <rect>
-     <x>260</x>
+     <x>290</x>
      <y>10</y>
      <width>281</width>
      <height>81</height>
@@ -1286,67 +1286,6 @@ background-color: rgb(134, 255, 142)
    <property name="text">
     <string>CurrentPlayerName</string>
    </property>
-  </widget>
-  <widget class="QGroupBox" name="grpPawnPromotion">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>40</y>
-     <width>141</width>
-     <height>111</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Pawn Promotion</string>
-   </property>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>30</y>
-      <width>122</width>
-      <height>72</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QComboBox" name="cbPawnPromotion">
-       <item>
-        <property name="text">
-         <string>Not Selected</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Queen</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Rook</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Knight</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bishop</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pbPawnPromotion">
-       <property name="text">
-        <string>OK</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
   </widget>
   <widget class="QPushButton" name="bStart">
    <property name="geometry">
@@ -1396,6 +1335,83 @@ background-color: rgb(134, 255, 142)
      <height>401</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QStackedWidget" name="swpawnpromotion">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>211</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>1</number>
+   </property>
+   <widget class="QWidget" name="pawnpromotionpage">
+    <widget class="QGroupBox" name="grpPawnPromotion">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>0</y>
+       <width>141</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Pawn Promotion</string>
+     </property>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>122</width>
+        <height>72</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QComboBox" name="cbPawnPromotion">
+         <item>
+          <property name="text">
+           <string>Not Selected</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Queen</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Rook</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Knight</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Bishop</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbPawnPromotion">
+         <property name="text">
+          <string>OK</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="defaultpage"/>
   </widget>
  </widget>
  <resources/>
