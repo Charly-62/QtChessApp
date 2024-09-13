@@ -144,6 +144,8 @@ public:
     void switchTurn(bool);
     int rowPawnPromotion;
 
+    bool isCheckmate = false;
+
  //   bool pawnPromotionCompleted ;
 
 private:
