@@ -108,10 +108,7 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     if (logikInstance.isCaptureMove(this, s_col, s_row, e_col, e_row)) {
         moveInfo.consequences = 0x01;  // Capture
     }
-    if (logikInstance.isCheckmate(this)) {
-        std::cout << "Checkmate!";
-        moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // Checkmate or capture and checkmate
-    }
+
 
     // Check for pawn promotion
     moveInfo.promotion = 0x00; // No promotion by default
@@ -140,6 +137,12 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
         }
         // Apply the move to the board (update the game state)
         updateBoard(s_col, s_row, e_col, e_row);
+
+        if (logikInstance.isCheckmate(this)) {
+            std::cout << "Checkmate!";
+            isCheckmate = true;
+            moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // Checkmate or capture and checkmate
+        }
 
         return moveInfo;  // Return moveInfo struct
 }
