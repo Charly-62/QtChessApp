@@ -62,8 +62,6 @@ private slots:
     void device_disconnected();
     void device_stateChanged(QAbstractSocket::SocketState);
 
-    void onPbPawnPromotionClicked();
-
     void on_bStart_clicked();
 
     void on_pbClear_clicked();
