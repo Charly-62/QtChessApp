@@ -42,6 +42,7 @@ public:
     }
 
     quint8 PawnPromotion(int rowPawnPromotion);
+    void checkForCheckmate();
 
 private slots:
     void handleSquareClick(int row, int col);
@@ -95,14 +96,14 @@ private:
     bool isLocalPlayerWhite = false;
     bool isLocalGame = false;
 
-    QTimer* whiteTimer;
-    QTimer* blackTimer;
-    int whiteTimeRemaining;  // in seconds
-    int blackTimeRemaining;  // in seconds
+    QTimer* player1Timer;
+    QTimer* player2Timer;
+    int player1TimeRemaining;  // in seconds
+    int player2TimeRemaining;  // in seconds
 
-    void updateWhiteTimer();
-    void updateBlackTimer();
-    void updateTimerDisplay(int timeRemaining, bool isWhite);
+    void updatePlayer1Timer();
+    void updatePlayer2Timer();
+    void updateTimerDisplay(int timeRemaining);
     void startTurnTimer();
     void setWelcomeMessage();
     void updatecurrentPlayerLabel();

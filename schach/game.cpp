@@ -140,7 +140,9 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
 
         if (logikInstance.isCheckmate(this)) {
             std::cout << "Checkmate!";
+
             isCheckmate = true;
+            gui->checkForCheckmate();
             moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // Checkmate or capture and checkmate
         }
 
