@@ -30,12 +30,14 @@ public:
      * @return A vector of possible moves for the piece.
      */
     virtual std::vector<std::pair<int, int>> getPossibleMoves(const Game* game) const = 0;
-    bool checkIfWhite(){return isWhite;};
-    void setPosition(int newRow, int newCol){row=newRow; col=newCol;};
+    bool checkIfWhite(){return isWhite;}
+    void setPosition(int newRow, int newCol){row=newRow; col=newCol;}
 
     //hasMoved getter and setter
-    bool checkMoved() const{return hasMoved;};
-    void setMoved(){hasMoved = true;};
+    bool checkMoved() const{return hasMoved;}
+    void setMoved(bool movedPieceHasMovedBefore){
+        hasMoved = movedPieceHasMovedBefore;
+    }
 
     virtual QString getType() const = 0;
     virtual std::shared_ptr<Piece> clone() const = 0; // Pure virtual function for cloning

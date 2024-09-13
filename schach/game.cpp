@@ -50,7 +50,10 @@ void Game::initBoard() {
 
 
 MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
-    MoveInfo moveInfo = {s_col, s_row, e_col, e_row, 0x00, 0x00,true};
+    MoveInfo moveInfo = {s_col, s_row, e_col, e_row,
+                         0x00, 0x00, true,
+                         nullptr, false, false, 8, nullptr,
+                         -1, -1, nullptr};
 
     // Check legality of the move
     if (!logikInstance.isLegal(this, s_col, s_row, e_col, e_row)) {
@@ -58,23 +61,62 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
         return moveInfo;
     }
 
+    std::shared_ptr<Piece> movingPiece = getPieceAt(s_col, s_row);
+
+    // Store the captured piece
+    moveInfo.capturedPiece = getPieceAt(e_col, e_row);
+
+    // Store hasMoved flags
+    moveInfo.movedPieceHasMovedBefore = movingPiece->checkMoved();
+
+    // For en passant, store the captured pawn
+    if (movingPiece->getType() == "pawn" && s_col != e_col && getPieceAt(e_col, e_row) == nullptr) {
+        int capturedPawnRow = (movingPiece->checkIfWhite()) ? e_row - 1 : e_row + 1;
+        moveInfo.enPassantCapturedPawn = getPieceAt(e_col, capturedPawnRow);
+    }
+
+    // Store lastMoveWasTwoSquarePawnMove
+    moveInfo.lastMoveWasTwoSquarePawnMoveBefore = lastMoveWasTwoSquarePawnMove;
+
+    // For castling, store rook info
+    if (movingPiece->getType() == "king" && abs(e_col - s_col) == 2) {
+        // Determine rook positions
+        if (e_col == 6) {  // Kingside castling
+            moveInfo.rookStartCol = 7;
+            moveInfo.rookEndCol = 5;
+            std::shared_ptr<Piece> rook = getPieceAt(7, s_row);
+            moveInfo.rookHasMovedBefore = rook->checkMoved();
+        } else if (e_col == 2) {  // Queenside castling
+            moveInfo.rookStartCol = 0;
+            moveInfo.rookEndCol = 3;
+            std::shared_ptr<Piece> rook = getPieceAt(0, s_row);
+            moveInfo.rookHasMovedBefore = rook->checkMoved();
+        }
+    }
+
+    // For pawn promotion, store the pawn before promotion
+    if (logikInstance.isPawnPromotion(this, s_col, s_row, e_col, e_row)) {
+        moveInfo.pawnBeforePromotion = movingPiece; // Store the pawn
+    }
+
     // Determine consequences (capture, checkmate, etc.)
-    moveInfo.consequences = 0x00; // schlägt nicht by default
+    moveInfo.consequences = 0x00; // By default, no capture
 
     if (logikInstance.isCaptureMove(this, s_col, s_row, e_col, e_row)) {
-        moveInfo.consequences = 0x01;  // schlägt
+        moveInfo.consequences = 0x01;  // Capture
     }
     if (logikInstance.isCheckmate(this, e_col, e_row)) {
-        std::cout << "checkmate!!!!";
-        moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // checkmate or capture and checkmate
+        std::cout << "Checkmate!";
+        moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // Checkmate or capture and checkmate
     }
 
     // Check for pawn promotion
-    moveInfo.promotion = 0x00; // no promotion by default
+    moveInfo.promotion = 0x00; // No promotion by default
 
     if (logikInstance.isPawnPromotion(this, s_col, s_row, e_col, e_row)) {
         moveInfo.promotion = gui->PawnPromotion(rowPawnPromotion);
     }
+
     // Apply the move to the board (update the game state)
     updateBoard(s_col, s_row, e_col, e_row);
 
@@ -126,7 +168,7 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
                 board[5][s_row] = rook;
                 board[7][s_row] = nullptr;
                 rook->setPosition(s_row, 5);
-                rook->setMoved();  // Mark the rook as having moved
+                rook->setMoved(true);  // Mark the rook as having moved
             }
             else if (e_col == 2) {  // Queenside castling (king moves to column 2)
                 // Move the rook from column 0 to column 3
@@ -134,7 +176,7 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
                 board[3][s_row] = rook;
                 board[0][s_row] = nullptr;
                 rook->setPosition(s_row, 3);
-                rook->setMoved();  // Mark the rook as having moved
+                rook->setMoved(true);  // Mark the rook as having moved
             }
         }
     }
@@ -168,7 +210,7 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
     }
 
     //change the Piece hasMoved boolean to true
-    movingPiece->setMoved();
+    movingPiece->setMoved(true);
     // Change the turn
 }
 
@@ -211,4 +253,59 @@ Game* Game::clone() const {
     }
 
     return clonedGame;
+}
+
+void Game::undoMove(MoveInfo moveInfo) {
+
+    // Get the moving piece
+    std::shared_ptr<Piece> movingPiece = getPieceAt(moveInfo.e_col, moveInfo.e_row);
+
+    // Move the piece back to its original position
+    board[moveInfo.s_col][moveInfo.s_row] = movingPiece;
+    movingPiece->setPosition(moveInfo.s_row, moveInfo.s_col);
+
+    // Restore the hasMoved flag
+    movingPiece->setMoved(moveInfo.movedPieceHasMovedBefore);
+
+    // Clear the end position
+    board[moveInfo.e_col][moveInfo.e_row] = nullptr;
+
+    // If there was a captured piece, restore it
+    if (moveInfo.capturedPiece) {
+        board[moveInfo.e_col][moveInfo.e_row] = moveInfo.capturedPiece;
+        moveInfo.capturedPiece->setPosition(moveInfo.e_row, moveInfo.e_col);
+    }
+
+    // Handle special moves
+    // Castling
+    if (movingPiece->getType() == "king" && abs(moveInfo.e_col - moveInfo.s_col) == 2) {
+        // Move the rook back to its original position
+        std::shared_ptr<Piece> rook = getPieceAt(moveInfo.rookEndCol, moveInfo.e_row);
+        board[moveInfo.rookStartCol][moveInfo.e_row] = rook;
+        rook->setPosition(moveInfo.e_row, moveInfo.rookStartCol);
+        rook->setMoved(moveInfo.rookHasMovedBefore);
+
+        // Clear the rook's end position
+        board[moveInfo.rookEndCol][moveInfo.e_row] = nullptr;
+    }
+
+    // En passant
+    if (moveInfo.enPassantCapturedPawn) {
+        int capturedPawnRow = (movingPiece->checkIfWhite()) ? moveInfo.e_row - 1 : moveInfo.e_row + 1;
+        board[moveInfo.e_col][capturedPawnRow] = moveInfo.enPassantCapturedPawn;
+        moveInfo.enPassantCapturedPawn->setPosition(capturedPawnRow, moveInfo.e_col);
+    }
+
+    // Promotion
+    if (moveInfo.promotion != 0x00) {
+        // Replace the promoted piece with the original pawn
+        board[moveInfo.s_col][moveInfo.s_row] = moveInfo.pawnBeforePromotion;
+        movingPiece = nullptr;
+    }
+
+    // Restore lastMoveWasTwoSquarePawnMove
+    lastMoveWasTwoSquarePawnMove = moveInfo.lastMoveWasTwoSquarePawnMoveBefore;
+
+    // Switch the turn back
+    whiteTurn = !whiteTurn;
 }

@@ -39,7 +39,8 @@ SchachApp::SchachApp(QWidget *parent)
     connect(whiteTimer, &QTimer::timeout, this, &SchachApp::updateWhiteTimer);
     connect(blackTimer, &QTimer::timeout, this, &SchachApp::updateBlackTimer);
 
-
+    // Undo move
+    connect(ui->pbUndo, &QPushButton::clicked, this, &SchachApp::undoMove);
 
     ui->cbPawnPromotion->setCurrentText("Not Selected");
     connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
@@ -253,6 +254,10 @@ void SchachApp::handleSquareClick(int row, int col) {
             chessGame->switchTurn();
             startTurnTimer();  // Start the timer for the next turn
             updatecurrentPlayerLabel();
+
+            // Push the moveInfo onto the move history
+            chessGame->moveHistory.push_back(moveInfo);
+
             if (client) {
                 client->sendMove(moveInfo);
             }
@@ -677,8 +682,45 @@ void SchachApp::on_bStart_clicked()
     }
 }
 
-// pbClearNetzwerkConsole
-void SchachApp::on_pushButton_clicked()
+void SchachApp::undoMove() {
+    if (!isLocalGame) {
+        updateNetzwerkConsole("Undo not allowed in networked games");
+        return;
+    }
+
+    if (chessGame->moveHistory.empty()) {
+        updateNetzwerkConsole("No moves to undo");
+        return;
+    }
+
+    MoveInfo lastMove = chessGame->moveHistory.back();
+    chessGame->moveHistory.pop_back();
+
+    // Undo the move in the game logic
+    chessGame->undoMove(lastMove);
+
+    // Update the GUI
+    // Re-fetch all pieces and update the icons on the board
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            QPushButton* button = buttons[row][col];
+            std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);  // Get piece from the game
+
+            if (piece != nullptr) {
+                QString iconName = QString(":/Figuren/") + piece->getType() + (piece->checkIfWhite() ? "W" : "B") + ".png";
+                button->setIcon(QIcon(iconName));  // Set the correct icon for the piece
+            } else {
+                button->setIcon(QIcon());  // Clear icon if no piece exists
+            }
+        }
+    }
+
+    // Update other game states, timers, labels
+    chessGame->switchTurn(); // Since we undid a move, switch turn back
+    startTurnTimer();        // Restart the timer for the player whose turn it now is
+    updatecurrentPlayerLabel();
+}
+void SchachApp::on_pbClear_clicked()
 {
     ui->lstNetzwerkConsole->clear();
 }

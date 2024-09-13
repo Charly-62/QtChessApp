@@ -66,7 +66,7 @@ private slots:
 
     void on_bStart_clicked();
 
-    void on_pushButton_clicked(); // pbClearNetzwerkConsole
+    void on_pbClear_clicked();
 
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
@@ -112,6 +112,8 @@ private:
     QComboBox* cbPawnPromotion;
     quint8 promotionType;
     quint8 selectedPromotionType;
+
+    void undoMove();
 
 };
 #endif // SCHACHAPP_H

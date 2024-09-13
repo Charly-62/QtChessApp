@@ -24,9 +24,22 @@ class Netzwerk;
  */
 struct MoveInfo {
 
-    int s_col, s_row, e_col, e_row;
-    quint8 consequences, promotion;
-    bool islegal;
+    int s_col = 0, s_row = 0, e_col = 0, e_row = 0;
+    quint8 consequences = 0x00, promotion = 0x00;
+    bool islegal = false;
+
+    std::shared_ptr<Piece> capturedPiece = nullptr; // The piece that was captured, if any
+    bool movedPieceHasMovedBefore = false;        // Whether the moving piece had moved before this move
+    bool rookHasMovedBefore = false;              // In case of castling, whether the rook had moved before
+    int lastMoveWasTwoSquarePawnMoveBefore = 8; // To restore en passant possibilities
+    std::shared_ptr<Piece> pawnBeforePromotion = nullptr; // In case of promotion, the pawn before promotion
+
+    // Additional info for castling
+    int rookStartCol = -1; // For castling, the starting column of the rook
+    int rookEndCol = -1;   // For castling, the ending column of the rook
+
+    // For en passant
+    std::shared_ptr<Piece> enPassantCapturedPawn = nullptr; // In case of en passant, the pawn that was captured
 
 };
 
@@ -122,6 +135,9 @@ public:
 
     Game* clone() const;
 
+    std::vector<MoveInfo> moveHistory; // Stack to keep track of move history
+    void undoMove(MoveInfo moveInfo);
+
     //the int value is the column of lastMoveWasTwoSquarePawnMove // 8 means lastMoveWasTwoSquarePawnMove is false
     int lastMoveWasTwoSquarePawnMove = 8;
     void switchTurn();
@@ -133,6 +149,7 @@ private:
     bool whiteKingChecked;
     bool blackKingChecked;
     SchachApp* gui;
+
 
     /**
      * @brief Initializes the chessboard with the pieces in their starting positions.
