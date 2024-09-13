@@ -84,7 +84,7 @@ public:
      * @param e_row Ending row of the piece.
      * @return True if the move is successful, otherwise false. [TODO]: return error type if false (we also have to send it via TCP/IP)
      */
-    MoveInfo tryMove(int s_col, int s_row, int e_col, int e_row);
+    MoveInfo tryMove(int s_col, int s_row, int e_col, int e_row, int promotion = 0x00);
 
     /**
      * @brief Retrieves the piece at the specified board position.

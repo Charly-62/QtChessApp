@@ -433,16 +433,16 @@ quint8 SchachApp::PawnPromotion(int row) {
             QString mode = ui->cbPawnPromotion->currentText();
 
             if (mode == "Queen") {
-                promotionType = 0x40;
+                promotionType = 0x4;
             } else if (mode == "Rook") {
-                promotionType = 0x30;
+                promotionType = 0x3;
             } else if (mode == "Knight") {
-                promotionType = 0x20;
+                promotionType = 0x2;
             } else if (mode == "Bishop") {
-                promotionType = 0x10;
+                promotionType = 0x1;
             }
 
-            qWarning() << "promotion type:" << promotionType << mode;
+            qDebug() << "Promotion type selected: " << promotionType << mode;
 
             ui->pbPawnPromotion->setEnabled(false);
             ui->cbPawnPromotion->setEnabled(false);
@@ -679,7 +679,7 @@ void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
 
 void SchachApp::moveReceived(MoveInfo moveInfo) {
 
-    MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
+    MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row, moveInfo.promotion);
 
     if(result.islegal) {
         movePiece(moveInfo.s_row, moveInfo.s_col, moveInfo.e_row, moveInfo.e_col);

@@ -10,7 +10,7 @@
 
 #include<iostream>
 
-bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row) const{
+bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row, int promotion) const{
     // Step 1: Check if the source and destination are within bounds (0 to 7)
     if (s_col < 0 || s_col >= 8 || s_row < 0 || s_row >= 8 ||
         e_col < 0 || e_col >= 8 || e_row < 0 || e_row >= 8) {
@@ -66,9 +66,28 @@ bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row)
     // Simulate the move
     //Create a copy of the game for simulating the move
     Game* simulatedGame = chessGame->clone();
-
-
     simulatedGame->updateBoard(s_col, s_row, e_col, e_row);
+
+    if(isPawnPromotion(simulatedGame, s_col, s_row, e_row)) {
+        switch (promotion) {
+        case 0x10:
+            simulatedGame->board[e_col][e_row] = std::make_shared<Bishop>(simulatedGame->board[e_col][e_row]->checkIfWhite(), e_col, e_row);
+            break;
+        case 0x20:
+            simulatedGame->board[e_col][e_row] = std::make_shared<Knight>(simulatedGame->board[e_col][e_row]->checkIfWhite(), e_col, e_row);
+            break;
+        case 0x30:
+            simulatedGame->board[e_col][e_row] = std::make_shared<Rook>(simulatedGame->board[e_col][e_row]->checkIfWhite(), e_col, e_row);
+            break;
+        case 0x40:
+            simulatedGame->board[e_col][e_row] = std::make_shared<Queen>(simulatedGame->board[e_col][e_row]->checkIfWhite(), e_col, e_row);
+            break;
+        default:
+            // Default to Queen if promotion piece is not specified
+            simulatedGame->board[e_col][e_row] = std::make_shared<Queen>(simulatedGame->board[e_col][e_row]->checkIfWhite(), e_col, e_row);
+            break;
+        }
+    }
 
     // Check if the king is in check after the move
     std::pair<int, int> simulKingPosition = simulatedGame->findKing(isWhiteTurn);
