@@ -471,15 +471,18 @@ void SchachApp::on_bConnect_clicked()
             // Print connection error after some time if disconnected (SocketError gibt Probleme im online builder)
             // Disable bConnect while trying to connect
             ui->bConnect->setEnabled(false);
+            ui->cbHostClient->setEnabled(false);
             QTimer::singleShot(500, this, [this]() {
                 if(client->state() == QAbstractSocket::ConnectedState) {
                     ui->bConnect->setEnabled(true);
+                    ui->cbHostClient->setEnabled(true);
                 } else {
-                    QTimer::singleShot(5000, this, [this]() {
+                    QTimer::singleShot(3000, this, [this]() {
                         if(client->state() != QAbstractSocket::ConnectedState) {
                             ui->lstNetzwerkConsole->addItem("Connection error. Check IP Address or Host availability");
                         }
                         ui->bConnect->setEnabled(true);
+                        ui->cbHostClient->setEnabled(true);
                         });
             }
             });
