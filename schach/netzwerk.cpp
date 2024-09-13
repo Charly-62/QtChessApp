@@ -73,10 +73,12 @@ void Netzwerk::receiveMove() {
 
         QString group = QString::number(groupNumber);
         emit gameStarted(StartingPlayer & 1, group);
+
+        sendGameStartResponse(groupNumber);
     }
 
     // Move command
-    if(command == 0x03) {
+    else if(command == 0x03) {
         quint8 startCol, startRow, endCol, endRow, zusatzinfo; // store received data in to quint8
 
         stream >> length
@@ -96,6 +98,8 @@ void Netzwerk::receiveMove() {
 
         qDebug() << "Move received: " << "Length: " << length << ", s_col: " << moveInfo.s_col << ", s_row: " << moveInfo.s_row << ", e_col: " << moveInfo.e_col << ", e_row: " << moveInfo.e_row << ", zusatzinfo: " << zusatzinfo;
 
+        quint8 statusCode;
+
         moveInfo.islegal = gameInstance->logikInstance.isLegal(gameInstance, startCol, startRow, endCol, endRow);
 
         if(!moveInfo.islegal) {
@@ -103,8 +107,78 @@ void Netzwerk::receiveMove() {
             return;
         } else {
             emit logMessage("Received valid move.");
-        }
+            // Apply the move in the game logic
+            // Assuming you have a function to apply the move
+            MoveInfo result = gameInstance->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
 
-        emit moveReceived(moveInfo);
+            // Determine the status code based on move consequences
+            if (moveInfo.consequences & 0x02) { // Checkmate
+                statusCode = 0x02; // OK, checkmate
+            } else if (moveInfo.consequences & 0x01) { // Capture
+                statusCode = 0x01; // OK, capture
+            } else {
+                statusCode = 0x00; // OK
+            }
+
+            emit moveReceived(moveInfo);
+            sendMoveResponse(statusCode);
+        }
     }
+
+    else if(command == 0x04) {
+        quint8 status;
+        stream >> length >> status;
+
+        switch(status) {
+            case 0x00:
+                emit logMessage("Move accepted.");
+                break;
+            case 0x01:
+                emit logMessage("Move accepted with capture.");
+                break;
+            case 0x02:
+                emit logMessage("Move accepted with checkmate.");
+                break;
+            case 0x03:
+                emit logMessage("Move rejected: No piece at start position.");
+                break;
+            case 0x04:
+                emit logMessage("Move rejected: Move not allowed.");
+                break;
+            case 0x06:
+                emit logMessage("Move rejected: No capture made.");
+                break;
+            case 0x07:
+                emit logMessage("Move rejected: Not your turn.");
+                break;
+            case 0x08:
+                emit logMessage("Move rejected: No checkmate.");
+                break;
+            default:
+                emit logMessage("Unknown move response received.");
+                break;
+        }
+    }
+}
+
+void Netzwerk::sendGameStartResponse(quint8 groupNumber) {
+    QByteArray responseMessage;
+    QDataStream stream(&responseMessage, QIODevice::WriteOnly);
+
+    stream << quint8(0x02) << quint8(0x01)
+           << quint8(groupNumber);
+
+    _socket->write(responseMessage);
+    _socket->flush();
+}
+
+void Netzwerk::sendMoveResponse(quint8 status) {
+    QByteArray responseMessage;
+    QDataStream stream(&responseMessage, QIODevice::WriteOnly);
+
+    stream << quint8(0x04) << quint8(0x01)
+           << quint8(status);
+
+    _socket->write(responseMessage);
+    _socket->flush();
 }

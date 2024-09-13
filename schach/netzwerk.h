@@ -36,7 +36,10 @@ public:
      * @param e_row The ending row of the move.
      */
     void sendMove(const MoveInfo&);
+    void sendMoveResponse(quint8 status);
+
     void sendGameStart(bool ServerStarts);
+    void sendGameStartResponse(quint8 groupNumber);
 
     /**
      * @brief Receives a move from the network.
@@ -48,6 +51,7 @@ public:
      * @brief Initializes the socket if it's not already done
      */
     void initializeSocket();
+
 
 protected:
     QTcpSocket* _socket = nullptr;
