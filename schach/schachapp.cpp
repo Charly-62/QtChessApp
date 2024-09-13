@@ -10,6 +10,7 @@
 #include <iostream>
 #include <QEventLoop>
 #include <QComboBox>
+#include <QStackedWidget>
 
 SchachApp::SchachApp(QWidget *parent)
     : QWidget(parent)
@@ -45,7 +46,9 @@ SchachApp::SchachApp(QWidget *parent)
     //connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
     ui->pbPawnPromotion->setEnabled(false);
     ui->cbPawnPromotion->setEnabled(false);
+
     setWelcomeMessage();
+    ui->swpawnpromotion->setCurrentWidget(ui->defaultpage);
     //ui->lblCurrentPlayerName->setText("Welcome to a new game ");
 
 }
@@ -452,6 +455,12 @@ quint8 SchachApp::PawnPromotion(int row) {
 
     if ((row == 7 && isLocalPlayerWhite) || (row == 0 && !isLocalPlayerWhite) || isLocalGame) {
         qWarning() << "Select a piece for pawn promotion";
+
+        if ((isLocalGame) || (isLocalPlayerWhite && chessGame->getWhiteTurn()) ||
+            (!isLocalPlayerWhite && !chessGame->getWhiteTurn())) {
+            ui->swpawnpromotion->setCurrentWidget(ui->pawnpromotionpage);
+         }
+
         ui->pbPawnPromotion->setEnabled(true);
         ui->cbPawnPromotion->setEnabled(true);
 
@@ -476,7 +485,7 @@ quint8 SchachApp::PawnPromotion(int row) {
 
             ui->pbPawnPromotion->setEnabled(false);
             ui->cbPawnPromotion->setEnabled(false);
-
+            ui->swpawnpromotion->setCurrentWidget(ui->defaultpage);
             // Exit the event loop when the button is clicked
             loop.quit();
         });
