@@ -152,6 +152,8 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row, int promotion
     // Apply the move to the board (update the game state)
     updateBoard(s_col, s_row, e_col, e_row);
 
+    updateCheckStatus();
+
     if (logikInstance.isCheckmate(this)) {
         std::cout << "Checkmate!";
         isCheckmate = true;
@@ -350,4 +352,15 @@ void Game::undoMove(MoveInfo moveInfo) {
 
     // Switch the turn back
     whiteTurn = !whiteTurn;
+}
+
+void Game::updateCheckStatus() {
+    std::pair<int, int> whiteKingPosition = findKing(true);
+    std::pair<int, int> blackKingPosition = findKing(false);
+
+    bool whiteInCheck = isSquareAttacked(whiteKingPosition.first, whiteKingPosition.second, true);
+    bool blackInCheck = isSquareAttacked(blackKingPosition.first, blackKingPosition.second, false);
+
+    setCheck(whiteInCheck, true);
+    setCheck(blackInCheck, false);
 }
