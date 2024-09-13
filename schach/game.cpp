@@ -10,10 +10,13 @@
 #include <iostream>
 #include <QString>
 #include <QComboBox>
+#include <QEvent>
 
 Game::Game(class SchachApp* gui, QObject* parent)
-    : QObject(parent), whiteTurn(true), gui(gui){
+    : QObject(parent), whiteTurn(true), gui(gui)
+{
     initBoard();
+
 }
 
 
@@ -114,13 +117,14 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     moveInfo.promotion = 0x00; // No promotion by default
 
     if (logikInstance.isPawnPromotion(this, s_col, s_row, e_row)) {
+        qWarning() <<"game choose promotion!";
         moveInfo.promotion = gui->PawnPromotion(rowPawnPromotion);
-    }
+        qWarning() << "game promotion!" << moveInfo.promotion;
+        }
+        // Apply the move to the board (update the game state)
+        updateBoard(s_col, s_row, e_col, e_row);
 
-    // Apply the move to the board (update the game state)
-    updateBoard(s_col, s_row, e_col, e_row);
-
-    return moveInfo;  // Return moveInfo struct
+        return moveInfo;  // Return moveInfo struct
 }
 
 std::shared_ptr<Piece> Game::getPieceAt(int col, int row) const{

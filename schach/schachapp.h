@@ -119,5 +119,7 @@ private:
     void addMoveToHistory(const MoveInfo& moveInfo);
     void removeLastMoveFromHistory();
 
+
+
 };
 #endif // SCHACHAPP_H

@@ -43,7 +43,7 @@ SchachApp::SchachApp(QWidget *parent)
     connect(ui->pbUndo, &QPushButton::clicked, this, &SchachApp::undoMove);
 
     ui->cbPawnPromotion->setCurrentText("Not Selected");
-    connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
+    //connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
     ui->pbPawnPromotion->setEnabled(false);
     ui->cbPawnPromotion->setEnabled(false);
     setWelcomeMessage();
@@ -415,35 +415,81 @@ void SchachApp::updateBlackTimer() {
     }
 }
 
-void SchachApp::onPbPawnPromotionClicked(){
-    QString mode = ui-> cbPawnPromotion->currentText();
-    qWarning()<<"Current Selection:"<<mode;
-    quint8 promotionType = 0x00;
-    if (mode == "Queen"){
-        promotionType = 0x40;
-    }
-    else if (mode == "Rook"){
-        promotionType = 0x30;
-    }
-    else if (mode == "Knight"){
-        promotionType = 0x20;
-    }
-    else if (mode == "Bishop"){
-        promotionType = 0x10;
-    }
-    qWarning()<<"promotion type:"<<promotionType;
-    ui->pbPawnPromotion->setEnabled(false);
-    ui->cbPawnPromotion->setEnabled(false);
-}
 
-quint8 SchachApp::PawnPromotion(int row){
-    if((row == 7 && isLocalPlayerWhite) || (row == 0 && !isLocalPlayerWhite) || isLocalGame) {
-        qWarning()<<"Select a piece for pawn promotion";
+
+quint8 SchachApp::PawnPromotion(int row) {
+    quint8 promotionType = 0x00;
+
+    if ((row == 7 && isLocalPlayerWhite) || (row == 0 && !isLocalPlayerWhite) || isLocalGame) {
+        qWarning() << "Select a piece for pawn promotion";
         ui->pbPawnPromotion->setEnabled(true);
         ui->cbPawnPromotion->setEnabled(true);
+
+        // Create a local event loop
+        QEventLoop loop;
+
+        // Connect the OK button's clicked signal to a lambda function
+        connect(ui->pbPawnPromotion, &QPushButton::clicked, this, [&]() {
+            QString mode = ui->cbPawnPromotion->currentText();
+
+            if (mode == "Queen") {
+                promotionType = 0x40;
+            } else if (mode == "Rook") {
+                promotionType = 0x30;
+            } else if (mode == "Knight") {
+                promotionType = 0x20;
+            } else if (mode == "Bishop") {
+                promotionType = 0x10;
+            }
+
+            qWarning() << "promotion type:" << promotionType << mode;
+
+            ui->pbPawnPromotion->setEnabled(false);
+            ui->cbPawnPromotion->setEnabled(false);
+
+            // Exit the event loop when the button is clicked
+            loop.quit();
+        });
+
+        // Start the event loop, this will block until loop.quit() is called
+        loop.exec();
     }
+
     return promotionType;
 }
+//void SchachApp::onPbPawnPromotionClicked(){
+//    QString mode = ui-> cbPawnPromotion->currentText();
+//    qWarning()<<"Current Selection:"<<mode;
+//    quint8 promotionType = 0x00;
+//    if (mode == "Queen"){
+//        promotionType = 0x40;
+//    }
+//    else if (mode == "Rook"){
+//        promotionType = 0x30;
+//    }
+//    else if (mode == "Knight"){
+//        promotionType = 0x20;
+//    }
+//    else if (mode == "Bishop"){
+//        promotionType = 0x10;
+//    }
+//    qWarning()<<"promotion type:"<<promotionType<< mode;
+//    ui->pbPawnPromotion->setEnabled(false);
+//    ui->cbPawnPromotion->setEnabled(false);
+//    chessGame -> pawnPromotionCompleted = true;
+//}
+
+
+//quint8 SchachApp::PawnPromotion(int row){
+//    if((row == 7 && isLocalPlayerWhite) || (row == 0 && !isLocalPlayerWhite) || isLocalGame) {
+//        qWarning()<<"Select a piece for pawn promotion";
+//        ui->pbPawnPromotion->setEnabled(true);
+//        ui->cbPawnPromotion->setEnabled(true);
+//    }
+
+//    return promotionType;
+
+//}
 
 /**
  * @brief Changes the color of the IPAddress line edit if it is a valid or invalid IPv4 address (maybe add also IPv6 addresses)

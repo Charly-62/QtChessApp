@@ -144,6 +144,8 @@ public:
     void switchTurn(bool);
     int rowPawnPromotion;
 
+ //   bool pawnPromotionCompleted ;
+
 private:
 
     bool whiteTurn;
