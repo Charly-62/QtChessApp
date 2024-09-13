@@ -741,9 +741,9 @@ void SchachApp::on_bStart_clicked()
         bool ServerStarts = (ui->cbStartingPlayer->currentText() == "Server");
         server->sendGameStart(ServerStarts);
         updateNetzwerkConsole("Game start message sent. " + ui->cbStartingPlayer->currentText() + " starts.");
-        ui->bStart->setEnabled(false);
     }
 
+    ui->bStart->setEnabled(false);
     ui->cbHostClient->setEnabled(false);
     startTurnTimer();
     updatecurrentPlayerLabel();
