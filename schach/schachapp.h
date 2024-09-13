@@ -119,6 +119,11 @@ private:
     QWidget* defaultpage ;
     QWidget* pawnpromotionpage ;
 
+
+    QStackedWidget* GAME ;
+    QWidget* initialpage ;
+    QWidget* gamepage ;
+
     void undoMove();
 
     QString formatMove(const MoveInfo& moveInfo);

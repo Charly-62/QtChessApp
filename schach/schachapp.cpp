@@ -24,6 +24,7 @@ SchachApp::SchachApp(QWidget *parent)
     , server(nullptr)
 {
     ui->setupUi(this);
+    ui-> GAME ->setCurrentWidget(ui->initalpage);
     // initializeBoard();
     // setupChessBoard();
     setDeviceController();
@@ -784,6 +785,7 @@ void SchachApp::gameStarted(bool ServerStarts, QString groupNumber) {
             isLocalPlayerWhite = true;
         }
         initializeBoard();
+        ui->GAME ->setCurrentWidget(ui->gamepage);
 }
 
 // Server version of gameStarted()
@@ -815,7 +817,7 @@ void SchachApp::on_bStart_clicked()
     startTurnTimer();
     updatecurrentPlayerLabel();
     initializeBoard();
-
+    ui->GAME ->setCurrentWidget(ui->gamepage);
 }
 
 void SchachApp::undoMove() {
