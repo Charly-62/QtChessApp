@@ -25,7 +25,7 @@ public:
      * @param e_row The ending row of the move.
      * @return True if the move is legal, otherwise false.
      */
-    bool isLegal(Game* Game, int s_col, int s_row, int e_col, int e_row) const;
+    bool isLegal(Game* Game, int s_col, int s_row, int e_col, int e_row, int promotion = 0x00) const;
 
     /**
      * @brief Checks if a move is a capture

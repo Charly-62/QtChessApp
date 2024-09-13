@@ -52,7 +52,7 @@ void Game::initBoard() {
 }
 
 
-MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
+MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row, int promotion) {
     MoveInfo moveInfo = {s_col, s_row, e_col, e_row,
                          0x00, 0x00, true,
                          nullptr, false, false, 8, nullptr,
@@ -114,37 +114,49 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     moveInfo.promotion = 0x00; // No promotion by default
 
     if (logikInstance.isPawnPromotion(this, s_col, s_row, e_row)) {
-        qWarning() <<"game choose promotion!";
-        moveInfo.promotion = gui->PawnPromotion(rowPawnPromotion);
-        qWarning() << "game promotion!" << moveInfo.promotion;
-
-        switch(moveInfo.promotion){
-            case 16:
-                board[s_col][s_row] = std::make_shared<Bishop> (true, s_col, s_row);
-            break;
-            case 32:
-                board[s_col][s_row] = std::make_shared<Knight> (true, s_col, s_row);
-            break;
-            case 48:
-                board[s_col][s_row] = std::make_shared<Rook> (true, s_col, s_row);
-            break;
-            case 64:
-                board[s_col][s_row] = std::make_shared<Queen> (true, s_col, s_row);
-            break;
+        if (promotion == 0x00) {
+            // If promotion piece not specified, get it from the user
+            moveInfo.promotion = gui->PawnPromotion(rowPawnPromotion);
+        } else {
+            moveInfo.promotion = promotion;
         }
 
+        qDebug() << "Game: Applying promotion with type: " << QString::number(moveInfo.promotion, 16).toUpper();
 
+        // Apply the promotion
+        switch (moveInfo.promotion) {
+            case 0x1:
+                board[s_col][s_row] = std::make_shared<Bishop>(movingPiece->checkIfWhite(), s_col, s_row);
+                qDebug() << "Game: Promoted to Bishop.";
+                break;
+            case 0x2:
+                board[s_col][s_row] = std::make_shared<Knight>(movingPiece->checkIfWhite(), s_col, s_row);
+                qDebug() << "Game: Promoted to Knight.";
+                break;
+            case 0x3:
+                board[s_col][s_row] = std::make_shared<Rook>(movingPiece->checkIfWhite(), s_col, s_row);
+                qDebug() << "Game: Promoted to Rook.";
+                break;
+            case 0x4:
+                board[s_col][s_row] = std::make_shared<Queen>(movingPiece->checkIfWhite(), s_col, s_row);
+                qDebug() << "Game: Promoted to Queen.";
+                break;
+            default:
+                // Default to Queen
+                board[s_col][s_row] = std::make_shared<Queen>(movingPiece->checkIfWhite(), s_col, s_row);
+                qDebug() << "Game: Promotion type unspecified. Defaulted to Queen.";
+                break;
         }
-        // Apply the move to the board (update the game state)
-        updateBoard(s_col, s_row, e_col, e_row);
+    }
 
-        if (logikInstance.isCheckmate(this)) {
-            std::cout << "Checkmate!";
+    // Apply the move to the board (update the game state)
+    updateBoard(s_col, s_row, e_col, e_row);
 
-            isCheckmate = true;
-            gui->checkForCheckmate();
-            moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // Checkmate or capture and checkmate
-        }
+    if (logikInstance.isCheckmate(this)) {
+        std::cout << "Checkmate!";
+        isCheckmate = true;
+        moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // Checkmate or capture and checkmate
+    }
 
         return moveInfo;  // Return moveInfo struct
 }

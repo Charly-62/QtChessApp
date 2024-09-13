@@ -35,6 +35,7 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
     QDataStream stream(&moveData, QIODevice::WriteOnly);
 
     quint8 zusatzInfo = (moveInfo.promotion << 4) | (moveInfo.consequences & 0x0F);
+    qDebug() << "Sending Move - zusatzInfo: " << QString::number(zusatzInfo, 16).toUpper();
 
     stream << quint8(0x03)
            << quint8(0x05)
@@ -44,12 +45,10 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
            << quint8(moveInfo.e_row)
            << zusatzInfo;
 
-    moveData.toHex();
-
     if(_socket && _socket->isOpen()) {
         _socket->write(moveData);
         _socket->flush();
-        qDebug() << "Move sent: " << moveData;
+        qDebug() << "Move sent: " << moveData.toHex();
         emit logMessage("Move sent successfully.");
     } else {
         emit logMessage("Socket is not open, cannot send the move.");
@@ -102,11 +101,17 @@ void Netzwerk::receiveMove() {
         moveInfo.consequences = static_cast<int> (zusatzinfo & 0x0F); // Lower 4 bits for consequences
         moveInfo.promotion = static_cast<int> ((zusatzinfo >> 4) & 0x0F); // Upper 4 bits for promotion
 
-        qDebug() << "Move received: " << "Length: " << length << ", s_col: " << moveInfo.s_col << ", s_row: " << moveInfo.s_row << ", e_col: " << moveInfo.e_col << ", e_row: " << moveInfo.e_row << ", zusatzinfo: " << zusatzinfo;
+        qDebug() << "Move received: " << "Length: " << length
+                         << ", s_col: " << moveInfo.s_col
+                         << ", s_row: " << moveInfo.s_row
+                         << ", e_col: " << moveInfo.e_col
+                         << ", e_row: " << moveInfo.e_row
+                         << ", zusatzinfo: " << QString::number(zusatzinfo, 16).toUpper()
+                         << ", promotion: " << QString::number(moveInfo.promotion, 16).toUpper();
 
         quint8 statusCode;
 
-        moveInfo.islegal = gameInstance->logikInstance.isLegal(gameInstance, startCol, startRow, endCol, endRow);
+        moveInfo.islegal = gameInstance->logikInstance.isLegal(gameInstance, startCol, startRow, endCol, endRow, moveInfo.promotion);
 
         if(!moveInfo.islegal) {
             emit logMessage("Received move is illegal!");
