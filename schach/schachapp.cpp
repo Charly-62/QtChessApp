@@ -629,7 +629,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
         ui->bStart->setEnabled(false);
         ui->leIP->setEnabled(true);
         ui->cbStartingPlayer->setEnabled(false);
-
+        ui->bConnect->setEnabled(true);
 
         // Switch to Client mode
         if(server) {
@@ -657,6 +657,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
         ui->bStart->setEnabled(false);
         ui->leIP->setEnabled(false);
         ui->cbStartingPlayer->setEnabled(true);
+        ui->bConnect->setEnabled(true);
 
         // Switch to Server mode
         if(client) {
