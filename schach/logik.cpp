@@ -115,22 +115,22 @@ bool Logik::isCaptureMove(Game* Game, int s_col, int s_row, int e_col, int e_row
 
 
 bool Logik::isCheckmate(Game* game) const {
-    // Determine whose turn it is
+    // Determine whose turn it is (player who just moved)
     bool isWhiteTurn = game->getWhiteTurn();
 
-    // Step 1: Check if the current player is in check
+    // Step 1: Check if the opponent is in check
     if(!game->getCheck(!isWhiteTurn)){
         qDebug() << "IS NOT CHECKMATE!!!!!";
         return false;
     }
 
-    // Step 2: Iterate over all pieces of the current player
+    // Step 2: Iterate over all pieces of the opponent
     for(int row = 0; row < 8; ++row){
         for(int col = 0; col < 8; ++col){
-            std::shared_ptr<Piece> piece = game->board[row][col];
+            std::shared_ptr<Piece> piece = game->board[col][row];
 
-            // If there's a piece and it belongs to the current player
-            if(piece && piece->checkIfWhite() == isWhiteTurn){
+            // If there's a piece and it belongs to the opponent
+            if(piece && piece->checkIfWhite() == !isWhiteTurn){
                 // Get all possible moves for this piece
                 std::vector<std::pair<int, int>> possibleMoves = piece->getPossibleMoves(game);
 
@@ -149,7 +149,7 @@ bool Logik::isCheckmate(Game* game) const {
         }
     }
 
-    // Step 3: No legal moves found and player is in check -> Checkmate
+    // Step 3: No legal moves found and opponent is in check -> Checkmate
     qDebug() << "CHECKMATE!!!!";
     return true;
 }
