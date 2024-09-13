@@ -141,6 +141,7 @@ public:
     //the int value is the column of lastMoveWasTwoSquarePawnMove // 8 means lastMoveWasTwoSquarePawnMove is false
     int lastMoveWasTwoSquarePawnMove = 8;
     void switchTurn();
+    void switchTurn(bool);
     int rowPawnPromotion;
 
 private:

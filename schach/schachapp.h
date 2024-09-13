@@ -115,5 +115,9 @@ private:
 
     void undoMove();
 
+    QString formatMove(const MoveInfo& moveInfo);
+    void addMoveToHistory(const MoveInfo& moveInfo);
+    void removeLastMoveFromHistory();
+
 };
 #endif // SCHACHAPP_H

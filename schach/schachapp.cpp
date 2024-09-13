@@ -258,6 +258,9 @@ void SchachApp::handleSquareClick(int row, int col) {
             // Push the moveInfo onto the move history
             chessGame->moveHistory.push_back(moveInfo);
 
+            // Format and display the move into lstMoveHystory
+            addMoveToHistory(moveInfo);
+
             if (client) {
                 client->sendMove(moveInfo);
             }
@@ -485,6 +488,7 @@ void SchachApp::on_bConnect_clicked()
                     QTimer::singleShot(3000, this, [this]() {
                         if(client->state() != QAbstractSocket::ConnectedState) {
                             ui->lstNetzwerkConsole->addItem("Connection error. Check IP Address or Host availability");
+                            ui->lstNetzwerkConsole->scrollToBottom();
                         }
                         ui->bConnect->setEnabled(true);
                         ui->cbHostClient->setEnabled(true);
@@ -498,6 +502,7 @@ void SchachApp::on_bConnect_clicked()
             server->stopListening();
             ui->bConnect->setText("Start Listening");
             ui->lstNetzwerkConsole->addItem("Server stopped listening.");
+            ui->lstNetzwerkConsole->scrollToBottom();
         } else {
             // Get the port number from the spnPort widget and start listening
             int port = ui->spnPort->value();
@@ -524,12 +529,14 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             delete server;
             server = nullptr;
             ui->lstNetzwerkConsole->addItem("Switched to Client Mode. Server stopped.");
+            ui->lstNetzwerkConsole->scrollToBottom();
         }
 
         if(!client) {
             client = new MyTCPClient(chessGame);
             setDeviceController();
             ui->lstNetzwerkConsole->addItem("Client initialized.");
+            ui->lstNetzwerkConsole->scrollToBottom();
             connect(client, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
             connect(client, &Netzwerk::gameStarted, this, &SchachApp::gameStarted);
             connect(client, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
@@ -549,11 +556,13 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             delete client;
             client = nullptr;
             ui->lstNetzwerkConsole->addItem("Switched to Server Mode. Client stopped.");
+            ui->lstNetzwerkConsole->scrollToBottom();
         }
 
         if(!server) {
             server = new MyTCPServer(chessGame);
             ui->lstNetzwerkConsole->addItem("Server initialized");
+            ui->lstNetzwerkConsole->scrollToBottom();
             connect(server, &MyTCPServer::clientStateChanged, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &MyTCPServer::clientStateChanged, this, [=]() {
                     ui->bStart->setEnabled(true);
@@ -577,6 +586,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             delete server;
             server = nullptr;
             ui->lstNetzwerkConsole->addItem("Switched to Client Mode. Server stopped.");
+            ui->lstNetzwerkConsole->scrollToBottom();
         }
 
         if(client) {
@@ -584,12 +594,14 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             delete client;
             client = nullptr;
             ui->lstNetzwerkConsole->addItem("Switched to Server Mode. Client stopped.");
+            ui->lstNetzwerkConsole->scrollToBottom();
         }
     }
 }
 
 void SchachApp::updateNetzwerkConsole(QString message) {
     ui->lstNetzwerkConsole->addItem(message);
+    ui->lstNetzwerkConsole->scrollToBottom();
 }
 
 void SchachApp::setDeviceController() {
@@ -602,17 +614,20 @@ void SchachApp::setDeviceController() {
 
 void SchachApp::device_connected() {
     ui->lstNetzwerkConsole->addItem("Connected to device");
+    ui->lstNetzwerkConsole->scrollToBottom();
     ui->bConnect->setText("Disconnect");
 }
 
 void SchachApp::device_disconnected() {
     ui->lstNetzwerkConsole->addItem("Disconnected from device");
+    ui->lstNetzwerkConsole->scrollToBottom();
     ui->bConnect->setText("Connect");
 }
 
 void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
     QMetaEnum metaEnum = QMetaEnum::fromType<QAbstractSocket::SocketState>();
     ui->lstNetzwerkConsole->addItem(metaEnum.valueToKey(state));
+    ui->lstNetzwerkConsole->scrollToBottom();
 }
 
 void SchachApp::moveReceived(MoveInfo moveInfo) {
@@ -625,6 +640,13 @@ void SchachApp::moveReceived(MoveInfo moveInfo) {
         chessGame->switchTurn();
         startTurnTimer();  // Start the timer for the next turn
         updatecurrentPlayerLabel();
+
+        // Push the moveInfo onto the move history
+        chessGame->moveHistory.push_back(moveInfo);
+
+        // Format and display the move
+        addMoveToHistory(moveInfo);
+
     } else {
         updateNetzwerkConsole("Invalid move received");
     }
@@ -715,12 +737,141 @@ void SchachApp::undoMove() {
         }
     }
 
+    if(chessGame->moveHistory.empty()) {
+        chessGame->switchTurn(true);
+        ui->lblCurrentPlayerName->setText("White's Turn");
+    } else {
+        chessGame->switchTurn();
+    }
+
     // Update other game states, timers, labels
-    chessGame->switchTurn(); // Since we undid a move, switch turn back
-    startTurnTimer();        // Restart the timer for the player whose turn it now is
+    startTurnTimer();    // Restart the timer for the player whose turn it now is
     updatecurrentPlayerLabel();
+
+    // Remove the move from the move history display and disable the button if it´s empty
+    removeLastMoveFromHistory();
+    ui->pbUndo->setEnabled(!chessGame->moveHistory.empty());
 }
 void SchachApp::on_pbClear_clicked()
 {
     ui->lstNetzwerkConsole->clear();
+}
+
+QString SchachApp::formatMove(const MoveInfo& moveInfo) {
+    // Get the moving piece
+    std::shared_ptr<Piece> movingPiece = chessGame->getPieceAt(moveInfo.e_col, moveInfo.e_row);
+    if (!movingPiece) {
+        return "";
+    }
+
+    QString moveNotation;
+
+    // Handle castling
+    if (movingPiece->getType() == "king" && abs(moveInfo.e_col - moveInfo.s_col) == 2) {
+        if (moveInfo.e_col == 6) { // Kingside castling
+            moveNotation = "O-O";
+        } else if (moveInfo.e_col == 2) { // Queenside castling
+            moveNotation = "O-O-O";
+        }
+    } else {
+        // For other pieces
+        QString pieceNotation;
+        if (movingPiece->getType() == "pawn") {
+            pieceNotation = "";
+        } else if (movingPiece->getType() == "knight") {
+            pieceNotation = "N";
+        } else if (movingPiece->getType() == "bishop") {
+            pieceNotation = "B";
+        } else if (movingPiece->getType() == "rook") {
+            pieceNotation = "R";
+        } else if (movingPiece->getType() == "queen") {
+            pieceNotation = "Q";
+        } else if (movingPiece->getType() == "king") {
+            pieceNotation = "K";
+        }
+
+        // Determine if it's a capture
+        bool isCapture = moveInfo.capturedPiece != nullptr || moveInfo.enPassantCapturedPawn != nullptr;
+        if (movingPiece->getType() == "pawn" && isCapture) {
+            // For pawn captures, include the file (column) of the pawn
+            pieceNotation += QChar('a' + moveInfo.s_col);
+        }
+
+        QString captureNotation = isCapture ? "x" : "";
+
+        // Destination square
+        QString destFile = QChar('a' + moveInfo.e_col);
+        QString destRank = QString::number(moveInfo.e_row + 1);
+
+        // Promotion
+        QString promotionNotation;
+        if (moveInfo.promotion != 0x00) {
+            // Assuming promotion codes match the piece types
+            if (moveInfo.promotion == 0x40) { // Queen
+                promotionNotation = "=Q";
+            } else if (moveInfo.promotion == 0x30) { // Rook
+                promotionNotation = "=R";
+            } else if (moveInfo.promotion == 0x20) { // Knight
+                promotionNotation = "=N";
+            } else if (moveInfo.promotion == 0x10) { // Bishop
+                promotionNotation = "=B";
+            }
+        }
+
+        // Check or checkmate notation
+        QString checkNotation;
+        if (moveInfo.consequences & 0x02) { // Checkmate
+            checkNotation = "#";
+        } else if (chessGame->getCheck(!movingPiece->checkIfWhite())) { // If opponent is in check
+            checkNotation = "+";
+        }
+
+        moveNotation = pieceNotation + captureNotation + destFile + destRank + promotionNotation + checkNotation;
+    }
+
+    return moveNotation;
+}
+
+void SchachApp::addMoveToHistory(const MoveInfo& moveInfo) {
+    QString moveNotation = formatMove(moveInfo);
+
+    // Determine if it's white's or black's move based on move count
+    int moveNumber = (chessGame->moveHistory.size() + 1) / 2;
+
+    if (chessGame->moveHistory.size() % 2 == 1) {
+        // White's move
+        QString entry = QString::number(moveNumber) + ". " + moveNotation;
+        ui->lstMoveHistory->addItem(entry);
+        ui->pbUndo->setEnabled(true);
+    } else {
+        // Black's move
+        QListWidgetItem* lastItem = ui->lstMoveHistory->item(ui->lstMoveHistory->count() - 1);
+        lastItem->setText(lastItem->text() + " " + moveNotation);
+    }
+
+    // Scroll to the bottom to show the latest move
+    ui->lstMoveHistory->scrollToBottom();
+}
+
+void SchachApp::removeLastMoveFromHistory() {
+    if (ui->lstMoveHistory->count() == 0) {
+        return;
+    }
+
+    if (chessGame->moveHistory.size() % 2 != 0) {
+        // Last move was a black move
+        QListWidgetItem* lastItem = ui->lstMoveHistory->item(ui->lstMoveHistory->count() - 1);
+        QString text = lastItem->text();
+        int spaceIndex = text.lastIndexOf(' ');
+
+        if (spaceIndex != -1) {
+            text = text.left(spaceIndex);
+            lastItem->setText(text);
+        } else {
+            delete ui->lstMoveHistory->takeItem(ui->lstMoveHistory->count() - 1);
+        }
+    } else {
+        // Last move was a white move
+        delete ui->lstMoveHistory->takeItem(ui->lstMoveHistory->count() - 1);
+    }
 }
