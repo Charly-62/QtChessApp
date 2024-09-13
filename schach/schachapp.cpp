@@ -514,6 +514,8 @@ void SchachApp::on_leIP_textChanged(const QString &arg1)
 
 void SchachApp::on_bConnect_clicked()
 {
+    ui->leIP->setEnabled(false);
+    ui->spnPort->setEnabled(false);
     if(ui->cbHostClient->currentText() == "Client") {
         if(client->isConnected()) {
             client->disconnect();
@@ -706,6 +708,7 @@ void SchachApp::moveReceived(MoveInfo moveInfo) {
 void SchachApp::gameStarted(bool ServerStarts, QString groupNumber) {
         qDebug() << "gameStarted" << ServerStarts;
         isLocalGame = false;
+        ui->cbHostClient->setEnabled(false);
         startTurnTimer();
         updatecurrentPlayerLabel();
         if(ServerStarts) {
@@ -745,6 +748,9 @@ void SchachApp::on_bStart_clicked()
 
     ui->bStart->setEnabled(false);
     ui->cbHostClient->setEnabled(false);
+    ui->leIP->setEnabled(false);
+    ui->cbStartingPlayer->setEnabled(false);
+    ui->spnPort->setEnabled(false);
     startTurnTimer();
     updatecurrentPlayerLabel();
     initializeBoard();

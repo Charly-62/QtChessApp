@@ -39,7 +39,7 @@ public:
     void sendMoveResponse(quint8 status);
 
     void sendGameStart(bool ServerStarts);
-    void sendGameStartResponse(quint8 groupNumber);
+    void sendGameStartResponse();
 
     /**
      * @brief Receives a move from the network.

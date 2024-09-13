@@ -74,7 +74,13 @@ void Netzwerk::receiveMove() {
         QString group = QString::number(groupNumber);
         emit gameStarted(StartingPlayer & 1, group);
 
-        sendGameStartResponse(groupNumber);
+        sendGameStartResponse();
+    }
+
+    else if(command == 0x02) {
+        quint8 groupNumber;
+        stream >> length >> groupNumber;
+        emit logMessage("Playing against Group " + QString::number(groupNumber));
     }
 
     // Move command
@@ -108,8 +114,7 @@ void Netzwerk::receiveMove() {
         } else {
             emit logMessage("Received valid move.");
             // Apply the move in the game logic
-            // Assuming you have a function to apply the move
-            MoveInfo result = gameInstance->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
+            //MoveInfo result = gameInstance->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
 
             // Determine the status code based on move consequences
             if (moveInfo.consequences & 0x02) { // Checkmate
@@ -161,12 +166,12 @@ void Netzwerk::receiveMove() {
     }
 }
 
-void Netzwerk::sendGameStartResponse(quint8 groupNumber) {
+void Netzwerk::sendGameStartResponse() {
     QByteArray responseMessage;
     QDataStream stream(&responseMessage, QIODevice::WriteOnly);
 
     stream << quint8(0x02) << quint8(0x01)
-           << quint8(groupNumber);
+           << quint8(0x01);
 
     _socket->write(responseMessage);
     _socket->flush();
