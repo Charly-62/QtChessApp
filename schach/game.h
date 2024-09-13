@@ -148,6 +148,8 @@ public:
 
  //   bool pawnPromotionCompleted ;
 
+    void updateCheckStatus();
+
 private:
 
     bool whiteTurn;

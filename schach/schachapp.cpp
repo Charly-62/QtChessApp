@@ -199,6 +199,7 @@ void SchachApp::handleSquareClick(int row, int col) {
     if (selectedRow == -1 && selectedCol == -1) {
         // select the piece of the actual player
        if (selectedPiece && ((selectedPiece->checkIfWhite() && chessGame->getWhiteTurn()) || (!selectedPiece->checkIfWhite() && !chessGame->getWhiteTurn()))) {
+            chessGame->updateCheckStatus();
             selectedRow = row;
             selectedCol = col;
             qDebug() << "Selected piece at:" << selectedCol << selectedRow;
@@ -749,6 +750,8 @@ void SchachApp::moveReceived(MoveInfo moveInfo) {
 
         // Push the moveInfo onto the move history
         chessGame->moveHistory.push_back(moveInfo);
+
+        chessGame->updateCheckStatus();
 
         // Format and display the move
         addMoveToHistory(moveInfo);
