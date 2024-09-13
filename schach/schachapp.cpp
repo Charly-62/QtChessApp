@@ -188,7 +188,6 @@ void SchachApp::handleSquareClick(int row, int col) {
         return;
     }
 
-    QPushButton* clickedButton = buttons[row][col];
     std::shared_ptr<Piece> selectedPiece = chessGame->getPieceAt(col, row);
     // if no piece is selected yet
     if (selectedRow == -1 && selectedCol == -1) {
@@ -416,7 +415,7 @@ void SchachApp::updateBlackTimer() {
     }
 }
 
-void SchachApp::onPbPawnPromotionClicked(int rowPawnPromotion){
+void SchachApp::onPbPawnPromotionClicked(){
     QString mode = ui-> cbPawnPromotion->currentText();
     qWarning()<<"Current Selection:"<<mode;
     quint8 promotionType = 0x00;
@@ -692,16 +691,18 @@ void SchachApp::on_cbStartingPlayer_currentTextChanged(const QString &startingPl
 
 void SchachApp::on_bStart_clicked()
 {
-    ui->bStart->setEnabled(false);
-    startTurnTimer();
-    updatecurrentPlayerLabel();
-    initializeBoard();
-
     if(!isLocalGame) {
         bool ServerStarts = (ui->cbStartingPlayer->currentText() == "Server");
         server->sendGameStart(ServerStarts);
         updateNetzwerkConsole("Game start message sent. " + ui->cbStartingPlayer->currentText() + " starts.");
+        ui->bStart->setEnabled(false);
     }
+
+    ui->cbHostClient->setEnabled(false);
+    startTurnTimer();
+    updatecurrentPlayerLabel();
+    initializeBoard();
+
 }
 
 void SchachApp::undoMove() {

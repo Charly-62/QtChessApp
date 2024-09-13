@@ -47,7 +47,7 @@ public:
      * @param e_row
      * @return
      */
-    bool isCheckmate(Game* Game, int e_col, int e_row) const;
+    bool isCheckmate(Game* Game) const;
 
     /**
      * @brief Checks if a move end in a stalemate
@@ -69,7 +69,7 @@ public:
      * @param e_row
      * @return
      */
-    bool isPawnPromotion(Game* Game, int s_col, int s_row, int e_col, int e_row) const;
+    bool isPawnPromotion(Game* Game, int s_col, int s_row, int e_row) const;
 
 
 

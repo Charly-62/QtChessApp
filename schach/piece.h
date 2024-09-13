@@ -46,7 +46,7 @@ protected:
     int col,        ///< Column position of the piece on the board.
         row;        ///< Row position of the piece on the board.
     bool isWhite;   ///< Boolean indicating if the piece is white or black.
-    bool hasMoved = false; ///Boolean if Piece has moved. Used for Castling
+    bool hasMoved = false; ///< Boolean if Piece has moved. Used for Castling
 };
 
 #include "pawn.h"

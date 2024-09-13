@@ -95,7 +95,7 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     }
 
     // For pawn promotion, store the pawn before promotion
-    if (logikInstance.isPawnPromotion(this, s_col, s_row, e_col, e_row)) {
+    if (logikInstance.isPawnPromotion(this, s_col, s_row, e_row)) {
         moveInfo.pawnBeforePromotion = movingPiece; // Store the pawn
     }
 
@@ -105,7 +105,7 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     if (logikInstance.isCaptureMove(this, s_col, s_row, e_col, e_row)) {
         moveInfo.consequences = 0x01;  // Capture
     }
-    if (logikInstance.isCheckmate(this, e_col, e_row)) {
+    if (logikInstance.isCheckmate(this)) {
         std::cout << "Checkmate!";
         moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // Checkmate or capture and checkmate
     }
@@ -113,7 +113,7 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
     // Check for pawn promotion
     moveInfo.promotion = 0x00; // No promotion by default
 
-    if (logikInstance.isPawnPromotion(this, s_col, s_row, e_col, e_row)) {
+    if (logikInstance.isPawnPromotion(this, s_col, s_row, e_row)) {
         moveInfo.promotion = gui->PawnPromotion(rowPawnPromotion);
     }
 

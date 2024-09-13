@@ -95,7 +95,7 @@ bool Logik::isCaptureMove(Game* Game, int s_col, int s_row, int e_col, int e_row
 }
 
 
-bool Logik::isCheckmate(Game* game, int e_col, int e_row) const {
+bool Logik::isCheckmate(Game* game) const {
     // Find the king's position for the player currently under check
     bool isWhiteTurn = !game->getWhiteTurn();
     std::pair<int, int> kingPosition = game->findKing(isWhiteTurn);
@@ -211,7 +211,7 @@ bool Logik::isStalemate(Game* game) const {
 
 
 
-bool Logik::isPawnPromotion(Game* Game, int s_col, int s_row, int e_col, int e_row) const {
+bool Logik::isPawnPromotion(Game* Game, int s_col, int s_row, int e_row) const {
 
     std::shared_ptr<Piece> piece = Game->getPieceAt(s_col, s_row);
 
