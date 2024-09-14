@@ -31,6 +31,10 @@ SchachApp::SchachApp(QWidget *parent)
 
     on_cbHostClient_currentTextChanged("Local");
     isLocalPlayerWhite = false;
+
+    ui->pbUndoAccept->setEnabled(false);
+    ui->pbUndoDeny->setEnabled(false);
+
     player1Timer = new QTimer(this);
     player2Timer = new QTimer(this);
     player1TimeRemaining = 10 * 60;  // Set the initial time to 10 minutes (in seconds)
@@ -39,9 +43,6 @@ SchachApp::SchachApp(QWidget *parent)
     // Connect the QTimer signals to the corresponding slot functions
     connect(player1Timer, &QTimer::timeout, this, &SchachApp::updatePlayer1Timer);
     connect(player2Timer, &QTimer::timeout, this, &SchachApp::updatePlayer2Timer);
-
-    // Undo move
-    connect(ui->pbUndo, &QPushButton::clicked, this, &SchachApp::undoMove);
 
     ui->cbPawnPromotion->setCurrentText("Not Selected");
     //connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
@@ -201,7 +202,7 @@ void SchachApp::resetBoardHighlight() {
 
 void SchachApp::handleSquareClick(int row, int col) {
 //    Comment out to play around with the GUI. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
-    if ((!isLocalGame && isLocalPlayerWhite != chessGame->getWhiteTurn()) || promotiontmp) {
+    if ((!isLocalGame && isLocalPlayerWhite != chessGame->getWhiteTurn()) || blockguitmp) {
         updateNetzwerkConsole("Not your turn!");
         return;
     }
@@ -517,7 +518,7 @@ quint8 SchachApp::PawnPromotion(int row) {
         if ((isLocalGame) || (isLocalPlayerWhite && chessGame->getWhiteTurn()) ||
             (!isLocalPlayerWhite && !chessGame->getWhiteTurn())) {
             ui->swpawnpromotion->setCurrentWidget(ui->pawnpromotionpage);
-            promotiontmp = true;
+            blockguitmp = true;
         }
         ui->gridLayout->setEnabled(false);
         ui->pbPawnPromotion->setEnabled(true);
@@ -545,7 +546,7 @@ quint8 SchachApp::PawnPromotion(int row) {
             ui->pbPawnPromotion->setEnabled(false);
             ui->cbPawnPromotion->setEnabled(false);
             ui->swpawnpromotion->setCurrentWidget(ui->defaultpage);
-            promotiontmp = false;
+            blockguitmp = false;
 
             // Exit the event loop when the button is clicked
             loop.quit();
@@ -689,6 +690,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             connect(client, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
             connect(client, &Netzwerk::gameStarted, this, &SchachApp::gameStarted);
             connect(client, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
+            connect(client, &Netzwerk::undoMove, this, &SchachApp::undoMove);
         }
     } else if(mode == "Server") {
         isLocalGame = false;
@@ -721,6 +723,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             connect(server, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &MyTCPServer::serverStatus, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
+            connect(server, &Netzwerk::undoMove, this, &SchachApp::undoMove);
         }
     } else if(mode == "Local") {
         isLocalGame = true;
@@ -865,15 +868,55 @@ void SchachApp::on_bStart_clicked()
 }
 
 void SchachApp::undoMove() {
-    if (!isLocalGame) {
-        updateNetzwerkConsole("Undo not allowed in networked games");
-        return;
-    }
 
     if (chessGame->moveHistory.empty()) {
         updateNetzwerkConsole("No moves to undo");
         return;
     }
+
+    bool stopundo = false;
+
+    if (!isLocalGame && ((client && client->undoMovetmp == true) || (server && server->undoMovetmp == true))) {
+
+        ui->pbUndoAccept->setEnabled(true);
+        ui->pbUndoDeny->setEnabled(true);
+
+        QEventLoop loop;
+
+        auto conn1 = std::make_shared<QMetaObject::Connection>();
+        auto conn2 = std::make_shared<QMetaObject::Connection>();
+
+        *conn1 = connect(ui->pbUndoDeny, &QPushButton::clicked, this, [&]() {
+            if(client) client->sendUndoResponse(false);
+            if(server) server->sendUndoResponse(false);
+
+            // Exit the event loop when the button is clicked
+            ui->pbUndoAccept->setEnabled(false);
+            ui->pbUndoDeny->setEnabled(false);
+            stopundo = true;
+            disconnect(*conn1);
+            loop.quit();
+        });
+
+        *conn2 = connect(ui->pbUndoAccept, &QPushButton::clicked, this, [&]() {
+            qDebug() << "Inside accept";
+            if(client) client->sendUndoResponse(true);
+            if(server) server->sendUndoResponse(true);
+
+            // Exit the event loop when the button is clicked
+            ui->pbUndoAccept->setEnabled(false);
+            ui->pbUndoDeny->setEnabled(false);
+            disconnect(*conn2);
+            loop.quit();
+        });
+
+        loop.exec();
+    }
+
+    if(client) client->undoMovetmp = false;
+    else if(server) server->undoMovetmp = false;
+
+    if(stopundo) return;
 
     MoveInfo lastMove = chessGame->moveHistory.back();
     chessGame->moveHistory.pop_back();
@@ -1046,6 +1089,45 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
         ui->deadplayer1->addWidget(capturedPieceLabel);
     } else {
         ui->deadplayer2->addWidget(capturedPieceLabel);
+    }
+}
+
+
+void SchachApp::on_pbUndo_clicked()
+{
+
+    bool acceptedmain = true;
+
+    if(!isLocalGame) {
+        if(client) client->sendUndo();
+        else if(server) server->sendUndo();
+        ui->pbUndo->setEnabled(false);
+        blockguitmp = true;
+        acceptedmain = false;
+
+        QEventLoop loop;
+
+        if(client)
+            connect(client, &Netzwerk::undoAccepted, this, [&](bool accepted) {
+                ui->pbUndo->setEnabled(true);
+                blockguitmp = false;
+                acceptedmain = accepted;
+                loop.quit();
+            });
+        if(server)
+            connect(server, &Netzwerk::undoAccepted, this, [&](bool accepted) {
+                ui->pbUndo->setEnabled(true);
+                blockguitmp = false;
+                acceptedmain = accepted;
+                loop.quit();
+            });
+
+        loop.exec();
+    }
+
+    if(acceptedmain) {
+        qDebug() << "Undoing the move";
+        undoMove();
     }
 }
 

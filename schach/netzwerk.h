@@ -41,6 +41,10 @@ public:
     void sendGameStart(bool ServerStarts);
     void sendGameStartResponse();
 
+    void sendUndo();
+    void sendUndoResponse(bool accepted);
+    bool undoMovetmp = false;
+
     /**
      * @brief Receives a move from the network.
      * @param moveData The data received over the network containing move information.
@@ -53,6 +57,7 @@ public:
     void initializeSocket();
 
 
+
 protected:
     QTcpSocket* _socket = nullptr;
 
@@ -63,6 +68,9 @@ signals:
     void logMessage(const QString& message); // Signal to log messages to the NetzwerkConsole
     void moveReceived(MoveInfo moveInfo);
     void gameStarted(bool ServerStarts, QString& groupNumber);
+
+    void undoMove();
+    void undoAccepted(bool accepted);
 
 };
 

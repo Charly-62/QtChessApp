@@ -30,6 +30,26 @@ void Netzwerk::sendGameStart(bool ServerStarts) {
 
 }
 
+void Netzwerk::sendUndo() {
+    QByteArray UndoMessage;
+    QDataStream stream(&UndoMessage, QIODevice::WriteOnly);
+
+    stream << quint8(0x05) << quint8(0x01);
+
+    _socket->write(UndoMessage);
+    _socket->flush();
+}
+
+void Netzwerk::sendUndoResponse(bool accepted) {
+    QByteArray responseMessage;
+    QDataStream stream(&responseMessage, QIODevice::WriteOnly);
+
+    stream << quint8(0x06) << quint8(accepted);
+
+    _socket->write(responseMessage);
+    _socket->flush();
+}
+
 void Netzwerk::sendMove(const MoveInfo& moveInfo) {
     QByteArray moveData;
     QDataStream stream(&moveData, QIODevice::WriteOnly);
@@ -185,6 +205,23 @@ void Netzwerk::receiveMove() {
                 emit logMessage("Unknown move response received.");
                 break;
         }
+    }
+
+    else if(command == 0x05) {
+        quint8 groupNumber;
+        stream >> groupNumber;
+        if(groupNumber == 1) {
+            qDebug() << "Undo last move requested";
+            undoMovetmp = true;
+            emit undoMove();
+        }
+    }
+
+    else if(command == 0x06) {
+        quint8 accepted;
+        stream >> accepted;
+        qDebug() << "Undo received" << accepted;
+        emit undoAccepted(accepted);
     }
 
     else {

@@ -69,6 +69,8 @@ private slots:
 
     void on_pbClear_clicked();
 
+    void on_pbUndo_clicked();
+
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
     void initializeBoard();
@@ -126,7 +128,7 @@ private:
 
     void undoMove();
 
-    bool promotiontmp = false; // to block the board when selecting promotion type
+    bool blockguitmp = false; // to block the board when selecting promotion type
 
 
     QString formatMove(const MoveInfo& moveInfo);

@@ -32,7 +32,7 @@ background-color: rgb(134, 255, 142)
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="initalpage">
     <widget class="QGroupBox" name="groupBox">
@@ -232,7 +232,7 @@ background-color: rgb(134, 255, 142)
      </property>
      <property name="geometry">
       <rect>
-       <x>580</x>
+       <x>590</x>
        <y>40</y>
        <width>191</width>
        <height>111</height>
@@ -1880,6 +1880,32 @@ background-color: rgb(134, 255, 142)
       </rect>
      </property>
      <layout class="QHBoxLayout" name="deadplayer1"/>
+    </widget>
+    <widget class="QPushButton" name="pbUndoAccept">
+     <property name="geometry">
+      <rect>
+       <x>590</x>
+       <y>850</y>
+       <width>91</width>
+       <height>33</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Accept Undo</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pbUndoDeny">
+     <property name="geometry">
+      <rect>
+       <x>690</x>
+       <y>850</y>
+       <width>91</width>
+       <height>33</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Deny Undo</string>
+     </property>
     </widget>
    </widget>
   </widget>
