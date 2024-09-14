@@ -32,6 +32,7 @@ SchachApp::SchachApp(QWidget *parent)
     on_cbHostClient_currentTextChanged("Local");
     isLocalPlayerWhite = false;
 
+    ui->pbUndo->setEnabled(false);
     ui->pbUndoAccept->setEnabled(false);
     ui->pbUndoDeny->setEnabled(false);
 
@@ -279,6 +280,9 @@ void SchachApp::handleSquareClick(int row, int col) {
 
             // Format and display the move into lstMoveHystory
             addMoveToHistory(moveInfo);
+
+            if(!isLocalGame && ((chessGame->getWhiteTurn() && isLocalPlayerWhite) || (!chessGame->getWhiteTurn() && !isLocalPlayerWhite)))
+                ui->pbUndo->setEnabled(false);
 
             if (client) {
                 client->sendMove(moveInfo);
@@ -806,6 +810,10 @@ void SchachApp::moveReceived(MoveInfo moveInfo) {
 
         // Format and display the move
         addMoveToHistory(moveInfo);
+
+        if(!isLocalGame && ((chessGame->getWhiteTurn() && isLocalPlayerWhite) || (!chessGame->getWhiteTurn() && !isLocalPlayerWhite)))
+            ui->pbUndo->setEnabled(false);
+
     } else {
         updateNetzwerkConsole("Invalid move received");
     }
@@ -1043,7 +1051,6 @@ void SchachApp::addMoveToHistory(const MoveInfo& moveInfo) {
         // White's move
         QString entry = QString::number(moveNumber) + ". " + moveNotation;
         ui->lstMoveHistory->addItem(entry);
-        ui->pbUndo->setEnabled(true);
     } else {
         // Black's move
         QListWidgetItem* lastItem = ui->lstMoveHistory->item(ui->lstMoveHistory->count() - 1);
