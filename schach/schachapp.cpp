@@ -29,7 +29,7 @@ SchachApp::SchachApp(QWidget *parent)
     // setupChessBoard();
     setDeviceController();
 
-    on_cbHostClient_currentTextChanged("Client");
+    on_cbHostClient_currentTextChanged("Local");
     isLocalPlayerWhite = false;
     player1Timer = new QTimer(this);
     player2Timer = new QTimer(this);
@@ -201,7 +201,7 @@ void SchachApp::resetBoardHighlight() {
 
 void SchachApp::handleSquareClick(int row, int col) {
 //    Comment out to play around with the GUI. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
-        if (!isLocalGame && isLocalPlayerWhite != chessGame->getWhiteTurn()) {
+    if ((!isLocalGame && isLocalPlayerWhite != chessGame->getWhiteTurn()) || promotiontmp) {
         updateNetzwerkConsole("Not your turn!");
         return;
     }
@@ -517,7 +517,8 @@ quint8 SchachApp::PawnPromotion(int row) {
         if ((isLocalGame) || (isLocalPlayerWhite && chessGame->getWhiteTurn()) ||
             (!isLocalPlayerWhite && !chessGame->getWhiteTurn())) {
             ui->swpawnpromotion->setCurrentWidget(ui->pawnpromotionpage);
-         }
+            promotiontmp = true;
+        }
         ui->gridLayout->setEnabled(false);
         ui->pbPawnPromotion->setEnabled(true);
         ui->cbPawnPromotion->setEnabled(true);
@@ -544,6 +545,7 @@ quint8 SchachApp::PawnPromotion(int row) {
             ui->pbPawnPromotion->setEnabled(false);
             ui->cbPawnPromotion->setEnabled(false);
             ui->swpawnpromotion->setCurrentWidget(ui->defaultpage);
+            promotiontmp = false;
 
             // Exit the event loop when the button is clicked
             loop.quit();
@@ -665,6 +667,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         ui->bStart->setEnabled(false);
         ui->leIP->setEnabled(true);
+        ui->spnPort->setEnabled(true);
         ui->cbStartingPlayer->setEnabled(false);
         ui->bConnect->setEnabled(true);
 
@@ -694,6 +697,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         ui->bStart->setEnabled(false);
         ui->leIP->setEnabled(false);
+        ui->spnPort->setEnabled(true);
         ui->cbStartingPlayer->setEnabled(true);
         ui->bConnect->setEnabled(true);
 
@@ -891,13 +895,6 @@ void SchachApp::undoMove() {
                 button->setIcon(QIcon());  // Clear icon if no piece exists
             }
         }
-    }
-
-    if(chessGame->moveHistory.empty()) {
-        chessGame->switchTurn(true);
-        ui->lblCurrentPlayerName->setText("White's Turn");
-    } else {
-        chessGame->switchTurn();
     }
 
     // Update other game states, timers, labels

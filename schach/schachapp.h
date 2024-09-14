@@ -126,6 +126,8 @@ private:
 
     void undoMove();
 
+    bool promotiontmp = false; // to block the board when selecting promotion type
+
 
     QString formatMove(const MoveInfo& moveInfo);
     void addMoveToHistory(const MoveInfo& moveInfo);
