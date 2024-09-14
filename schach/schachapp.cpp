@@ -727,8 +727,9 @@ void SchachApp::device_connected() {
 }
 
 void SchachApp::device_disconnected() {
-    ui->lstNetzwerkConsole->addItem("Disconnected from device");
+    ui->lstNetzwerkConsole->addItem("Disconnected from host");
     ui->lstNetzwerkConsole->scrollToBottom();
+    client->tryReconnect();
     ui->bConnect->setText("Connect");
 }
 

@@ -282,6 +282,8 @@ void Game::switchTurn(bool turn) {
     whiteTurn = turn;
 }
 
+
+
 Game* Game::clone() const {
     Game* clonedGame = new Game(gui);
 

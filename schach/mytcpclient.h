@@ -16,6 +16,7 @@ public:
     void disconnect();
     QAbstractSocket::SocketState state();
     bool isConnected();
+    void tryReconnect();
 
 signals:
     void connected();
@@ -28,6 +29,8 @@ private slots:
 private:
     QString _ip;
     int _port;
+
+    void attemptReconnect(int remainingAttempts);
 
 };
 

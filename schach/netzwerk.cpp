@@ -45,18 +45,35 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
            << quint8(moveInfo.e_row)
            << zusatzInfo;
 
-    if(_socket && _socket->isOpen()) {
-        _socket->write(moveData);
-        _socket->flush();
+    if (_socket && _socket->isOpen()) {
+        qint64 bytesWritten = 0;
+        while (bytesWritten < moveData.size()) {
+            qint64 result = _socket->write(moveData.mid(bytesWritten));  // Write remaining bytes
+            if (result == -1) {
+                emit logMessage("Could not send move.");
+                return;
+            }
+            bytesWritten += result;
+        }
+
         qDebug() << "Move sent: " << moveData.toHex();
         emit logMessage("Move sent successfully.");
+        _socket->flush();
     } else {
         emit logMessage("Socket is not open, cannot send the move.");
     }
-
 }
 
 void Netzwerk::receiveMove() {
+
+    const int MAX_PACKET_SIZE = 7;
+
+    if (_socket->bytesAvailable() > MAX_PACKET_SIZE) {
+        qWarning() << "Packet too large, possible attack. Disconnecting.";
+        _socket->disconnect();
+        return;
+    }
+
     QByteArray moveData = _socket->readAll();
     QDataStream stream(&moveData, QIODevice::ReadOnly);
 
@@ -168,6 +185,12 @@ void Netzwerk::receiveMove() {
                 emit logMessage("Unknown move response received.");
                 break;
         }
+    }
+
+    else {
+        emit logMessage("Command not valid.");
+        emit logMessage("Disconnecting for safety.");
+        _socket->disconnect();
     }
 }
 
