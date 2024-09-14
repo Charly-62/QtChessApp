@@ -468,7 +468,9 @@ void SchachApp::updatecurrentPlayerLabel() {
 
 void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
 
-    ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
+    if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
+        ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
+    }
 
     QPushButton* fromButton = buttons[fromRow][fromCol];
     QPushButton* toButton = buttons[toRow][toCol];
@@ -817,8 +819,6 @@ void SchachApp::moveReceived(MoveInfo moveInfo) {
     } else {
         updateNetzwerkConsole("Invalid move received");
     }
-
-    //isLocalTurn = true;
 }
 
 
@@ -833,13 +833,11 @@ void SchachApp::gameStarted(bool ServerStarts, QString groupNumber) {
         updatecurrentPlayerLabel();
         if(ServerStarts) {
             updateNetzwerkConsole("Server starts the game.");
-            updateNetzwerkConsole("Playing against Group " + groupNumber);
-            //isLocalTurn = false;
+            qDebug() << "Playing against Group " << client->getopponentgroup();
             isLocalPlayerWhite = false;
         } else {
             updateNetzwerkConsole("Client starts the game.");
-            updateNetzwerkConsole("Playing against Group " + groupNumber);
-            //isLocalTurn = true;
+            qDebug() << "Playing against Group " << client->getopponentgroup();
             isLocalPlayerWhite = true;
         }
         initializeBoard();
@@ -851,10 +849,8 @@ void SchachApp::on_cbStartingPlayer_currentTextChanged(const QString &startingPl
     qDebug() << "startingGame" << startingPlayer;
     if(startingPlayer == "Server") {
         isLocalPlayerWhite = true;
-        //isLocalTurn = true;
     } else if(startingPlayer == "Client") {
         isLocalPlayerWhite = false;
-        //isLocalTurn = false;
     }
 
 }
@@ -901,8 +897,9 @@ void SchachApp::undoMove() {
         *conn1 = connect(ui->pbUndoDeny, &QPushButton::clicked, this, [&]() {
             if(client) client->sendUndoResponse(false);
             if(server) server->sendUndoResponse(false);
-            ui->pbUndo->setEnabled(true);
-
+            if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
+                ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
+            }
             // Exit the event loop when the button is clicked
             ui->pbUndoAccept->setEnabled(false);
             ui->pbUndoDeny->setEnabled(false);
@@ -918,7 +915,9 @@ void SchachApp::undoMove() {
             // Exit the event loop when the button is clicked
             ui->pbUndoAccept->setEnabled(false);
             ui->pbUndoDeny->setEnabled(false);
-            ui->pbUndo->setEnabled(true);
+            if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
+                ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
+            }
             disconnect(*conn2);
             loop.quit();
         });
@@ -1105,8 +1104,7 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
 }
 
 
-void SchachApp::on_pbUndo_clicked()
-{
+void SchachApp::on_pbUndo_clicked() {
 
     bool acceptedmain = true;
 
@@ -1121,7 +1119,11 @@ void SchachApp::on_pbUndo_clicked()
 
         if(client)
             connect(client, &Netzwerk::undoAccepted, this, [&](bool accepted) {
-                if(accepted) ui->pbUndo->setEnabled(true);
+                if(accepted){
+                    if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
+                        ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
+                    }
+                }
                 else ui->pbUndo->setEnabled(false);
                 blockguitmp = false;
                 acceptedmain = accepted;
@@ -1129,7 +1131,11 @@ void SchachApp::on_pbUndo_clicked()
             });
         if(server)
             connect(server, &Netzwerk::undoAccepted, this, [&](bool accepted) {
-                if(accepted) ui->pbUndo->setEnabled(true);
+                if(accepted){
+                    if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
+                        ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
+                    }
+                }
                 else ui->pbUndo->setEnabled(false);
                 blockguitmp = false;
                 acceptedmain = accepted;
@@ -1143,5 +1149,5 @@ void SchachApp::on_pbUndo_clicked()
         qDebug() << "Undoing the move";
         undoMove();
     }
-}
 
+}

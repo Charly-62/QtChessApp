@@ -45,6 +45,10 @@ public:
     void sendUndoResponse(bool accepted);
     bool undoMovetmp = false;
 
+    int getopponentgroup() {
+        return opponentgroup;
+    }
+
     /**
      * @brief Receives a move from the network.
      * @param moveData The data received over the network containing move information.
@@ -63,6 +67,7 @@ protected:
 
 private:
     Game* gameInstance; ///< Reference to the game instance.
+    int opponentgroup = 0; // Playing against this group
 
 signals:
     void logMessage(const QString& message); // Signal to log messages to the NetzwerkConsole

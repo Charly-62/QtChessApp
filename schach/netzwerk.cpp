@@ -106,6 +106,7 @@ void Netzwerk::receiveMove() {
     if(command == 0x01) {
         quint8 StartingPlayer, groupNumber;
         stream >> length >> StartingPlayer >> groupNumber;
+        opponentgroup = groupNumber;
 
         QString group = QString::number(groupNumber);
         emit gameStarted(StartingPlayer & 1, group);
@@ -116,6 +117,7 @@ void Netzwerk::receiveMove() {
     else if(command == 0x02) {
         quint8 groupNumber;
         stream >> length >> groupNumber;
+        opponentgroup = groupNumber;
         emit logMessage("Playing against Group " + QString::number(groupNumber));
     }
 
