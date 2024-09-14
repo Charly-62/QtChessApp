@@ -58,12 +58,20 @@ SchachApp::SchachApp(QWidget *parent)
 
 SchachApp::~SchachApp()
 {
+    if (client) {
+        client->disconnect();
+        delete client;
+        client = nullptr;
+    }
+
+    if (server) {
+        server->stopListening();
+        delete server;
+        server = nullptr;
+    }
+
     delete ui;
-    for (int row = 0; row < 8; ++row) {
-            for (int col = 0; col < 8; ++col) {
-                delete board[row][col];
-            }
-     }
+    delete chessGame;
 }
 
 void SchachApp::setWelcomeMessage()
@@ -662,6 +670,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         // Switch to Client mode
         if(server) {
+            server->disconnect();
             server->stopListening();
             delete server;
             server = nullptr;

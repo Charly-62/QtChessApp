@@ -95,9 +95,11 @@ bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row,
 
     // If the king is in check, the move is illegal
     if (simulIsCheck) {
+        delete simulatedGame;
         return false;
     }
 
+    delete simulatedGame;
     return true;
 }
 
