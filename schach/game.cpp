@@ -68,6 +68,9 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row, int promotion
 
     // Store the captured piece
     moveInfo.capturedPiece = getPieceAt(e_col, e_row);
+    if(moveInfo.capturedPiece) {
+        emit pieceCaptured(moveInfo.capturedPiece);
+    }
 
     // Store hasMoved flags
     moveInfo.movedPieceHasMovedBefore = movingPiece->checkMoved();

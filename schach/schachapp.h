@@ -129,8 +129,9 @@ private:
     QString formatMove(const MoveInfo& moveInfo);
     void addMoveToHistory(const MoveInfo& moveInfo);
     void removeLastMoveFromHistory();
-
-
+    QHBoxLayout* deadplayer1;
+    QHBoxLayout* deadplayer2;
+    void pieceCaptured(std::shared_ptr<Piece> capturedPiece);
 
 };
 #endif // SCHACHAPP_H
