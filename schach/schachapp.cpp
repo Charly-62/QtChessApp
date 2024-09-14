@@ -52,6 +52,8 @@ SchachApp::SchachApp(QWidget *parent)
     ui->swpawnpromotion->setCurrentWidget(ui->defaultpage);
     //ui->lblCurrentPlayerName->setText("Welcome to a new game ");
 
+    connect(chessGame, &Game::pieceCaptured, this, &SchachApp::pieceCaptured);
+
 }
 
 SchachApp::~SchachApp()
@@ -382,25 +384,27 @@ void SchachApp::updatecurrentPlayerLabel() {
     if (Player1Name != "Enter your name" && Player2Name != "Enter the opponent's name") {
         if (chessGame->getWhiteTurn()) {
             labelText = "♔ " + Player1Name + "'s Turn";
-            style = "color: #ffffff; background-color: #000000; padding: 5px; border-radius: 5px;";
+            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
         } else {
             labelText = "♚ " + Player2Name + "'s Turn";
-            style = "color: #000000; background-color: #ffffff; padding: 5px; border-radius: 5px;";
+            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
         }
     } else {
         if (chessGame->getWhiteTurn()) {
             labelText = "♔ White's Turn";
-            style = "color: #ffffff; background-color: #000000; padding: 5px; border-radius: 5px;";
+            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
         } else {
             labelText = "♚ Black's Turn";
-            style = "color: #000000; background-color: #ffffff; padding: 5px; border-radius: 5px;";
+            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
         }
     }
     if (isLocalGame) {
         if (player2TimeRemaining <= 0){
-            labelText = "White WINS";
+            labelText = " ♔ WHITE WINS ♔ ";
+            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
          }else if (player1TimeRemaining <= 0){
-            labelText = "Black WINS";
+            labelText = " ♚ BLACK WINS ♚";
+            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
          }
 
     } else {
@@ -991,3 +995,20 @@ void SchachApp::removeLastMoveFromHistory() {
         delete ui->lstMoveHistory->takeItem(ui->lstMoveHistory->count() - 1);
     }
 }
+
+
+
+void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
+    QString type = capturedPiece->getType();
+    QLabel *capturedPieceLabel = new QLabel();
+    QString imagePath = QString(":/Figuren/") + type + (capturedPiece->checkIfWhite() ? "W" : "B") + ".png";
+
+    capturedPieceLabel->setPixmap(QPixmap(imagePath));
+
+    if (capturedPiece->checkIfWhite()) {
+        ui->deadplayer1->addWidget(capturedPieceLabel);
+    } else {
+        ui->deadplayer2->addWidget(capturedPieceLabel);
+    }
+}
+

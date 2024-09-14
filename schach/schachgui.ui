@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>958</width>
-    <height>846</height>
+    <width>1102</width>
+    <height>1044</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,11 +28,11 @@ background-color: rgb(134, 255, 142)
      <x>30</x>
      <y>10</y>
      <width>861</width>
-     <height>831</height>
+     <height>881</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="initalpage">
     <widget class="QGroupBox" name="groupBox">
@@ -307,12 +307,12 @@ background-color: rgb(134, 255, 142)
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>150</y>
+       <y>210</y>
        <width>561</width>
        <height>33</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayoutPlayer2">
       <item>
        <widget class="QLineEdit" name="leName2">
         <property name="text">
@@ -321,7 +321,7 @@ background-color: rgb(134, 255, 142)
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="scorelbl">
+       <widget class="QLabel" name="scorelbl2">
         <property name="text">
          <string>Score</string>
         </property>
@@ -360,12 +360,12 @@ background-color: rgb(134, 255, 142)
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>750</y>
+       <y>810</y>
        <width>561</width>
        <height>33</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayoutPlayer1">
       <item>
        <widget class="QLineEdit" name="leName1">
         <property name="text">
@@ -374,14 +374,14 @@ background-color: rgb(134, 255, 142)
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="scorelbl_2">
+       <widget class="QLabel" name="scorelbl1">
         <property name="text">
          <string>Score</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="lblPlayer2Score_2">
+       <widget class="QLabel" name="lblPlayer1Score">
         <property name="text">
          <string>0</string>
         </property>
@@ -423,7 +423,7 @@ background-color: rgb(134, 255, 142)
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>180</y>
+       <y>250</y>
        <width>562</width>
        <height>562</height>
       </rect>
@@ -899,7 +899,8 @@ background-color: rgb(134, 255, 142)
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: rgb(121, 121, 121)</string>
+         <string notr="true">background-color: rgb(121, 121, 121)
+</string>
         </property>
         <property name="text">
          <string/>
@@ -1869,7 +1870,29 @@ background-color: rgb(134, 255, 142)
       </item>
      </layout>
     </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget_4">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>130</y>
+       <width>351</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="deadplayer2"/>
+    </widget>
    </widget>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>860</y>
+     <width>351</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="deadplayer1"/>
   </widget>
  </widget>
  <resources/>

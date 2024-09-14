@@ -163,6 +163,9 @@ private:
      */
     void initBoard();
 
+signals:
+    void pieceCaptured(std::shared_ptr<Piece> capturedPiece);
+
 };
 
 #endif // GAME_H
