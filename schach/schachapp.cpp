@@ -463,6 +463,9 @@ void SchachApp::updatecurrentPlayerLabel() {
 
 
 void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
+
+    ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
+
     QPushButton* fromButton = buttons[fromRow][fromCol];
     QPushButton* toButton = buttons[toRow][toCol];
     // Move the icon from the selected button to the target button
@@ -880,6 +883,7 @@ void SchachApp::undoMove() {
 
         ui->pbUndoAccept->setEnabled(true);
         ui->pbUndoDeny->setEnabled(true);
+        ui->pbUndo->setEnabled(false);
 
         QEventLoop loop;
 
@@ -889,6 +893,7 @@ void SchachApp::undoMove() {
         *conn1 = connect(ui->pbUndoDeny, &QPushButton::clicked, this, [&]() {
             if(client) client->sendUndoResponse(false);
             if(server) server->sendUndoResponse(false);
+            ui->pbUndo->setEnabled(true);
 
             // Exit the event loop when the button is clicked
             ui->pbUndoAccept->setEnabled(false);
@@ -899,13 +904,13 @@ void SchachApp::undoMove() {
         });
 
         *conn2 = connect(ui->pbUndoAccept, &QPushButton::clicked, this, [&]() {
-            qDebug() << "Inside accept";
             if(client) client->sendUndoResponse(true);
             if(server) server->sendUndoResponse(true);
 
             // Exit the event loop when the button is clicked
             ui->pbUndoAccept->setEnabled(false);
             ui->pbUndoDeny->setEnabled(false);
+            ui->pbUndo->setEnabled(true);
             disconnect(*conn2);
             loop.quit();
         });
@@ -1109,14 +1114,16 @@ void SchachApp::on_pbUndo_clicked()
 
         if(client)
             connect(client, &Netzwerk::undoAccepted, this, [&](bool accepted) {
-                ui->pbUndo->setEnabled(true);
+                if(accepted) ui->pbUndo->setEnabled(true);
+                else ui->pbUndo->setEnabled(false);
                 blockguitmp = false;
                 acceptedmain = accepted;
                 loop.quit();
             });
         if(server)
             connect(server, &Netzwerk::undoAccepted, this, [&](bool accepted) {
-                ui->pbUndo->setEnabled(true);
+                if(accepted) ui->pbUndo->setEnabled(true);
+                else ui->pbUndo->setEnabled(false);
                 blockguitmp = false;
                 acceptedmain = accepted;
                 loop.quit();
