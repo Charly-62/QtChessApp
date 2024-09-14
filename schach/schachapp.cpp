@@ -139,14 +139,11 @@ void SchachApp::initializeBoard()
     setupChessBoard();
 
 }
-void SchachApp::checkForCheckmate() {
-
-
-    qDebug() << "GUI CHHECKMATE" ;
-}
 
 // Setup chessboard in GUI
 void SchachApp::setupChessBoard() {
+    whiteScore = 0;
+    blackScore = 0;
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
             std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);  // Get piece from the game
@@ -165,6 +162,10 @@ void SchachApp::setupChessBoard() {
             });
         }
     }
+
+    // Update score display (assuming you have labels for scores)
+    ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
+    ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
 }
 void SchachApp::highlightPossibleMove(const std::pair<int, int>& move) {
     int row = move.second;
@@ -175,7 +176,7 @@ void SchachApp::highlightPossibleMove(const std::pair<int, int>& move) {
      if (!originalButtonStyles.contains(button)) {
           originalButtonStyles[button] = button->styleSheet(); // Store the current style if not already stored
        }
-        button->setStyleSheet("background-color: red;");
+        button->setStyleSheet("background-color: rgb(255, 231, 142);");
     }
 }
 
@@ -192,7 +193,7 @@ void SchachApp::resetBoardHighlight() {
 
 void SchachApp::handleSquareClick(int row, int col) {
 //    Comment out to play around with the GUI. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
-    if (!isLocalGame && isLocalPlayerWhite != chessGame->getWhiteTurn()) {
+        if (!isLocalGame && isLocalPlayerWhite != chessGame->getWhiteTurn()) {
         updateNetzwerkConsole("Not your turn!");
         return;
     }
@@ -384,27 +385,33 @@ void SchachApp::updatecurrentPlayerLabel() {
     if (Player1Name != "Enter your name" && Player2Name != "Enter the opponent's name") {
         if (chessGame->getWhiteTurn()) {
             labelText = "♔ " + Player1Name + "'s Turn";
-            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
+            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
+//            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
         } else {
             labelText = "♚ " + Player2Name + "'s Turn";
-            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
+            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
+//            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
         }
     } else {
         if (chessGame->getWhiteTurn()) {
             labelText = "♔ White's Turn";
-            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
+            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
+//            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
         } else {
             labelText = "♚ Black's Turn";
-            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
+            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
+//            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
         }
     }
     if (isLocalGame) {
         if (player2TimeRemaining <= 0){
             labelText = " ♔ WHITE WINS ♔ ";
-            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
+            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
+//            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
          }else if (player1TimeRemaining <= 0){
             labelText = " ♚ BLACK WINS ♚";
-            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
+            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
+//            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
          }
 
     } else {
@@ -422,19 +429,19 @@ void SchachApp::updatecurrentPlayerLabel() {
 
     if (chessGame->isCheckmate == true){
         if (chessGame->getWhiteTurn()){
-            labelText = "Black WINS";
+            labelText = " CHECKMATE ♚ BLACK WINS ♚ ";
         }else{
-            labelText = "White WINS";
+            labelText = " CHECKMATE ♔ WHITE WINS ♔ ";
         }
         style = R"(
-                color: #ffffff;
-                background-color: #000000;
+                color: #006400; /* Text color (e.g., dark green) */
+                background-color: #98fb98; /* Background color (e.g., pale green) */
                 padding: 10px 20px;
                 border-radius: 15px;
                 font-size: 24px;
                 font-weight: bold;
                 text-align: center;
-                border: 2px solid #ffffff;
+                border: 2px solid #006400; /* Border color matching text */
                 box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.7);
             )";
         }
@@ -455,21 +462,39 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
 
      // Debugging: Print the move details
      qDebug() << "Moved piece from:" << fromCol << fromRow << "to:" << toCol << toRow;
-
+     whiteScore = 0;
+     blackScore = 0;
      // Re-fetch all pieces and update the icons on the board
      for (int row = 0; row < 8; ++row) {
          for (int col = 0; col < 8; ++col) {
+
              QPushButton* button = buttons[row][col];
              std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);  // Get piece from the game
 
              if (piece != nullptr) {
                  QString iconName = QString(":/Figuren/") + piece->getType() + (piece->checkIfWhite() ? "W" : "B") + ".png";
                  button->setIcon(QIcon(iconName));  // Set the correct icon for the piece
+                 // Calculate the score
+                   int pieceValue = 0;
+                   if (piece->getType() == "pawn") pieceValue = 1;
+                   else if (piece->getType() == "horse" || piece->getType() == "bishop") pieceValue = 3;
+                   else if (piece->getType() == "rook") pieceValue = 5;
+                   else if (piece->getType() == "queen") pieceValue = 9;
+
+                   if (piece->checkIfWhite()) {
+                       whiteScore += pieceValue;
+                   } else {
+                       blackScore += pieceValue;
+                   }
              } else {
                  button->setIcon(QIcon());  // Clear icon if no piece exists
              }
          }
      }
+     qDebug() << "score White vs black " << whiteScore <<" vs  " << blackScore;
+     // Update score display (assuming you have labels for scores)
+         ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
+         ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
 
 }
 
@@ -485,7 +510,7 @@ quint8 SchachApp::PawnPromotion(int row) {
             (!isLocalPlayerWhite && !chessGame->getWhiteTurn())) {
             ui->swpawnpromotion->setCurrentWidget(ui->pawnpromotionpage);
          }
-
+        ui->gridLayout->setEnabled(false);
         ui->pbPawnPromotion->setEnabled(true);
         ui->cbPawnPromotion->setEnabled(true);
 
@@ -511,6 +536,7 @@ quint8 SchachApp::PawnPromotion(int row) {
             ui->pbPawnPromotion->setEnabled(false);
             ui->cbPawnPromotion->setEnabled(false);
             ui->swpawnpromotion->setCurrentWidget(ui->defaultpage);
+
             // Exit the event loop when the button is clicked
             loop.quit();
         });
@@ -518,7 +544,7 @@ quint8 SchachApp::PawnPromotion(int row) {
         // Start the event loop, this will block until loop.quit() is called
         loop.exec();
     }
-
+    ui->gridLayout->setEnabled(true);
     return promotionType;
 }
 //void SchachApp::onPbPawnPromotionClicked(){
@@ -1004,7 +1030,11 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
     QLabel *capturedPieceLabel = new QLabel();
     QString imagePath = QString(":/Figuren/") + type + (capturedPiece->checkIfWhite() ? "W" : "B") + ".png";
 
-    capturedPieceLabel->setPixmap(QPixmap(imagePath));
+    QPixmap originalPixmap(imagePath);
+    QSize newSize(32, 32);
+    QPixmap scaledPixmap = originalPixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    capturedPieceLabel->setPixmap(QPixmap(scaledPixmap));
 
     if (capturedPiece->checkIfWhite()) {
         ui->deadplayer1->addWidget(capturedPieceLabel);

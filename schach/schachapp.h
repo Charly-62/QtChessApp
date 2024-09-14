@@ -44,7 +44,7 @@ public:
     }
 
     quint8 PawnPromotion(int rowPawnPromotion);
-    void checkForCheckmate();
+
 
 private slots:
     void handleSquareClick(int row, int col);
@@ -126,12 +126,15 @@ private:
 
     void undoMove();
 
+
     QString formatMove(const MoveInfo& moveInfo);
     void addMoveToHistory(const MoveInfo& moveInfo);
     void removeLastMoveFromHistory();
     QHBoxLayout* deadplayer1;
     QHBoxLayout* deadplayer2;
     void pieceCaptured(std::shared_ptr<Piece> capturedPiece);
+    int whiteScore ;
+    int blackScore ;
 
 };
 #endif // SCHACHAPP_H

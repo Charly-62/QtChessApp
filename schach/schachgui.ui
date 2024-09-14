@@ -27,8 +27,8 @@ background-color: rgb(134, 255, 142)
     <rect>
      <x>30</x>
      <y>10</y>
-     <width>861</width>
-     <height>881</height>
+     <width>791</width>
+     <height>911</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -38,7 +38,7 @@ background-color: rgb(134, 255, 142)
     <widget class="QGroupBox" name="groupBox">
      <property name="geometry">
       <rect>
-       <x>90</x>
+       <x>40</x>
        <y>150</y>
        <width>401</width>
        <height>531</height>
@@ -204,17 +204,17 @@ background-color: rgb(134, 255, 142)
     <widget class="QListWidget" name="lstNetzwerkConsole">
      <property name="geometry">
       <rect>
-       <x>500</x>
+       <x>450</x>
        <y>150</y>
        <width>321</width>
-       <height>491</height>
+       <height>501</height>
       </rect>
      </property>
     </widget>
     <widget class="QPushButton" name="pbClear">
      <property name="geometry">
       <rect>
-       <x>500</x>
+       <x>450</x>
        <y>650</y>
        <width>321</width>
        <height>33</height>
@@ -227,16 +227,19 @@ background-color: rgb(134, 255, 142)
    </widget>
    <widget class="QWidget" name="gamepage">
     <widget class="QStackedWidget" name="swpawnpromotion">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>30</y>
+       <x>580</x>
+       <y>40</y>
        <width>191</width>
        <height>111</height>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="pawnpromotionpage">
       <widget class="QGroupBox" name="grpPawnPromotion">
@@ -306,13 +309,20 @@ background-color: rgb(134, 255, 142)
     <widget class="QWidget" name="horizontalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>260</x>
-       <y>210</y>
+       <x>20</x>
+       <y>200</y>
        <width>561</width>
        <height>33</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayoutPlayer2">
+      <item>
+       <widget class="QLabel" name="lblPlayer2Timer">
+        <property name="text">
+         <string>10:00</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QLineEdit" name="leName2">
         <property name="text">
@@ -327,26 +337,12 @@ background-color: rgb(134, 255, 142)
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QLabel" name="lblPlayer2Score">
-        <property name="text">
-         <string>0</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblPlayer2Timer">
-        <property name="text">
-         <string>10:00</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
     <widget class="QLabel" name="lblCurrentPlayerName">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>20</x>
        <y>30</y>
        <width>561</width>
        <height>91</height>
@@ -359,13 +355,20 @@ background-color: rgb(134, 255, 142)
     <widget class="QWidget" name="horizontalLayoutWidget_2">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>20</x>
        <y>810</y>
        <width>561</width>
        <height>33</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayoutPlayer1">
+      <item>
+       <widget class="QLabel" name="lblPlayer1Timer">
+        <property name="text">
+         <string>10:00</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QLineEdit" name="leName1">
         <property name="text">
@@ -380,37 +383,23 @@ background-color: rgb(134, 255, 142)
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QLabel" name="lblPlayer1Score">
-        <property name="text">
-         <string>0</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="lblPlayer1Timer">
-        <property name="text">
-         <string>10:00</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
     <widget class="QListWidget" name="lstMoveHistory">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>180</y>
+       <x>590</x>
+       <y>240</y>
        <width>191</width>
-       <height>551</height>
+       <height>561</height>
       </rect>
      </property>
     </widget>
     <widget class="QPushButton" name="pbUndo">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>740</y>
+       <x>590</x>
+       <y>810</y>
        <width>191</width>
        <height>33</height>
       </rect>
@@ -422,8 +411,8 @@ background-color: rgb(134, 255, 142)
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>260</x>
-       <y>250</y>
+       <x>20</x>
+       <y>240</y>
        <width>562</width>
        <height>562</height>
       </rect>
@@ -1873,26 +1862,26 @@ background-color: rgb(134, 255, 142)
     <widget class="QWidget" name="horizontalLayoutWidget_4">
      <property name="geometry">
       <rect>
-       <x>260</x>
-       <y>130</y>
-       <width>351</width>
-       <height>80</height>
+       <x>20</x>
+       <y>159</y>
+       <width>561</width>
+       <height>41</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="deadplayer2"/>
     </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>840</y>
+       <width>561</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="deadplayer1"/>
+    </widget>
    </widget>
-  </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_3">
-   <property name="geometry">
-    <rect>
-     <x>290</x>
-     <y>860</y>
-     <width>351</width>
-     <height>80</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="deadplayer1"/>
   </widget>
  </widget>
  <resources/>
