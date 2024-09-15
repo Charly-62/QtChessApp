@@ -23,7 +23,7 @@ void Netzwerk::sendGameStart(bool ServerStarts) {
     QDataStream stream(&gameStartMessage, QIODevice::WriteOnly);
 
     stream << quint8(0x01) << quint8(0x02)
-           << quint8(ServerStarts) << quint8(0x01);
+           << quint8(!ServerStarts) << quint8(0x01);
 
     _socket->write(gameStartMessage);
     _socket->flush();
@@ -34,7 +34,7 @@ void Netzwerk::sendUndo() {
     QByteArray UndoMessage;
     QDataStream stream(&UndoMessage, QIODevice::WriteOnly);
 
-    stream << quint8(0x05) << quint8(0x01);
+    stream << quint8(0x05) << quint8(0x01) << quint8(0x01);
 
     _socket->write(UndoMessage);
     _socket->flush();
@@ -44,7 +44,7 @@ void Netzwerk::sendUndoResponse(bool accepted) {
     QByteArray responseMessage;
     QDataStream stream(&responseMessage, QIODevice::WriteOnly);
 
-    stream << quint8(0x06) << quint8(accepted);
+    stream << quint8(0x06) << quint8(0x01) << quint8(accepted);
 
     _socket->write(responseMessage);
     _socket->flush();
@@ -89,48 +89,102 @@ void Netzwerk::receiveMove() {
     const int MAX_PACKET_SIZE = 7;
 
     if (_socket->bytesAvailable() > MAX_PACKET_SIZE) {
-        qWarning() << "Packet too large, possible attack. Disconnecting.";
+        emit logInGameMsg("Packet too large, possible attack. Disconnecting.");
         _socket->disconnect();
         return;
     }
 
     QByteArray moveData = _socket->readAll();
-    QDataStream stream(&moveData, QIODevice::ReadOnly);
+    buffer.append(moveData);
 
-    MoveInfo moveInfo;
-    quint8 length, command;
+    while(true) {
 
-    stream >> command; // receive command first and handle the message differently if it's a move, the start of the game, etc.
+        if (buffer.size() < 2) {
+            break; // Not enough data for command yet
+        }
+
+        QDataStream stream(buffer);
+        quint8 length, command;
+
+        stream >> command >> length; // receive command first and handle the message differently if it's a move, the start of the game, etc.
+
+        int expectedSize = 2 + length;
+
+        if(buffer.size() < expectedSize) {
+            break; // Not enough data yet
+        }
+
+        QByteArray messageData = buffer.left(expectedSize);
+
+        buffer.remove(0, expectedSize);
+
+        QDataStream messageStream(messageData);
+        processMessage(messageStream);
+    }
+}
+
+void Netzwerk::processMessage(QDataStream& stream) {
+
+    quint8 command, length;
+
+    stream >> command >> length;
 
     // Game Start command
     if(command == 0x01) {
+        if(length != 2) {
+            emit logInGameMsg("Invalid message length.");
+            emit logInGameMsg("Disconnecting for safety.");
+            _socket->disconnect();
+        }
+
         quint8 StartingPlayer, groupNumber;
-        stream >> length >> StartingPlayer >> groupNumber;
+        stream >> StartingPlayer >> groupNumber;
         opponentgroup = groupNumber;
 
         QString group = QString::number(groupNumber);
-        emit gameStarted(StartingPlayer & 1, group);
+        bool ServerStarts = !StartingPlayer;
+        emit gameStarted(ServerStarts, group);
 
         sendGameStartResponse();
     }
 
+    // Game Start Response command
     else if(command == 0x02) {
+        if(length != 1) {
+            emit logInGameMsg("Invalid message length.");
+            emit logInGameMsg("Disconnecting for safety.");
+            _socket->disconnect();
+        }
         quint8 groupNumber;
-        stream >> length >> groupNumber;
+        stream >> groupNumber;
         opponentgroup = groupNumber;
         emit logInGameMsg("Playing against Group " + QString::number(groupNumber));
     }
 
     // Move command
     else if(command == 0x03) {
+        if(length != 5) {
+            emit logInGameMsg("Invalid message length.");
+            emit logInGameMsg("Disconnecting for safety.");
+            _socket->disconnect();
+        }
+
         quint8 startCol, startRow, endCol, endRow, zusatzinfo; // store received data in to quint8
 
-        stream >> length
-               >> startCol
+        stream >> startCol
                >> startRow
                >> endCol
                >> endRow
                >> zusatzinfo;
+
+        if (startCol >= 8 || startRow >= 8 || endCol >= 8 || endRow >= 8) {
+            emit logInGameMsg("Invalid position values in Move message.");
+            emit logInGameMsg("Disconnecting for safety.");
+            _socket->disconnect();
+            return;
+        }
+
+        MoveInfo moveInfo;
 
         moveInfo.s_col = static_cast<int> (startCol);
         moveInfo.s_row = static_cast<int> (startRow);
@@ -157,8 +211,6 @@ void Netzwerk::receiveMove() {
             return;
         } else {
             emit logInGameMsg("Received valid move.");
-            // Apply the move in the game logic
-            //MoveInfo result = gameInstance->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
 
             // Determine the status code based on move consequences
             if (moveInfo.consequences & 0x02) { // Checkmate
@@ -174,9 +226,15 @@ void Netzwerk::receiveMove() {
         }
     }
 
+    // Move response command
     else if(command == 0x04) {
+        if(length != 1) {
+            emit logInGameMsg("Invalid message length.");
+            emit logInGameMsg("Disconnecting for safety.");
+            _socket->disconnect();
+        }
         quint8 status;
-        stream >> length >> status;
+        stream >> status;
 
         switch(status) {
             case 0x00:
@@ -209,7 +267,13 @@ void Netzwerk::receiveMove() {
         }
     }
 
+    // Undo move command
     else if(command == 0x05) {
+        if(length != 1) {
+            emit logInGameMsg("Invalid message length.");
+            emit logInGameMsg("Disconnecting for safety.");
+            _socket->disconnect();
+        }
         quint8 groupNumber;
         stream >> groupNumber;
         if(groupNumber == 1) {
@@ -219,15 +283,22 @@ void Netzwerk::receiveMove() {
         }
     }
 
+    // Undo move response command
     else if(command == 0x06) {
+        if(length != 1) {
+            emit logInGameMsg("Invalid message length.");
+            emit logInGameMsg("Disconnecting for safety.");
+            _socket->disconnect();
+        }
         quint8 accepted;
         stream >> accepted;
         qDebug() << "Undo received" << accepted;
         emit undoAccepted(accepted);
     }
 
+    // Unvalid command
     else {
-        emit logInGameMsg("Command not valid.");
+        emit logInGameMsg("Invalid command received.");
         emit logInGameMsg("Disconnecting for safety.");
         _socket->disconnect();
     }

@@ -54,6 +54,7 @@ public:
      * @param moveData The data received over the network containing move information.
      */
     void receiveMove();
+    void processMessage(QDataStream& stream);
 
     /**
      * @brief Initializes the socket if it's not already done
@@ -64,6 +65,7 @@ public:
 
 protected:
     QTcpSocket* _socket = nullptr;
+    QByteArray buffer; // Buffer to accumulate incoming data
 
 private:
     Game* gameInstance; ///< Reference to the game instance.
