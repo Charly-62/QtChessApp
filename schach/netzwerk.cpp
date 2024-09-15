@@ -14,6 +14,7 @@ void Netzwerk::initializeSocket() {
     if (!_socket) {
         _socket = new QTcpSocket(this);
         connect(_socket, &QTcpSocket::readyRead, this, &Netzwerk::receiveMove);
+        connect(_socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &Netzwerk::onSocketError);
     }
 }
 
@@ -44,7 +45,7 @@ void Netzwerk::sendUndoResponse(bool accepted) {
     QByteArray responseMessage;
     QDataStream stream(&responseMessage, QIODevice::WriteOnly);
 
-    stream << quint8(0x06) << quint8(0x01) << quint8(accepted);
+    stream << quint8(0x90) << quint8(0x01) << quint8(accepted);
 
     _socket->write(responseMessage);
     _socket->flush();
@@ -284,7 +285,7 @@ void Netzwerk::processMessage(QDataStream& stream) {
     }
 
     // Undo move response command
-    else if(command == 0x06) {
+    else if(command == 0x90) {
         if(length != 1) {
             emit logInGameMsg("Invalid message length.");
             emit logInGameMsg("Disconnecting for safety.");
@@ -324,4 +325,32 @@ void Netzwerk::sendMoveResponse(quint8 status) {
 
     _socket->write(responseMessage);
     _socket->flush();
+}
+
+void Netzwerk::onSocketError(QAbstractSocket::SocketError socketError) {
+    QString errorString = _socket->errorString();
+    emit logInGameMsg(QString("Socket error: %1").arg(errorString));
+    emit logNetzwerkMsg(QString("Socket error: %1").arg(errorString));
+
+    switch (socketError) {
+        case QAbstractSocket::RemoteHostClosedError:
+            emit logInGameMsg("Remote host closed the connection.");
+            emit logNetzwerkMsg("Remote host closed the connection.");
+            break;
+
+        case QAbstractSocket::HostNotFoundError:
+            emit logInGameMsg("Host not found. Please check the host address and port.");
+            emit logNetzwerkMsg("Host not found. Please check the host address and port.");
+            break;
+
+        case QAbstractSocket::ConnectionRefusedError:
+            emit logInGameMsg("Connection refused by the server.");
+            emit logNetzwerkMsg("Connection refused by the server.");
+            break;
+
+        default:
+            emit logInGameMsg("An unexpected network error occurred.");
+            emit logNetzwerkMsg("An unexpected network error occurred.");
+            break;
+    }
 }
