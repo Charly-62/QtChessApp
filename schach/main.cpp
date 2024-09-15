@@ -21,8 +21,6 @@ int main(int argc, char *argv[])
     /// Create the GUI instance
     SchachApp gui;
 
-    int l;
-
     /// Show the GUI
     gui.show();
 
