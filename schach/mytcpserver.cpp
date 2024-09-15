@@ -38,6 +38,9 @@ void MyTCPServer::stopListening() {
 
 void MyTCPServer::onClientConnecting() {
     _socket = server->nextPendingConnection();
+
+    emit client_Connected();
+
     if(_socket) {
         QHostAddress address = _socket->peerAddress();
         QString clientInfo;
@@ -65,6 +68,8 @@ void MyTCPServer::onClientConnecting() {
 void MyTCPServer::onClientDisconnected() {
     QHostAddress address = _socket->peerAddress();
     QString clientInfo;
+
+    emit client_Disconnected();
 
     // Save IP as QString according to address type
     if (address.protocol() == QAbstractSocket::IPv4Protocol) {

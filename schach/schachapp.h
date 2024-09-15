@@ -72,6 +72,8 @@ private slots:
 
     void on_pbUndo_clicked();
 
+    void on_leSendChat_returnPressed();
+
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
     void initializeBoard();
@@ -94,6 +96,9 @@ private:
     void setDeviceController();
     void moveReceived(MoveInfo);
     void gameStarted(bool, QString);
+
+    void on_client_connected();
+    void on_client_disconnected();
 
     QMap<QPushButton*, QString> originalButtonStyles;
 
@@ -130,6 +135,8 @@ private:
     QWidget* gamepage ;
 
     void undoMove();
+
+    void onChatMsgReceived(QString message);
 
     bool blockguitmp = false; // to block the board when selecting promotion type
 

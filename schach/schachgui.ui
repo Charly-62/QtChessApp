@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>948</width>
+    <width>1136</width>
     <height>1011</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@ background-color: rgb(134, 255, 142)
   <widget class="QStackedWidget" name="GAME">
    <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>260</x>
      <y>50</y>
      <width>861</width>
      <height>911</height>
@@ -494,7 +494,7 @@ QPushButton:pressed {
      </property>
      <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,1,1,1,1" columnstretch="1,1,1,1,1,1,1,1" rowminimumheight="70,70,70,70,70,70,70,70" columnminimumwidth="70,70,70,70,70,70,70,70">
       <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
+       <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
       </property>
       <property name="bottomMargin">
        <number>0</number>
@@ -2025,7 +2025,7 @@ QPushButton:pressed {
       <string>A</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
@@ -2041,7 +2041,7 @@ QPushButton:pressed {
       <string>B</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_3">
@@ -2057,7 +2057,7 @@ QPushButton:pressed {
       <string>C</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_4">
@@ -2073,7 +2073,7 @@ QPushButton:pressed {
       <string>D</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_5">
@@ -2089,7 +2089,7 @@ QPushButton:pressed {
       <string>F</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_6">
@@ -2105,7 +2105,7 @@ QPushButton:pressed {
       <string>E</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_7">
@@ -2121,7 +2121,7 @@ QPushButton:pressed {
       <string>G</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_8">
@@ -2137,7 +2137,7 @@ QPushButton:pressed {
       <string>H</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_9">
@@ -2153,7 +2153,7 @@ QPushButton:pressed {
       <string>5</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_10">
@@ -2169,7 +2169,7 @@ QPushButton:pressed {
       <string>4</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_11">
@@ -2185,7 +2185,7 @@ QPushButton:pressed {
       <string>3</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_12">
@@ -2201,7 +2201,7 @@ QPushButton:pressed {
       <string>2</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_13">
@@ -2217,7 +2217,7 @@ QPushButton:pressed {
       <string>1</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_14">
@@ -2233,7 +2233,7 @@ QPushButton:pressed {
       <string>6</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_15">
@@ -2249,7 +2249,7 @@ QPushButton:pressed {
       <string>7</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
     <widget class="QLabel" name="label_16">
@@ -2265,10 +2265,10 @@ QPushButton:pressed {
       <string>8</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -2280,6 +2280,32 @@ QPushButton:pressed {
      <layout class="QHBoxLayout" name="horizontalLayout"/>
     </widget>
    </widget>
+  </widget>
+  <widget class="QListWidget" name="lstChat">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>290</y>
+     <width>231</width>
+     <height>561</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="leSendChat">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>870</y>
+     <width>231</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="maxLength">
+    <number>100</number>
+   </property>
   </widget>
  </widget>
  <resources/>

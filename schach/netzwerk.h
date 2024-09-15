@@ -45,6 +45,8 @@ public:
     void sendUndoResponse(bool accepted);
     bool undoMovetmp = false;
 
+    void sendChatMsg(QString message);
+
     int getopponentgroup() {
         return opponentgroup;
     }
@@ -80,6 +82,8 @@ signals:
 
     void undoMove();
     void undoAccepted(bool accepted);
+
+    void ChatMsgReceived(QString message);
 
 };
 

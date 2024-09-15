@@ -21,6 +21,8 @@ public:
 signals:
     void clientStateChanged(QString clientInfo); // Signal for client connection/disconnection UI updates
     void serverStatus(QString status); // Signal for server status UI updates
+    void client_Connected();
+    void client_Disconnected();
 
 private slots:
     void onClientConnecting();

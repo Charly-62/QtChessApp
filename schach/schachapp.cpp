@@ -720,10 +720,11 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             ui->lstNetzwerkConsole->addItem("Client initialized.");
             ui->lstNetzwerkConsole->scrollToBottom();
             connect(client, &Netzwerk::logNetzwerkMsg, this, &SchachApp::updateNetzwerkConsole);
-            connect(server, &Netzwerk::logInGameMsg, this, &SchachApp::updateInGameConsole);
+            connect(client, &Netzwerk::logInGameMsg, this, &SchachApp::updateInGameConsole);
             connect(client, &Netzwerk::gameStarted, this, &SchachApp::gameStarted);
             connect(client, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
             connect(client, &Netzwerk::undoMove, this, &SchachApp::undoMove);
+            connect(client, &Netzwerk::ChatMsgReceived, this, &SchachApp::onChatMsgReceived);
         }
     } else if(mode == "Server") {
         isLocalGame = false;
@@ -753,13 +754,15 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             connect(server, &MyTCPServer::clientStateChanged, this, [=]() {
                     ui->bStart->setEnabled(true);
                     StartDisplay();
-
                 });
             connect(server, &Netzwerk::logNetzwerkMsg, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &Netzwerk::logInGameMsg, this, &SchachApp::updateInGameConsole);
             connect(server, &MyTCPServer::serverStatus, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
             connect(server, &Netzwerk::undoMove, this, &SchachApp::undoMove);
+            connect(server, &Netzwerk::ChatMsgReceived, this, &SchachApp::onChatMsgReceived);
+            connect(server, &MyTCPServer::client_Connected, this, &SchachApp::on_client_connected);
+            connect(server, &MyTCPServer::client_Disconnected, this, &SchachApp::on_client_disconnected);
         }
     } else if(mode == "Local") {
         isLocalGame = true;
@@ -771,6 +774,9 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
         ui->spnPort->setEnabled(false);
         ui->cbStartingPlayer->setEnabled(false);
         StartDisplay();
+
+        ui->lstChat->setEnabled(false);
+        ui->leSendChat->setEnabled(false);
 
         if(server) {
             server->stopListening();
@@ -812,6 +818,8 @@ void SchachApp::device_connected() {
     ui->lstNetzwerkConsole->addItem("Connected to device");
     ui->lstNetzwerkConsole->scrollToBottom();
     ui->bConnect->setText("Disconnect");
+    ui->lstChat->setEnabled(true);
+    ui->leSendChat->setEnabled(true);
 }
 
 void SchachApp::device_disconnected() {
@@ -819,6 +827,8 @@ void SchachApp::device_disconnected() {
     ui->lstNetzwerkConsole->scrollToBottom();
     client->tryReconnect();
     ui->bConnect->setText("Connect");
+    ui->lstChat->setEnabled(false);
+    ui->leSendChat->setEnabled(false);
 }
 
 void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
@@ -1282,4 +1292,28 @@ void SchachApp::on_pbUndo_clicked() {
 
     }
 
+}
+
+void SchachApp::on_leSendChat_returnPressed()
+{
+    QString message = ui->leSendChat->text();
+    ui->leSendChat->clear();
+    ui->lstChat->addItem("You: " + message);
+    if(client) client->sendChatMsg(message);
+    else if(server) server->sendChatMsg(message);
+}
+
+void SchachApp::onChatMsgReceived(QString message) {
+    ui->lstChat->addItem("Opponent: " + message);
+    ui->lstChat->scrollToBottom();
+}
+
+void SchachApp::on_client_connected() {
+    ui->lstChat->setEnabled(true);
+    ui->leSendChat->setEnabled(true);
+}
+
+void SchachApp::on_client_disconnected() {
+    ui->lstChat->setEnabled(false);
+    ui->leSendChat->setEnabled(false);
 }

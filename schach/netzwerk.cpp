@@ -51,6 +51,20 @@ void Netzwerk::sendUndoResponse(bool accepted) {
     _socket->flush();
 }
 
+void Netzwerk::sendChatMsg(QString message) {
+    QByteArray ChatMessage = message.toUtf8();
+    quint8 length = ChatMessage.size();
+
+    QByteArray SendMessage;
+    QDataStream stream(&SendMessage, QIODevice::WriteOnly);
+
+    stream << quint8(0x80) << quint8(length);
+    stream.writeRawData(ChatMessage.constData(), length);
+
+    _socket->write(SendMessage);
+    _socket->flush();
+}
+
 void Netzwerk::sendMove(const MoveInfo& moveInfo) {
     QByteArray moveData;
     QDataStream stream(&moveData, QIODevice::WriteOnly);
@@ -87,7 +101,8 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
 
 void Netzwerk::receiveMove() {
 
-    const int MAX_PACKET_SIZE = 7;
+
+    const int MAX_PACKET_SIZE = 255;
 
     if (_socket->bytesAvailable() > MAX_PACKET_SIZE) {
         emit logInGameMsg("Packet too large, possible attack. Disconnecting.");
@@ -109,6 +124,8 @@ void Netzwerk::receiveMove() {
 
         stream >> command >> length; // receive command first and handle the message differently if it's a move, the start of the game, etc.
 
+        qDebug() << "In receiveMove: " << command << length;
+
         int expectedSize = 2 + length;
 
         if(buffer.size() < expectedSize) {
@@ -129,6 +146,8 @@ void Netzwerk::processMessage(QDataStream& stream) {
     quint8 command, length;
 
     stream >> command >> length;
+
+    qDebug() << "In processMessage: " << command << length;
 
     // Game Start command
     if(command == 0x01) {
@@ -284,6 +303,29 @@ void Netzwerk::processMessage(QDataStream& stream) {
         }
     }
 
+    // Chat command
+    else if (command == 0x80) { // Chat message
+        if (length > 255) {
+            emit logInGameMsg("Received chat message too long.");
+            emit logNetzwerkMsg("Received chat message too long.");
+            emit logInGameMsg("Disconnecting for safety.");
+            emit logNetzwerkMsg("Disconnecting for safety.");
+            _socket->disconnect();
+        }
+
+        QByteArray ChatMessage(length, Qt::Uninitialized);
+        int bytesRead = stream.readRawData(ChatMessage.data(), length);
+
+        if (bytesRead != length) {
+            emit logInGameMsg("Failed to read complete chat message.");
+            emit logInGameMsg("Disconnecting for safety.");
+            _socket->disconnect();
+        }
+
+        QString message = QString::fromUtf8(ChatMessage);
+        emit ChatMsgReceived(message);
+    }
+
     // Undo move response command
     else if(command == 0x90) {
         if(length != 1) {
@@ -301,6 +343,8 @@ void Netzwerk::processMessage(QDataStream& stream) {
     else {
         emit logInGameMsg("Invalid command received.");
         emit logInGameMsg("Disconnecting for safety.");
+        emit logNetzwerkMsg("Invalid command received.");
+        emit logNetzwerkMsg("Disconnecting for safety.");
         _socket->disconnect();
     }
 }
