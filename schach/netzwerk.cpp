@@ -23,7 +23,7 @@ void Netzwerk::sendGameStart(bool ServerStarts) {
     QDataStream stream(&gameStartMessage, QIODevice::WriteOnly);
 
     stream << quint8(0x01) << quint8(0x02)
-           << quint8(ServerStarts) << quint8(0x01);
+           << quint8(!ServerStarts) << quint8(0x01);
 
     _socket->write(gameStartMessage);
     _socket->flush();
@@ -109,7 +109,8 @@ void Netzwerk::receiveMove() {
         opponentgroup = groupNumber;
 
         QString group = QString::number(groupNumber);
-        emit gameStarted(StartingPlayer & 1, group);
+        bool ServerStarts = !StartingPlayer;
+        emit gameStarted(ServerStarts, group);
 
         sendGameStartResponse();
     }
