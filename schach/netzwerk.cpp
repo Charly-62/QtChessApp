@@ -14,7 +14,7 @@ void Netzwerk::initializeSocket() {
     if (!_socket) {
         _socket = new QTcpSocket(this);
         connect(_socket, &QTcpSocket::readyRead, this, &Netzwerk::receiveMove);
-        connect(_socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &Netzwerk::onSocketError);
+        connect(_socket, &QTcpSocket::errorOccurred, this, &Netzwerk::onSocketError);
     }
 }
 
