@@ -970,6 +970,8 @@ void SchachApp::undoMove() {
     if(chessGame->moveHistory.empty()) {
         player1TimeRemaining = 10*60;
         player2TimeRemaining = 10*60;
+        updatePlayer1Timer();
+        updatePlayer2Timer();
     }
 }
 void SchachApp::on_pbClear_clicked()
