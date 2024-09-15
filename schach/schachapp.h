@@ -110,6 +110,8 @@ private:
     void updateTimerDisplay(int timeRemaining);
     void startTurnTimer();
     void setWelcomeMessage();
+    void WelcomeDisplay();
+    void StartDisplay();
     void updatecurrentPlayerLabel();
 
     QComboBox* cbPawnPromotion;

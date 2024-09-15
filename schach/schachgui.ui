@@ -25,7 +25,7 @@ background-color: rgb(134, 255, 142)
   <widget class="QStackedWidget" name="GAME">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>10</x>
      <y>10</y>
      <width>791</width>
      <height>911</height>
@@ -35,99 +35,87 @@ background-color: rgb(134, 255, 142)
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="initalpage">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="grpNetwork">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>150</y>
-       <width>401</width>
-       <height>531</height>
+       <x>20</x>
+       <y>390</y>
+       <width>371</width>
+       <height>211</height>
       </rect>
      </property>
      <property name="title">
-      <string>Settings</string>
+      <string>Network</string>
      </property>
-     <widget class="QGroupBox" name="grpNetwork">
+     <widget class="QWidget" name="formLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>40</y>
+        <width>311</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblIP">
+         <property name="text">
+          <string>IP Address:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="leIP">
+         <property name="inputMask">
+          <string>000.000.000.000;_</string>
+         </property>
+         <property name="text">
+          <string>127.0.0.1</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="state" stdset="0">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblPort">
+         <property name="text">
+          <string>Port:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="spnPort">
+         <property name="minimum">
+          <number>1024</number>
+         </property>
+         <property name="maximum">
+          <number>65535</number>
+         </property>
+         <property name="value">
+          <number>12345</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QPushButton" name="bConnect">
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>180</y>
-        <width>371</width>
-        <height>211</height>
+        <y>150</y>
+        <width>331</width>
+        <height>41</height>
        </rect>
       </property>
-      <property name="title">
-       <string>Network</string>
-      </property>
-      <widget class="QWidget" name="formLayoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>40</y>
-         <width>271</width>
-         <height>81</height>
-        </rect>
-       </property>
-       <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="lblIP">
-          <property name="text">
-           <string>IP Address:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="leIP">
-          <property name="inputMask">
-           <string>000.000.000.000;_</string>
-          </property>
-          <property name="text">
-           <string>127.0.0.1</string>
-          </property>
-          <property name="clearButtonEnabled">
-           <bool>true</bool>
-          </property>
-          <property name="state" stdset="0">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="lblPort">
-          <property name="text">
-           <string>Port:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QSpinBox" name="spnPort">
-          <property name="minimum">
-           <number>1024</number>
-          </property>
-          <property name="maximum">
-           <number>65535</number>
-          </property>
-          <property name="value">
-           <number>12345</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QPushButton" name="bConnect">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>150</y>
-         <width>331</width>
-         <height>41</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
     background-color: #3498db;
     color: white;
     border-radius: 10px;
@@ -143,22 +131,72 @@ QPushButton:pressed {
     background-color: #1c598a;
 }
 </string>
-       </property>
-       <property name="text">
-        <string>Connect</string>
-       </property>
-      </widget>
+      </property>
+      <property name="text">
+       <string>Connect</string>
+      </property>
      </widget>
+    </widget>
+    <widget class="QPushButton" name="bStart">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>620</y>
+       <width>331</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: #3498db;
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1c598a;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>Start Game</string>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>240</y>
+       <width>371</width>
+       <height>141</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
      <widget class="QWidget" name="formLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>70</y>
-        <width>321</width>
+        <x>30</x>
+        <y>40</y>
+        <width>311</width>
         <height>70</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblHostClient">
+         <property name="text">
+          <string>Play as:</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="1">
         <widget class="QComboBox" name="cbHostClient">
          <item>
@@ -176,13 +214,6 @@ QPushButton:pressed {
            <string>Server</string>
           </property>
          </item>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lblHostClient">
-         <property name="text">
-          <string>Play as:</string>
-         </property>
         </widget>
        </item>
        <item row="1" column="0">
@@ -208,42 +239,73 @@ QPushButton:pressed {
        </item>
       </layout>
      </widget>
-     <widget class="QPushButton" name="bStart">
+    </widget>
+    <widget class="QLabel" name="DisplayGame">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>130</y>
+       <width>761</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>WelcomeDisplay</string>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>240</y>
+       <width>371</width>
+       <height>361</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
+     <widget class="QPushButton" name="pbClear">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>450</y>
+        <x>20</x>
+        <y>300</y>
         <width>331</width>
         <height>41</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #3498db;
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1c598a;
+}
+</string>
+      </property>
       <property name="text">
-       <string>Start Game</string>
+       <string>Clear</string>
       </property>
      </widget>
-    </widget>
-    <widget class="QListWidget" name="lstNetzwerkConsole">
-     <property name="geometry">
-      <rect>
-       <x>430</x>
-       <y>150</y>
-       <width>321</width>
-       <height>481</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pbClear">
-     <property name="geometry">
-      <rect>
-       <x>430</x>
-       <y>640</y>
-       <width>331</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Clear</string>
-     </property>
+     <widget class="QListWidget" name="lstNetzwerkConsole">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>331</width>
+        <height>261</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="gamepage">
@@ -351,13 +413,6 @@ QPushButton:pressed {
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QLabel" name="scorelbl2">
-        <property name="text">
-         <string>Score</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
     <widget class="QLabel" name="lblCurrentPlayerName">
@@ -394,13 +449,6 @@ QPushButton:pressed {
        <widget class="QLineEdit" name="leName1">
         <property name="text">
          <string>Enter your name</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="scorelbl1">
-        <property name="text">
-         <string>Score</string>
         </property>
        </widget>
       </item>
@@ -1936,6 +1984,32 @@ QPushButton:pressed {
        <width>191</width>
        <height>131</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="scorelbl2">
+     <property name="geometry">
+      <rect>
+       <x>620</x>
+       <y>160</y>
+       <width>151</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ScoreBlack</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="scorelbl1">
+     <property name="geometry">
+      <rect>
+       <x>620</x>
+       <y>190</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>ScoreWhite</string>
      </property>
     </widget>
    </widget>

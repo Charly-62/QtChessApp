@@ -51,6 +51,7 @@ SchachApp::SchachApp(QWidget *parent)
     ui->cbPawnPromotion->setEnabled(false);
 
     setWelcomeMessage();
+    WelcomeDisplay();
     ui->swpawnpromotion->setCurrentWidget(ui->defaultpage);
     //ui->lblCurrentPlayerName->setText("Welcome to a new game ");
 
@@ -75,6 +76,45 @@ SchachApp::~SchachApp()
     delete ui;
     delete chessGame;
 }
+
+void SchachApp::WelcomeDisplay(){
+    QFont font;
+        font.setBold(true);
+        font.setPointSize(16); // Increase the font size
+        font.setFamily("Arial"); // Set a font family, like Arial or any other you prefer
+
+        ui-> DisplayGame->setFont(font);
+        ui-> DisplayGame->setText("Welcome! Please choose your settings");
+        ui->DisplayGame->setAlignment(Qt::AlignCenter);
+
+        // Set a gradient background and text color
+        ui->DisplayGame->setStyleSheet(
+            "color: #ffffff;" // Text color
+            "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3a3a3a, stop:1 #000000);" // Gradient background
+            "padding: 10px;" // Padding around the text
+            "border-radius: 10px;" // Rounded corners
+                    );
+}
+
+void SchachApp::StartDisplay(){
+    QFont font;
+        font.setBold(true);
+        font.setPointSize(16); // Increase the font size
+        font.setFamily("Arial"); // Set a font family, like Arial or any other you prefer
+
+        ui-> DisplayGame->setFont(font);
+        ui-> DisplayGame->setText("Click on Start Game");
+        ui->DisplayGame->setAlignment(Qt::AlignCenter);
+
+        // Set a gradient background and text color
+        ui->DisplayGame->setStyleSheet(
+            "color: #ffffff;" // Text color
+            "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3a3a3a, stop:1 #000000);" // Gradient background
+            "padding: 10px;" // Padding around the text
+            "border-radius: 10px;" // Rounded corners
+                    );
+}
+
 
 void SchachApp::setWelcomeMessage()
 {
@@ -480,8 +520,7 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
 
      // Debugging: Print the move details
      qDebug() << "Moved piece from:" << fromCol << fromRow << "to:" << toCol << toRow;
-     whiteScore = 0;
-     blackScore = 0;
+
      // Re-fetch all pieces and update the icons on the board
      for (int row = 0; row < 8; ++row) {
          for (int col = 0; col < 8; ++col) {
@@ -492,18 +531,7 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
              if (piece != nullptr) {
                  QString iconName = QString(":/Figuren/") + piece->getType() + (piece->checkIfWhite() ? "W" : "B") + ".png";
                  button->setIcon(QIcon(iconName));  // Set the correct icon for the piece
-                 // Calculate the score
-                   int pieceValue = 0;
-                   if (piece->getType() == "pawn") pieceValue = 1;
-                   else if (piece->getType() == "horse" || piece->getType() == "bishop") pieceValue = 3;
-                   else if (piece->getType() == "rook") pieceValue = 5;
-                   else if (piece->getType() == "queen") pieceValue = 9;
 
-                   if (piece->checkIfWhite()) {
-                       whiteScore += pieceValue;
-                   } else {
-                       blackScore += pieceValue;
-                   }
              } else {
                  button->setIcon(QIcon());  // Clear icon if no piece exists
              }
@@ -540,16 +568,37 @@ quint8 SchachApp::PawnPromotion(int row) {
         connect(ui->pbPawnPromotion, &QPushButton::clicked, this, [&]() {
             QString mode = ui->cbPawnPromotion->currentText();
 
+
+
             if (mode == "Queen") {
                 promotionType = 0x4;
+                if (isLocalPlayerWhite) {
+                    whiteScore += 8;  // Queen value
+                } else {
+                    blackScore += 8;  // Queen value
+                }
             } else if (mode == "Rook") {
                 promotionType = 0x3;
+                if (isLocalPlayerWhite) {
+                    whiteScore += 4;  // Rook value
+                } else {
+                    blackScore += 4;  // Rook value
+                }
             } else if (mode == "Knight") {
                 promotionType = 0x2;
+                if (isLocalPlayerWhite) {
+                    whiteScore += 2;  // Knight value
+                } else {
+                    blackScore += 2;  // Knight value
+                }
             } else if (mode == "Bishop") {
                 promotionType = 0x1;
+                if (isLocalPlayerWhite) {
+                    whiteScore += 2;  // Bishop value
+                } else {
+                    blackScore += 2;  // Bishop value
+                }
             }
-
             qDebug() << "Promotion type selected: " << promotionType << mode;
 
             ui->pbPawnPromotion->setEnabled(false);
@@ -565,41 +614,11 @@ quint8 SchachApp::PawnPromotion(int row) {
         loop.exec();
     }
     ui->gridLayout->setEnabled(true);
+    ui->scorelbl1->setText(QString::number(whiteScore));
+    ui->scorelbl2->setText(QString::number(blackScore));
+
     return promotionType;
 }
-//void SchachApp::onPbPawnPromotionClicked(){
-//    QString mode = ui-> cbPawnPromotion->currentText();
-//    qWarning()<<"Current Selection:"<<mode;
-//    quint8 promotionType = 0x00;
-//    if (mode == "Queen"){
-//        promotionType = 0x40;
-//    }
-//    else if (mode == "Rook"){
-//        promotionType = 0x30;
-//    }
-//    else if (mode == "Knight"){
-//        promotionType = 0x20;
-//    }
-//    else if (mode == "Bishop"){
-//        promotionType = 0x10;
-//    }
-//    qWarning()<<"promotion type:"<<promotionType<< mode;
-//    ui->pbPawnPromotion->setEnabled(false);
-//    ui->cbPawnPromotion->setEnabled(false);
-//    chessGame -> pawnPromotionCompleted = true;
-//}
-
-
-//quint8 SchachApp::PawnPromotion(int row){
-//    if((row == 7 && isLocalPlayerWhite) || (row == 0 && !isLocalPlayerWhite) || isLocalGame) {
-//        qWarning()<<"Select a piece for pawn promotion";
-//        ui->pbPawnPromotion->setEnabled(true);
-//        ui->cbPawnPromotion->setEnabled(true);
-//    }
-
-//    return promotionType;
-
-//}
 
 /**
  * @brief Changes the color of the IPAddress line edit if it is a valid or invalid IPv4 address (maybe add also IPv6 addresses)
@@ -729,6 +748,8 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             connect(server, &MyTCPServer::clientStateChanged, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &MyTCPServer::clientStateChanged, this, [=]() {
                     ui->bStart->setEnabled(true);
+                    StartDisplay();
+
                 });
             connect(server, &Netzwerk::logNetzwerkMsg, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &Netzwerk::logInGameMsg, this, &SchachApp::updateInGameConsole);
@@ -745,6 +766,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
         ui->leIP->setEnabled(false);
         ui->spnPort->setEnabled(false);
         ui->cbStartingPlayer->setEnabled(false);
+        StartDisplay();
 
         if(server) {
             server->stopListening();
@@ -1142,11 +1164,22 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
 
     capturedPieceLabel->setPixmap(QPixmap(scaledPixmap));
 
+    // Calculate piece value
+    int pieceValue = 0;
+    if (type == "pawn") pieceValue = 1;
+    else if (type == "horse" || type == "bishop") pieceValue = 3;
+    else if (type == "rook") pieceValue = 5;
+    else if (type == "queen") pieceValue = 9;
+
     if (capturedPiece->checkIfWhite()) {
         ui->deadplayer1->addWidget(capturedPieceLabel);
+        blackScore += pieceValue;
     } else {
         ui->deadplayer2->addWidget(capturedPieceLabel);
+        whiteScore += pieceValue;
     }
+    ui->scorelbl1->setText(QString::number(whiteScore));
+    ui->scorelbl2->setText(QString::number(blackScore));
 }
 
 
