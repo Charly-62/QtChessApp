@@ -127,25 +127,57 @@ bool Logik::isCheckmate(Game* game) const {
     }
 
     // Step 2: Iterate over all pieces of the opponent
-    for(int row = 0; row < 8; ++row){
-        for(int col = 0; col < 8; ++col){
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
             std::shared_ptr<Piece> piece = game->board[col][row];
 
             // If there's a piece and it belongs to the opponent
-            if(piece && piece->checkIfWhite() == !isWhiteTurn){
+            if (piece && piece->checkIfWhite() == !isWhiteTurn) {
                 // Get all possible moves for this piece
                 std::vector<std::pair<int, int>> possibleMoves = piece->getPossibleMoves(game);
 
-                for(const auto& move : possibleMoves){
+                for (const auto& move : possibleMoves) {
                     int targetCol = move.first;
                     int targetRow = move.second;
 
-                    // Check if the move is legal
-                    if(game->logikInstance.isLegal(game, col, row, targetCol, targetRow)){
-                        // At least one legal move exists, so it's not checkmate
+                    // Simulate the move on a cloned game board
+                    Game* simulatedGame = game->clone();
+                    simulatedGame->updateBoard(col, row, targetCol, targetRow);
+
+                    // // Handle pawn promotion
+                    // if (isPawnPromotion(simulatedGame, col, row, targetRow)) {
+                    //     switch (promotion) {
+                    //     case 0x10:
+                    //         simulatedGame->board[targetCol][targetRow] = std::make_shared<Bishop>(simulatedGame->board[targetCol][targetRow]->checkIfWhite(), targetCol, targetRow);
+                    //         break;
+                    //     case 0x20:
+                    //         simulatedGame->board[targetCol][targetRow] = std::make_shared<Knight>(simulatedGame->board[targetCol][targetRow]->checkIfWhite(), targetCol, targetRow);
+                    //         break;
+                    //     case 0x30:
+                    //         simulatedGame->board[targetCol][targetRow] = std::make_shared<Rook>(simulatedGame->board[targetCol][targetRow]->checkIfWhite(), targetCol, targetRow);
+                    //         break;
+                    //     case 0x40:
+                    //         simulatedGame->board[targetCol][targetRow] = std::make_shared<Queen>(simulatedGame->board[targetCol][targetRow]->checkIfWhite(), targetCol, targetRow);
+                    //         break;
+                    //     default:
+                    //         simulatedGame->board[targetCol][targetRow] = std::make_shared<Queen>(simulatedGame->board[targetCol][targetRow]->checkIfWhite(), targetCol, targetRow);
+                    //         break;
+                    //     }
+                    // }
+
+                    // Check if the move leaves the king in check
+                    std::pair<int, int> simulKingPosition = simulatedGame->findKing(!isWhiteTurn);
+                    bool simulIsCheck = simulatedGame->isSquareAttacked(simulKingPosition.first, simulKingPosition.second, !isWhiteTurn);
+
+                    // If the king is not in check after the move, it's not checkmate
+                    if (!simulIsCheck) {
+                        delete simulatedGame;
                         qDebug() << "IS NOT CHECKMATE!!!!!";
                         return false;
                     }
+
+                    // Clean up the simulated game
+                    delete simulatedGame;
                 }
             }
         }
