@@ -57,10 +57,10 @@ private slots:
 
     void on_cbStartingPlayer_currentTextChanged(const QString &startingPlayer);
 
-    // Server slots
-    void updateNetzwerkConsole(QString message); // Update UI when the client/server state changes
+    void updateNetzwerkConsole(QString message);
 
-    // Client slots
+    void updateInGameConsole(QString message);
+
     void device_connected();
     void device_disconnected();
     void device_stateChanged(QAbstractSocket::SocketState);

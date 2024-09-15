@@ -204,7 +204,7 @@ void SchachApp::resetBoardHighlight() {
 void SchachApp::handleSquareClick(int row, int col) {
 //    Comment out to play around with the GUI. ERASE COMMENT WHEN SENDING AND RECEIVING MOVES IS IMPLEMENTED
     if ((!isLocalGame && isLocalPlayerWhite != chessGame->getWhiteTurn()) || blockguitmp) {
-        updateNetzwerkConsole("Not your turn!");
+        updateInGameConsole("Not your turn!");
         return;
     }
 
@@ -312,7 +312,7 @@ void SchachApp::handleSquareClick(int row, int col) {
             }
             std::cout << std::endl;
         } else {
-            updateNetzwerkConsole("Illegal move!");
+            updateInGameConsole("Illegal move!");
             resetBoardHighlight();  // Clear previous highlights
         }
 
@@ -696,7 +696,8 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             setDeviceController();
             ui->lstNetzwerkConsole->addItem("Client initialized.");
             ui->lstNetzwerkConsole->scrollToBottom();
-            connect(client, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
+            connect(client, &Netzwerk::logNetzwerkMsg, this, &SchachApp::updateNetzwerkConsole);
+            connect(server, &Netzwerk::logInGameMsg, this, &SchachApp::updateInGameConsole);
             connect(client, &Netzwerk::gameStarted, this, &SchachApp::gameStarted);
             connect(client, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
             connect(client, &Netzwerk::undoMove, this, &SchachApp::undoMove);
@@ -729,7 +730,8 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             connect(server, &MyTCPServer::clientStateChanged, this, [=]() {
                     ui->bStart->setEnabled(true);
                 });
-            connect(server, &Netzwerk::logMessage, this, &SchachApp::updateNetzwerkConsole);
+            connect(server, &Netzwerk::logNetzwerkMsg, this, &SchachApp::updateNetzwerkConsole);
+            connect(server, &Netzwerk::logInGameMsg, this, &SchachApp::updateInGameConsole);
             connect(server, &MyTCPServer::serverStatus, this, &SchachApp::updateNetzwerkConsole);
             connect(server, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
             connect(server, &Netzwerk::undoMove, this, &SchachApp::undoMove);
@@ -765,6 +767,11 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 void SchachApp::updateNetzwerkConsole(QString message) {
     ui->lstNetzwerkConsole->addItem(message);
     ui->lstNetzwerkConsole->scrollToBottom();
+}
+
+void SchachApp::updateInGameConsole(QString message) {
+    ui->lstInGameConsole->addItem(message);
+    ui->lstInGameConsole->scrollToBottom();
 }
 
 void SchachApp::setDeviceController() {
@@ -829,22 +836,22 @@ void SchachApp::gameStarted(bool ServerStarts, QString groupNumber) {
         qDebug() << "gameStarted" << ServerStarts;
         isLocalGame = false;
         ui->cbHostClient->setEnabled(false);
+        ui->lstInGameConsole->clear();
         startTurnTimer();
         updatecurrentPlayerLabel();
         if(ServerStarts) {
-            updateNetzwerkConsole("Server starts the game.");
-            qDebug() << "Playing against Group " << client->getopponentgroup();
+            updateInGameConsole("Server starts the game.");
+            updateInGameConsole("Playing against Group " + groupNumber);
             isLocalPlayerWhite = false;
         } else {
-            updateNetzwerkConsole("Client starts the game.");
-            qDebug() << "Playing against Group " << client->getopponentgroup();
+            updateInGameConsole("Client starts the game.");
+            updateInGameConsole("Playing against Group " + groupNumber);
             isLocalPlayerWhite = true;
         }
         initializeBoard();
         ui->GAME ->setCurrentWidget(ui->gamepage);
 }
 
-// Server version of gameStarted()
 void SchachApp::on_cbStartingPlayer_currentTextChanged(const QString &startingPlayer) {
     qDebug() << "startingGame" << startingPlayer;
     if(startingPlayer == "Server") {
@@ -863,6 +870,7 @@ void SchachApp::on_bStart_clicked()
         updateNetzwerkConsole("Game start message sent. " + ui->cbStartingPlayer->currentText() + " starts.");
     }
 
+    ui->lstInGameConsole->clear();
     ui->bStart->setEnabled(false);
     ui->cbHostClient->setEnabled(false);
     ui->leIP->setEnabled(false);
@@ -959,6 +967,12 @@ void SchachApp::undoMove() {
     // Remove the move from the move history display and disable the button if it´s empty
     removeLastMoveFromHistory();
     ui->pbUndo->setEnabled(!chessGame->moveHistory.empty());
+    if(chessGame->moveHistory.empty()) {
+        player1TimeRemaining = 10*60;
+        player2TimeRemaining = 10*60;
+        updatePlayer1Timer();
+        updatePlayer2Timer();
+    }
 }
 void SchachApp::on_pbClear_clicked()
 {

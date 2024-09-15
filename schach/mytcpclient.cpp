@@ -26,13 +26,15 @@ void MyTCPClient::connectToHost(QString ip, int port) {
 }
 
 void MyTCPClient::tryReconnect() {
-    emit logMessage("Attempting to reconnect...");
+    emit logInGameMsg("Attempting to reconnect...");
+    emit logNetzwerkMsg("Attempting to reconnect...");
     attemptReconnect(5);  // Start the attempt process with max 5 attempts
 }
 
 void MyTCPClient::attemptReconnect(int remainingAttempts) {
     if (remainingAttempts <= 0) {
-        emit logMessage("Failed to reconnect after 5 attempts.");
+        emit logInGameMsg("Failed to reconnect after 5 attempts.");
+        emit logNetzwerkMsg("Failed to reconnect after 5 attempts.");
         return;
     }
 
@@ -42,10 +44,12 @@ void MyTCPClient::attemptReconnect(int remainingAttempts) {
 
         // Wait for the connection to establish asynchronously
         if (_socket->waitForConnected(5000)) { // Wait for up to 5 seconds
-            emit logMessage("Reconnected successfully!");
+            emit logInGameMsg("Reconnected successfully!");
+            emit logNetzwerkMsg("Reconnected successfully!");
         } else {
             if(remainingAttempts - 1 > 0) {
-            emit logMessage(QString("Reconnection attempt failed. %1 attempts remaining.").arg(remainingAttempts - 1));
+                emit logInGameMsg(QString("Reconnection attempt failed. %1 attempts remaining.").arg(remainingAttempts - 1));
+                emit logNetzwerkMsg(QString("Reconnection attempt failed. %1 attempts remaining.").arg(remainingAttempts - 1));
             }
             attemptReconnect(remainingAttempts - 1);  // Try again recursively
         }

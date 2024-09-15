@@ -391,7 +391,7 @@ background-color: rgb(134, 255, 142)
        <x>590</x>
        <y>240</y>
        <width>191</width>
-       <height>561</height>
+       <height>421</height>
       </rect>
      </property>
     </widget>
@@ -1905,6 +1905,16 @@ background-color: rgb(134, 255, 142)
      </property>
      <property name="text">
       <string>Deny Undo</string>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="lstInGameConsole">
+     <property name="geometry">
+      <rect>
+       <x>590</x>
+       <y>670</y>
+       <width>191</width>
+       <height>131</height>
+      </rect>
      </property>
     </widget>
    </widget>
