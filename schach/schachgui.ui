@@ -25,20 +25,23 @@ background-color: rgb(134, 255, 142)
   <widget class="QStackedWidget" name="GAME">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>0</x>
      <y>10</y>
      <width>791</width>
      <height>911</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="initalpage">
     <widget class="QGroupBox" name="groupBox">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>30</x>
        <y>150</y>
        <width>401</width>
        <height>531</height>
@@ -47,25 +50,12 @@ background-color: rgb(134, 255, 142)
      <property name="title">
       <string>Settings</string>
      </property>
-     <widget class="QPushButton" name="bStart">
-      <property name="geometry">
-       <rect>
-        <x>40</x>
-        <y>450</y>
-        <width>331</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Start Game</string>
-      </property>
-     </widget>
      <widget class="QGroupBox" name="grpNetwork">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>190</y>
-        <width>331</width>
+        <x>20</x>
+        <y>180</y>
+        <width>371</width>
         <height>211</height>
        </rect>
       </property>
@@ -130,11 +120,29 @@ background-color: rgb(134, 255, 142)
       <widget class="QPushButton" name="bConnect">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>130</y>
-         <width>269</width>
-         <height>24</height>
+         <x>20</x>
+         <y>150</y>
+         <width>331</width>
+         <height>41</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #3498db;
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1c598a;
+}
+</string>
        </property>
        <property name="text">
         <string>Connect</string>
@@ -200,12 +208,25 @@ background-color: rgb(134, 255, 142)
        </item>
       </layout>
      </widget>
+     <widget class="QPushButton" name="bStart">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>450</y>
+        <width>331</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Start Game</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QListWidget" name="lstNetzwerkConsole">
      <property name="geometry">
       <rect>
-       <x>450</x>
-       <y>160</y>
+       <x>430</x>
+       <y>150</y>
        <width>321</width>
        <height>481</height>
       </rect>
@@ -214,10 +235,10 @@ background-color: rgb(134, 255, 142)
     <widget class="QPushButton" name="pbClear">
      <property name="geometry">
       <rect>
-       <x>450</x>
-       <y>650</y>
-       <width>321</width>
-       <height>33</height>
+       <x>430</x>
+       <y>640</y>
+       <width>331</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
