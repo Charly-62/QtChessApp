@@ -70,17 +70,17 @@ void Netzwerk::sendMove(const MoveInfo& moveInfo) {
         while (bytesWritten < moveData.size()) {
             qint64 result = _socket->write(moveData.mid(bytesWritten));  // Write remaining bytes
             if (result == -1) {
-                emit logMessage("Could not send move.");
+                emit logInGameMsg("Could not send move.");
                 return;
             }
             bytesWritten += result;
         }
 
         qDebug() << "Move sent: " << moveData.toHex();
-        emit logMessage("Move sent successfully.");
+        emit logInGameMsg("Move sent successfully.");
         _socket->flush();
     } else {
-        emit logMessage("Socket is not open, cannot send the move.");
+        emit logInGameMsg("Socket is not open, cannot send the move.");
     }
 }
 
@@ -118,7 +118,7 @@ void Netzwerk::receiveMove() {
         quint8 groupNumber;
         stream >> length >> groupNumber;
         opponentgroup = groupNumber;
-        emit logMessage("Playing against Group " + QString::number(groupNumber));
+        emit logInGameMsg("Playing against Group " + QString::number(groupNumber));
     }
 
     // Move command
@@ -153,10 +153,10 @@ void Netzwerk::receiveMove() {
         moveInfo.islegal = gameInstance->logikInstance.isLegal(gameInstance, startCol, startRow, endCol, endRow, moveInfo.promotion);
 
         if(!moveInfo.islegal) {
-            emit logMessage("Received move is illegal!");
+            emit logInGameMsg("Received move is illegal!");
             return;
         } else {
-            emit logMessage("Received valid move.");
+            emit logInGameMsg("Received valid move.");
             // Apply the move in the game logic
             //MoveInfo result = gameInstance->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
 
@@ -180,31 +180,31 @@ void Netzwerk::receiveMove() {
 
         switch(status) {
             case 0x00:
-                emit logMessage("Move accepted.");
+                emit logInGameMsg("Move accepted.");
                 break;
             case 0x01:
-                emit logMessage("Move accepted with capture.");
+                emit logInGameMsg("Move accepted with capture.");
                 break;
             case 0x02:
-                emit logMessage("Move accepted with checkmate.");
+                emit logInGameMsg("Move accepted with checkmate.");
                 break;
             case 0x03:
-                emit logMessage("Move rejected: No piece at start position.");
+                emit logInGameMsg("Move rejected: No piece at start position.");
                 break;
             case 0x04:
-                emit logMessage("Move rejected: Move not allowed.");
+                emit logInGameMsg("Move rejected: Move not allowed.");
                 break;
             case 0x06:
-                emit logMessage("Move rejected: No capture made.");
+                emit logInGameMsg("Move rejected: No capture made.");
                 break;
             case 0x07:
-                emit logMessage("Move rejected: Not your turn.");
+                emit logInGameMsg("Move rejected: Not your turn.");
                 break;
             case 0x08:
-                emit logMessage("Move rejected: No checkmate.");
+                emit logInGameMsg("Move rejected: No checkmate.");
                 break;
             default:
-                emit logMessage("Unknown move response received.");
+                emit logInGameMsg("Unknown move response received.");
                 break;
         }
     }
@@ -227,8 +227,8 @@ void Netzwerk::receiveMove() {
     }
 
     else {
-        emit logMessage("Command not valid.");
-        emit logMessage("Disconnecting for safety.");
+        emit logInGameMsg("Command not valid.");
+        emit logInGameMsg("Disconnecting for safety.");
         _socket->disconnect();
     }
 }

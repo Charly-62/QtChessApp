@@ -70,7 +70,8 @@ private:
     int opponentgroup = 0; // Playing against this group
 
 signals:
-    void logMessage(const QString& message); // Signal to log messages to the NetzwerkConsole
+    void logNetzwerkMsg(const QString& message); // Signal to log messages to the NetzwerkConsole
+    void logInGameMsg(const QString& message);
     void moveReceived(MoveInfo moveInfo);
     void gameStarted(bool ServerStarts, QString& groupNumber);
 

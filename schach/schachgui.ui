@@ -391,7 +391,7 @@ background-color: rgb(134, 255, 142)
        <x>590</x>
        <y>240</y>
        <width>191</width>
-       <height>561</height>
+       <height>421</height>
       </rect>
      </property>
     </widget>
@@ -425,7 +425,7 @@ background-color: rgb(134, 255, 142)
      </property>
      <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,1,1,1,1" columnstretch="1,1,1,1,1,1,1,1" rowminimumheight="70,70,70,70,70,70,70,70" columnminimumwidth="70,70,70,70,70,70,70,70">
       <property name="sizeConstraint">
-       <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+       <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <property name="bottomMargin">
        <number>0</number>
@@ -697,7 +697,7 @@ background-color: rgb(134, 255, 142)
         </property>
        </widget>
       </item>
-      <item row="7" column="6" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+      <item row="7" column="6">
        <widget class="QPushButton" name="G1">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -918,7 +918,7 @@ background-color: rgb(134, 255, 142)
         </property>
        </widget>
       </item>
-      <item row="7" column="5" alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+      <item row="7" column="5">
        <widget class="QPushButton" name="F1">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1905,6 +1905,16 @@ background-color: rgb(134, 255, 142)
      </property>
      <property name="text">
       <string>Deny Undo</string>
+     </property>
+    </widget>
+    <widget class="QListWidget" name="lstInGameConsole">
+     <property name="geometry">
+      <rect>
+       <x>590</x>
+       <y>670</y>
+       <width>191</width>
+       <height>131</height>
+      </rect>
      </property>
     </widget>
    </widget>
