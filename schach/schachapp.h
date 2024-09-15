@@ -12,6 +12,7 @@
 #include <QTimer>
 #include <QComboBox>
 #include <QStackedWidget>
+#include <QStack>
 
 
 QT_BEGIN_NAMESPACE
@@ -141,6 +142,16 @@ private:
     void pieceCaptured(std::shared_ptr<Piece> capturedPiece);
     int whiteScore ;
     int blackScore ;
+    void undoScoreUpdate();
+
+
+    // Struct for tracking captured pieces
+    struct CapturedPieceInfo {
+        QString type;
+        bool isWhite;
+        int value;
+    };
+     QStack<CapturedPieceInfo> capturedPiecesStack;
 
 };
 #endif // SCHACHAPP_H

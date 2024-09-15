@@ -11,6 +11,9 @@
 #include <QEventLoop>
 #include <QComboBox>
 #include <QStackedWidget>
+#include <QStack>
+#include <QWidget>
+
 
 SchachApp::SchachApp(QWidget *parent)
     : QWidget(parent)
@@ -614,11 +617,12 @@ quint8 SchachApp::PawnPromotion(int row) {
         loop.exec();
     }
     ui->gridLayout->setEnabled(true);
-    ui->scorelbl1->setText(QString::number(whiteScore));
-    ui->scorelbl2->setText(QString::number(blackScore));
-
+    // Update score display (assuming you have labels for scores)
+    ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
+    ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
     return promotionType;
 }
+
 
 /**
  * @brief Changes the color of the IPAddress line edit if it is a valid or invalid IPv4 address (maybe add also IPv6 addresses)
@@ -1171,6 +1175,11 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
     else if (type == "rook") pieceValue = 5;
     else if (type == "queen") pieceValue = 9;
 
+
+
+    CapturedPieceInfo info = {type, capturedPiece->checkIfWhite(), pieceValue};
+    capturedPiecesStack.push(info);
+
     if (capturedPiece->checkIfWhite()) {
         ui->deadplayer1->addWidget(capturedPieceLabel);
         blackScore += pieceValue;
@@ -1178,8 +1187,50 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
         ui->deadplayer2->addWidget(capturedPieceLabel);
         whiteScore += pieceValue;
     }
-    ui->scorelbl1->setText(QString::number(whiteScore));
-    ui->scorelbl2->setText(QString::number(blackScore));
+    // Update score display (assuming you have labels for scores)
+    ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
+    ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+}
+
+void SchachApp::undoScoreUpdate() {
+    if (!capturedPiecesStack.isEmpty()) {
+        // Retrieve the last captured piece information
+        CapturedPieceInfo lastCapturedPiece = capturedPiecesStack.pop();
+
+        // Undo the score update
+        if (lastCapturedPiece.isWhite) {
+            blackScore -= lastCapturedPiece.value;
+
+            // Remove the last piece from the dead pieces display for black
+            if (ui->deadplayer1->count() > 0) {
+                // Access the last widget by iterating through the layout items
+                QLayoutItem* lastItem = ui->deadplayer1->itemAt(ui->deadplayer1->count() - 1);
+                if (lastItem) {
+                    QWidget* lastPiece = lastItem->widget();
+                    ui->deadplayer1->removeWidget(lastPiece);
+                    delete lastPiece; // Delete widget to free memory
+                }
+            }
+        } else {
+            whiteScore -= lastCapturedPiece.value;
+
+            // Remove the last piece from the dead pieces display for white
+            if (ui->deadplayer2->count() > 0) {
+                // Access the last widget by iterating through the layout items
+                QLayoutItem* lastItem = ui->deadplayer2->itemAt(ui->deadplayer2->count() - 1);
+                if (lastItem) {
+                    QWidget* lastPiece = lastItem->widget();
+                    ui->deadplayer2->removeWidget(lastPiece);
+                    delete lastPiece; // Delete widget to free memory
+                }
+            }
+        }
+
+        // Update the score labels
+        // Update score display (assuming you have labels for scores)
+        ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
+        ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+    }
 }
 
 
@@ -1227,6 +1278,8 @@ void SchachApp::on_pbUndo_clicked() {
     if(acceptedmain) {
         qDebug() << "Undoing the move";
         undoMove();
+        undoScoreUpdate();
+
     }
 
 }

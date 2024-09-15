@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>870</width>
-    <height>911</height>
+    <width>948</width>
+    <height>1011</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,9 +25,9 @@ background-color: rgb(134, 255, 142)
   <widget class="QStackedWidget" name="GAME">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>791</width>
+     <x>50</x>
+     <y>50</y>
+     <width>861</width>
      <height>911</height>
     </rect>
    </property>
@@ -35,7 +35,7 @@ background-color: rgb(134, 255, 142)
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="initalpage">
     <widget class="QGroupBox" name="grpNetwork">
@@ -392,7 +392,7 @@ QPushButton:pressed {
     <widget class="QWidget" name="horizontalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>40</x>
        <y>200</y>
        <width>561</width>
        <height>33</height>
@@ -431,8 +431,8 @@ QPushButton:pressed {
     <widget class="QWidget" name="horizontalLayoutWidget_2">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>810</y>
+       <x>40</x>
+       <y>830</y>
        <width>561</width>
        <height>33</height>
       </rect>
@@ -457,7 +457,7 @@ QPushButton:pressed {
     <widget class="QListWidget" name="lstMoveHistory">
      <property name="geometry">
       <rect>
-       <x>590</x>
+       <x>610</x>
        <y>240</y>
        <width>191</width>
        <height>421</height>
@@ -467,8 +467,8 @@ QPushButton:pressed {
     <widget class="QPushButton" name="pbUndo">
      <property name="geometry">
       <rect>
-       <x>590</x>
-       <y>810</y>
+       <x>610</x>
+       <y>830</y>
        <width>191</width>
        <height>33</height>
       </rect>
@@ -480,7 +480,7 @@ QPushButton:pressed {
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>40</x>
        <y>240</y>
        <width>562</width>
        <height>562</height>
@@ -1931,7 +1931,7 @@ QPushButton:pressed {
     <widget class="QWidget" name="horizontalLayoutWidget_4">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>40</x>
        <y>159</y>
        <width>561</width>
        <height>41</height>
@@ -1942,8 +1942,8 @@ QPushButton:pressed {
     <widget class="QWidget" name="horizontalLayoutWidget_3">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>840</y>
+       <x>40</x>
+       <y>860</y>
        <width>561</width>
        <height>41</height>
       </rect>
@@ -1953,8 +1953,8 @@ QPushButton:pressed {
     <widget class="QPushButton" name="pbUndoAccept">
      <property name="geometry">
       <rect>
-       <x>590</x>
-       <y>850</y>
+       <x>610</x>
+       <y>870</y>
        <width>91</width>
        <height>33</height>
       </rect>
@@ -1966,8 +1966,8 @@ QPushButton:pressed {
     <widget class="QPushButton" name="pbUndoDeny">
      <property name="geometry">
       <rect>
-       <x>690</x>
-       <y>850</y>
+       <x>710</x>
+       <y>870</y>
        <width>91</width>
        <height>33</height>
       </rect>
@@ -1979,7 +1979,7 @@ QPushButton:pressed {
     <widget class="QListWidget" name="lstInGameConsole">
      <property name="geometry">
       <rect>
-       <x>590</x>
+       <x>610</x>
        <y>670</y>
        <width>191</width>
        <height>131</height>
@@ -1989,9 +1989,9 @@ QPushButton:pressed {
     <widget class="QLabel" name="scorelbl2">
      <property name="geometry">
       <rect>
-       <x>620</x>
-       <y>160</y>
-       <width>151</width>
+       <x>610</x>
+       <y>180</y>
+       <width>191</width>
        <height>31</height>
       </rect>
      </property>
@@ -2002,15 +2002,282 @@ QPushButton:pressed {
     <widget class="QLabel" name="scorelbl1">
      <property name="geometry">
       <rect>
-       <x>620</x>
-       <y>190</y>
-       <width>131</width>
+       <x>610</x>
+       <y>210</y>
+       <width>181</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>ScoreWhite</string>
      </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>41</x>
+       <y>801</y>
+       <width>65</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>A</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>112</x>
+       <y>801</y>
+       <width>64</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>B</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>182</x>
+       <y>801</y>
+       <width>65</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>C</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>253</x>
+       <y>801</y>
+       <width>65</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>D</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>394</x>
+       <y>801</y>
+       <width>65</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>F</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>324</x>
+       <y>801</y>
+       <width>64</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>E</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>465</x>
+       <y>801</y>
+       <width>64</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>G</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>535</x>
+       <y>801</y>
+       <width>65</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>H</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>470</y>
+       <width>31</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>5</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_10">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>540</y>
+       <width>31</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>4</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>610</y>
+       <width>31</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>3</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_12">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>690</y>
+       <width>31</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>2</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_13">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>750</y>
+       <width>31</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>1</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_14">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>400</y>
+       <width>31</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>6</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_15">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>330</y>
+       <width>31</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>7</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_16">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>260</y>
+       <width>31</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>8</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>800</y>
+       <width>561</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout"/>
     </widget>
    </widget>
   </widget>
