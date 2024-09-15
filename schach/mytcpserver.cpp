@@ -14,6 +14,7 @@ MyTCPServer::~MyTCPServer() {
 }
 
 void MyTCPServer::startListening(int port) {
+    server->setMaxPendingConnections(1); // Allow only 1 simultaneous connection
     if(!server->listen(QHostAddress::Any, port)) {
         QString errorMsg = QString("Server could not start listening: %1").arg(server->errorString());
         emit serverStatus(errorMsg);

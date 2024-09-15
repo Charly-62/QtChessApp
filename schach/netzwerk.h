@@ -70,6 +70,7 @@ protected:
 private:
     Game* gameInstance; ///< Reference to the game instance.
     int opponentgroup = 0; // Playing against this group
+    void onSocketError(QAbstractSocket::SocketError socketError);
 
 signals:
     void logNetzwerkMsg(const QString& message); // Signal to log messages to the NetzwerkConsole
