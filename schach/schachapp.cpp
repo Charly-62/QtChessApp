@@ -19,7 +19,6 @@ SchachApp::SchachApp(QWidget *parent)
     , selectedCol(-1)
     , previouslySelectedCol(-1)
     , previouslySelectedRow(-1)
-    , chessGame(new Game(this))
     , client(nullptr)
     , server(nullptr)
 {
