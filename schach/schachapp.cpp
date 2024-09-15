@@ -894,7 +894,19 @@ void SchachApp::undoMove() {
     if (!isLocalGame && ((client && client->undoMovetmp == true) || (server && server->undoMovetmp == true))) {
 
         ui->pbUndoAccept->setEnabled(true);
+        QPalette palAccept = ui->pbUndoAccept->palette();
+        palAccept.setColor(QPalette::Button, QColor(255, 0, 0, 127));
+        ui->pbUndoAccept->setAutoFillBackground(true);
+        ui->pbUndoAccept->setPalette(palAccept);
+        ui->pbUndoAccept->update();
+
         ui->pbUndoDeny->setEnabled(true);
+        QPalette palDeny = ui->pbUndoDeny->palette();
+        palDeny.setColor(QPalette::Button, QColor(255, 0, 0, 127));
+        ui->pbUndoDeny->setAutoFillBackground(true);
+        ui->pbUndoDeny->setPalette(palDeny);
+        ui->pbUndoDeny->update();
+
         ui->pbUndo->setEnabled(false);
 
         QEventLoop loop;
@@ -908,9 +920,19 @@ void SchachApp::undoMove() {
             if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
                 ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
             }
-            // Exit the event loop when the button is clicked
+            // Reset pbUndoAccept button color and disable
+            ui->pbUndoAccept->setPalette(ui->pbUndoAccept->style()->standardPalette());
+            ui->pbUndoAccept->setAutoFillBackground(false); // Disable autofill
+            ui->pbUndoAccept->update();
             ui->pbUndoAccept->setEnabled(false);
+
+            // Reset pbUndoDeny button color and disable
+            ui->pbUndoDeny->setPalette(ui->pbUndoDeny->style()->standardPalette());
+            ui->pbUndoDeny->setAutoFillBackground(false); // Disable autofill
+            ui->pbUndoDeny->update();
             ui->pbUndoDeny->setEnabled(false);
+
+            // Exit the event loop when the button is clicked
             stopundo = true;
             disconnect(*conn1);
             loop.quit();
@@ -921,7 +943,16 @@ void SchachApp::undoMove() {
             if(server) server->sendUndoResponse(true);
 
             // Exit the event loop when the button is clicked
+            // Reset pbUndoAccept button color and disable
+            ui->pbUndoAccept->setPalette(ui->pbUndoAccept->style()->standardPalette());
+            ui->pbUndoAccept->setAutoFillBackground(false); // Disable autofill
+            ui->pbUndoAccept->update();
             ui->pbUndoAccept->setEnabled(false);
+
+            // Reset pbUndoDeny button color and disable
+            ui->pbUndoDeny->setPalette(ui->pbUndoDeny->style()->standardPalette());
+            ui->pbUndoDeny->setAutoFillBackground(false); // Disable autofill
+            ui->pbUndoDeny->update();
             ui->pbUndoDeny->setEnabled(false);
             if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
                 ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
