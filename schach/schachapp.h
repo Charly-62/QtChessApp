@@ -47,7 +47,6 @@ public:
     quint8 PawnPromotion(int rowPawnPromotion);
 
 
-
 private slots:
     void handleSquareClick(int row, int col);
 
@@ -110,6 +109,7 @@ private:
     //bool isLocalTurn;
     bool isLocalPlayerWhite = false;
     bool isLocalGame = false;
+
 
     QTimer* player1Timer;
     QTimer* player2Timer;

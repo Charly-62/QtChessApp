@@ -2387,7 +2387,7 @@ QPushButton:disabled {
     color: black;
     border-radius: 10px;
     padding: 5px;
-    font-size: 14px;
+    font-size: 10px;
 }
 
 QPushButton:hover {
@@ -2422,7 +2422,7 @@ QPushButton:disabled {
     color: black;
     border-radius: 10px;
     padding: 5px;
-    font-size: 14px;
+    font-size: 10px;
 }
 
 QPushButton:hover {

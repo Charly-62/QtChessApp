@@ -263,13 +263,13 @@ void SchachApp::setupChessBoard() {
     }
 
     // Update score display (assuming you have labels for scores)
-    ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
-    ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+    ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
+    ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
     ui->scorelbl1->setStyleSheet(
         "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
-        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "font-family: Arial, sans-serif;"
         "padding: 5px;"
     );
 
@@ -277,7 +277,7 @@ void SchachApp::setupChessBoard() {
         "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
-        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "font-family: Arial, sans-serif;"
         "padding: 5px;"
     );
 }
@@ -501,22 +501,6 @@ void SchachApp::updatecurrentPlayerLabel() {
     QString labelText;
     QString style;
 
-//    if (LocalName != "Player 1" && OpponentName != "Player 2") {
-//        if (isLocalPlayerWhite && chessGame->getWhiteTurn()) {
-//            labelText = LocalName + "'s Turn";  // Local white player’s turn
-//            style = "color: #006400; font: bold 18px 'Arial'; background-color: #ffffff; padding: 10px; border-radius: 5px;";
-//        } else if (!isLocalPlayerWhite && !chessGame->getWhiteTurn()) {
-//            labelText = LocalName + "'s Turn";  // Local black player’s turn
-//            style = "color: #006400; font: bold 18px 'Arial'; background-color: #ffffff; padding: 10px; border-radius: 5px;";
-//        } else if (isLocalPlayerWhite && !chessGame->getWhiteTurn()) {
-//            labelText = OpponentName + "'s Turn";  // Opponent's turn
-//            style = "color: #006400; font: bold 18px 'Arial'; background-color: #000000; padding: 10px; border-radius: 5px;";
-//        } else if (!isLocalPlayerWhite && chessGame->getWhiteTurn()) {
-//            labelText = OpponentName + "'s Turn";  // Opponent's turn
-//            style = "color: #006400; font: bold 18px 'Arial'; background-color: #000000; padding: 10px; border-radius: 5px;";
-//        }
-
-//    } else {
         if (chessGame->getWhiteTurn()) {
             labelText = "♔ White's Turn";
             style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
@@ -558,15 +542,16 @@ void SchachApp::updatecurrentPlayerLabel() {
             labelText = " CHECKMATE ♔ WHITE WINS ♔ ";
         }
         style = R"(
-                color: #006400; /* Text color (e.g., dark green) */
-                background-color: #98fb98; /* Background color (e.g., pale green) */
+                color: black;
+                background-color: #76c7b7;
                 padding: 10px 20px;
                 border-radius: 15px;
-                font-size: 24px;
+                font-size: 20px;
                 font-weight: bold;
                 text-align: center;
                 border: 2px solid #006400; /* Border color matching text */
             )";
+        blockguitmp = true;
         }
     ui->lblCurrentPlayerName->setText(labelText);
     ui->lblCurrentPlayerName->setStyleSheet(style);
@@ -609,13 +594,13 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
      }
      qDebug() << "score White vs black " << whiteScore <<" vs  " << blackScore;
      // Update score display (assuming you have labels for scores)
-         ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
-         ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+         ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
+         ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
          ui->scorelbl1->setStyleSheet(
              "font-size: 12px;"
              "font-weight: bold;"
              "color: #2c3e50;"
-             "font-family: 'Comic Sans MS', cursive, sans-serif;"
+             "font-family: Arial, sans-serif;"
              "padding: 5px;"
          );
 
@@ -623,7 +608,7 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
              "font-size: 12px;"
              "font-weight: bold;"
              "color: #2c3e50;"
-             "font-family: 'Comic Sans MS', cursive, sans-serif;"
+             "font-family: Arial, sans-serif;"
              "padding: 5px;"
          );
 
@@ -700,13 +685,13 @@ quint8 SchachApp::PawnPromotion(int row) {
     }
     ui->gridLayout->setEnabled(true);
     // Update score display (assuming you have labels for scores)
-    ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
-    ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+    ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
+    ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
     ui->scorelbl1->setStyleSheet(
         "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
-        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "font-family: Arial, sans-serif;"
         "padding: 5px;"
     );
 
@@ -714,7 +699,7 @@ quint8 SchachApp::PawnPromotion(int row) {
         "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
-        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "font-family: Arial, sans-serif;"
         "padding: 5px;"
     );
     return promotionType;
@@ -1283,14 +1268,14 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
         whiteScore += pieceValue;
     }
     // Update score display (assuming you have labels for scores)
-    ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
-    ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+    ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
+    ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
 
     ui->scorelbl1->setStyleSheet(
         "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
-        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "font-family: Arial, sans-serif;"
         "padding: 5px;"
     );
 
@@ -1298,7 +1283,7 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
         "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
-        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "font-family: Arial, sans-serif;"
         "padding: 5px;"
     );
 
@@ -1340,14 +1325,14 @@ void SchachApp::undoScoreUpdate() {
 
         // Update the score labels
         // Update score display (assuming you have labels for scores)
-        ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
-        ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+        ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
+        ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
 
         ui->scorelbl1->setStyleSheet(
             "font-size: 12px;"
             "font-weight: bold;"
             "color: #2c3e50;"
-            "font-family: 'Comic Sans MS', cursive, sans-serif;"
+            "font-family: Arial, sans-serif;"
             "padding: 5px;"
         );
 
@@ -1355,7 +1340,7 @@ void SchachApp::undoScoreUpdate() {
             "font-size: 12px;"
             "font-weight: bold;"
             "color: #2c3e50;"
-            "font-family: 'Comic Sans MS', cursive, sans-serif;"
+            "font-family: Arial, sans-serif;"
             "padding: 5px;"
         );
     }
