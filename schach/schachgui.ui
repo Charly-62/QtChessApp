@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1136</width>
+    <width>1372</width>
     <height>989</height>
    </rect>
   </property>
@@ -27,7 +27,7 @@ background-color: rgb(134, 255, 142)
     <rect>
      <x>270</x>
      <y>50</y>
-     <width>861</width>
+     <width>821</width>
      <height>911</height>
     </rect>
    </property>
@@ -35,7 +35,7 @@ background-color: rgb(134, 255, 142)
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="initalpage">
     <widget class="QGroupBox" name="grpNetwork">
@@ -555,6 +555,25 @@ QPushButton:disabled {
          <height>111</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QGroupBox {
+    background-color: #f2f2f2; 
+    border: 2px solid #76c7b7; 
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left; 
+    padding: 0 5px; 
+    font-size: 10px;
+    font-weight: bold; 
+    color: #2c3e50;
+	font-family: 'Comic Sans MS', cursive, sans-serif;
+}</string>
+       </property>
        <property name="title">
         <string>Pawn Promotion</string>
        </property>
@@ -570,6 +589,30 @@ QPushButton:disabled {
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
           <widget class="QComboBox" name="cbPawnPromotion">
+           <property name="styleSheet">
+            <string notr="true">QComboBox {
+    background-color: #f2f2f2; /* Lighter grey */
+    color: black;
+    border: 2px solid #76c7b7; /* Border color matches QPushButton */
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+QComboBox:hover {
+    border-color: #5bb7a5; /* Darker teal on hover */
+}
+
+QComboBox::drop-down {
+    border-radius: 10px;
+}
+
+QComboBox::down-arrow {
+    
+}
+
+</string>
+           </property>
            <item>
             <property name="text">
              <string>Not Selected</string>
@@ -599,6 +642,29 @@ QPushButton:disabled {
          </item>
          <item>
           <widget class="QPushButton" name="pbPawnPromotion">
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    background-color: #76c7b7; /* Light blue-green (teal) */
+    color: black;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #5bb7a5; /* Slightly darker teal for hover */
+}
+
+QPushButton:pressed {
+    background-color: #4fa89a; /* Darker blue-green when pressed */
+}
+
+QPushButton:disabled {
+    background-color: lightgrey;
+    color: grey;
+}
+</string>
+           </property>
            <property name="text">
             <string>OK</string>
            </property>
@@ -2451,6 +2517,32 @@ QPushButton:disabled {
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout"/>
+    </widget>
+    <widget class="QLabel" name="currentplayername">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>130</y>
+       <width>151</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Current player</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="opponentplayername">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>130</y>
+       <width>151</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Oppenent player</string>
+     </property>
     </widget>
    </widget>
   </widget>
