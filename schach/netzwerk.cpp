@@ -14,7 +14,7 @@ void Netzwerk::initializeSocket() {
     if (!_socket) {
         _socket = new QTcpSocket(this);
         connect(_socket, &QTcpSocket::readyRead, this, &Netzwerk::receiveMove);
-        connect(_socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &Netzwerk::onSocketError);
+        // connect(_socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &Netzwerk::onSocketError);
     }
 }
 
@@ -226,19 +226,56 @@ void Netzwerk::processMessage(QDataStream& stream) {
 
         moveInfo.islegal = gameInstance->logikInstance.isLegal(gameInstance, startCol, startRow, endCol, endRow, moveInfo.promotion);
 
-        if(!moveInfo.islegal) {
+        if (!moveInfo.islegal) {
             emit logInGameMsg("Received move is illegal!");
-            return;
-        } else {
-            emit logInGameMsg("Received valid move.");
 
-            // Determine the status code based on move consequences
-            if (moveInfo.consequences & 0x02) { // Checkmate
-                statusCode = 0x02; // OK, checkmate
-            } else if (moveInfo.consequences & 0x01) { // Capture
-                statusCode = 0x01; // OK, capture
+            // Determine the specific error code
+            if (!gameInstance->getPieceAt(startCol, startRow)) {
+                statusCode = 0x03;  // No piece at start
+            } else if (gameInstance->getWhiteTurn() != gameInstance->getPieceAt(startCol, startRow)->checkIfWhite()) {
+                statusCode = 0x07;  // Not your turn
             } else {
-                statusCode = 0x00; // OK
+                statusCode = 0x04;  // Move not allowed
+            }
+
+            sendMoveResponse(statusCode);
+
+        } else {
+            // Extract expected consequences
+            bool expectedCapture = (moveInfo.consequences & 0x01);
+            bool expectedCheckmate = (moveInfo.consequences & 0x02);
+
+            // Simulate the move
+            Game* simulatedGame = gameInstance->clone();
+            simulatedGame->updateBoard(startCol, startRow, endCol, endRow);
+            simulatedGame->updateCheckStatus();
+
+            // Determine actual consequences
+            bool actualCapture = (gameInstance->getPieceAt(endCol, endRow) != nullptr);
+            bool actualCheckmate = simulatedGame->logikInstance.isCheckmate(simulatedGame);
+
+            delete simulatedGame;
+
+            // Validate consequences
+            if (expectedCapture && !actualCapture) {
+                statusCode = 0x06;  // Not OK, expected capture but none
+                sendMoveResponse(statusCode);
+                return;
+            }
+
+            if (expectedCheckmate && !actualCheckmate) {
+                statusCode = 0x08;  // Not OK, expected checkmate but none
+                sendMoveResponse(statusCode);
+                return;
+            }
+
+            // Determine status code for response
+            if (actualCheckmate) {
+                statusCode = 0x02;  // OK, checkmate
+            } else if (actualCapture) {
+                statusCode = 0x01;  // OK, capture
+            } else {
+                statusCode = 0x00;  // OK
             }
 
             emit moveReceived(moveInfo);

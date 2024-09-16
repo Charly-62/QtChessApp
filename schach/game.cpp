@@ -160,7 +160,13 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row, int promotion
     if (logikInstance.isCheckmate(this)) {
         std::cout << "Checkmate!";
         isCheckmate = true;
-        moveInfo.consequences = (moveInfo.consequences == 0x01) ? 0x03 : 0x02;  // Checkmate or capture and checkmate
+        if (moveInfo.consequences == 0x01) {
+            moveInfo.consequences = 0x03;  // Capture and Checkmate
+            qDebug() << "Consequences set to Capture and Checkmate (0x03)";
+        } else {
+            moveInfo.consequences = 0x02;  // Checkmate
+            qDebug() << "Consequences set to Checkmate (0x02)";
+        }
     }
 
         return moveInfo;  // Return moveInfo struct

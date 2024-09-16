@@ -501,7 +501,6 @@ void SchachApp::updatecurrentPlayerLabel() {
                 font-weight: bold;
                 text-align: center;
                 border: 2px solid #006400; /* Border color matching text */
-                box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.7);
             )";
         }
     ui->lblCurrentPlayerName->setText(labelText);
