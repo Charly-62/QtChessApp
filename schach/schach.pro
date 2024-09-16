@@ -48,4 +48,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
+    bannedwords.qrc \
     images.qrc
+
+DISTFILES += \
+    List_of_banned_words/de.txt

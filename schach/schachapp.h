@@ -137,6 +137,11 @@ private:
     void undoMove();
 
     void onChatMsgReceived(QString message);
+    QString censorMessage(const QString& message) const;
+    QStringList bannedWords;
+    QString bannedWordsFilePathEn = ":/List_of_banned_words/en.txt"; // Credits for the dataset: https://github.com/Hesham-Elbadawi/list-of-banned-words/tree/master
+    QString bannedWordsFilePathDe = ":/List_of_banned_words/de.txt"; // Credits for the dataset: https://github.com/Hesham-Elbadawi/list-of-banned-words/tree/master
+    void loadBannedWords();
 
     bool blockguitmp = false; // to block the board when selecting promotion type
 
@@ -158,7 +163,8 @@ private:
         bool isWhite;
         int value;
     };
-     QStack<CapturedPieceInfo> capturedPiecesStack;
+
+    QStack<CapturedPieceInfo> capturedPiecesStack;
 
 };
 #endif // SCHACHAPP_H

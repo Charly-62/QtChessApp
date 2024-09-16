@@ -13,6 +13,7 @@
 #include <QStackedWidget>
 #include <QStack>
 #include <QWidget>
+#include <QFile>
 
 
 SchachApp::SchachApp(QWidget *parent)
@@ -59,6 +60,8 @@ SchachApp::SchachApp(QWidget *parent)
     //ui->lblCurrentPlayerName->setText("Welcome to a new game ");
 
     connect(chessGame, &Game::pieceCaptured, this, &SchachApp::pieceCaptured);
+
+    loadBannedWords();
 
 }
 
@@ -1296,16 +1299,39 @@ void SchachApp::on_pbUndo_clicked() {
 
 void SchachApp::on_leSendChat_returnPressed()
 {
-    QString message = ui->leSendChat->text();
+    QString originalMessage = ui->leSendChat->text();
+    QString censoredMessage = censorMessage(originalMessage);
+
     ui->leSendChat->clear();
-    ui->lstChat->addItem("You: " + message);
-    if(client) client->sendChatMsg(message);
-    else if(server) server->sendChatMsg(message);
+
+    // Check if any words were censored
+    if(originalMessage != censoredMessage) {
+        ui->lstChat->addItem("You: " + censoredMessage + " [Censored]");
+    }
+    else {
+        ui->lstChat->addItem("You: " + censoredMessage);
+    }
+
+    // Send the censored message
+    if(client) {
+        client->sendChatMsg(originalMessage);
+    }
+    else if(server) {
+        server->sendChatMsg(originalMessage);
+    }
 }
 
 void SchachApp::onChatMsgReceived(QString message) {
-    ui->lstChat->addItem("Opponent: " + message);
-    ui->lstChat->scrollToBottom();
+    QString originalMessage = message;
+    QString censoredMessage = censorMessage(originalMessage);
+
+    // Check if any words were censored
+    if(originalMessage != censoredMessage) {
+        ui->lstChat->addItem("Opponent: " + censoredMessage + " [Censored]");
+    }
+    else {
+        ui->lstChat->addItem("Opponent: " + censoredMessage);
+    }
 }
 
 void SchachApp::on_client_connected() {
@@ -1316,4 +1342,61 @@ void SchachApp::on_client_connected() {
 void SchachApp::on_client_disconnected() {
     ui->lstChat->setEnabled(false);
     ui->leSendChat->setEnabled(false);
+}
+
+void SchachApp::loadBannedWords() {
+    QFile fileEn(bannedWordsFilePathEn);
+
+    if (!fileEn.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Could not open banned words file:" << bannedWordsFilePathEn;
+        return;
+    }
+
+    QTextStream En(&fileEn);
+    while (!En.atEnd()) {
+        QString line = En.readLine().trimmed();
+        if (!line.isEmpty()) {
+            bannedWords.append(line.toLower());
+        }
+    }
+
+    fileEn.close();
+
+    QFile fileDe(bannedWordsFilePathDe);
+
+    if (!fileDe.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Could not open banned words file:" << bannedWordsFilePathDe;
+        return;
+    }
+
+    QTextStream De(&fileDe);
+    while (!De.atEnd()) {
+        QString line = De.readLine().trimmed();
+        if (!line.isEmpty()) {
+            bannedWords.append(line.toLower());
+        }
+    }
+
+    fileDe.close();
+
+    qDebug() << "Loaded" << bannedWords.size() << "banned words.";
+}
+
+QString SchachApp::censorMessage(const QString& message) const {
+    QString censoredMessage = message;
+    QString lowerMessage = message.toLower();
+
+    for (const QString& word : bannedWords) {
+        // Create a case-insensitive regular expression with word boundaries
+        QRegularExpression regex(QString("\\b%1\\b").arg(QRegularExpression::escape(word)),
+                                 QRegularExpression::CaseInsensitiveOption);
+
+        // Create a replacement string with asterisks matching the word's length
+        QString replacement = QString("*").repeated(word.length());
+
+        // Replace all occurrences of the banned word
+        censoredMessage.replace(regex, replacement);
+    }
+
+    return censoredMessage;
 }
