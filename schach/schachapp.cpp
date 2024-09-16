@@ -222,6 +222,21 @@ void SchachApp::setupChessBoard() {
     // Update score display (assuming you have labels for scores)
     ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
     ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+    ui->scorelbl1->setStyleSheet(
+        "font-size: 20px;"
+        "font-weight: bold;"
+        "color: #2c3e50;"
+        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "padding: 5px;"
+    );
+
+    ui->scorelbl2->setStyleSheet(
+        "font-size: 20px;"
+        "font-weight: bold;"
+        "color: #2c3e50;"
+        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "padding: 5px;"
+    );
 }
 void SchachApp::highlightPossibleMove(const std::pair<int, int>& move) {
     int row = move.second;
@@ -546,6 +561,21 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
      // Update score display (assuming you have labels for scores)
          ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
          ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+         ui->scorelbl1->setStyleSheet(
+             "font-size: 20px;"
+             "font-weight: bold;"
+             "color: #2c3e50;"
+             "font-family: 'Comic Sans MS', cursive, sans-serif;"
+             "padding: 5px;"
+         );
+
+         ui->scorelbl2->setStyleSheet(
+             "font-size: 20px;"
+             "font-weight: bold;"
+             "color: #2c3e50;"
+             "font-family: 'Comic Sans MS', cursive, sans-serif;"
+             "padding: 5px;"
+         );
 
 }
 
@@ -622,6 +652,21 @@ quint8 SchachApp::PawnPromotion(int row) {
     // Update score display (assuming you have labels for scores)
     ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
     ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+    ui->scorelbl1->setStyleSheet(
+        "font-size: 20px;"
+        "font-weight: bold;"
+        "color: #2c3e50;"
+        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "padding: 5px;"
+    );
+
+    ui->scorelbl2->setStyleSheet(
+        "font-size: 20px;"
+        "font-weight: bold;"
+        "color: #2c3e50;"
+        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "padding: 5px;"
+    );
     return promotionType;
 }
 
@@ -934,18 +979,8 @@ void SchachApp::undoMove() {
     if (!isLocalGame && ((client && client->undoMovetmp == true) || (server && server->undoMovetmp == true))) {
 
         ui->pbUndoAccept->setEnabled(true);
-        QPalette palAccept = ui->pbUndoAccept->palette();
-        palAccept.setColor(QPalette::Button, QColor(255, 0, 0, 127));
-        ui->pbUndoAccept->setAutoFillBackground(true);
-        ui->pbUndoAccept->setPalette(palAccept);
-        ui->pbUndoAccept->update();
 
         ui->pbUndoDeny->setEnabled(true);
-        QPalette palDeny = ui->pbUndoDeny->palette();
-        palDeny.setColor(QPalette::Button, QColor(255, 0, 0, 127));
-        ui->pbUndoDeny->setAutoFillBackground(true);
-        ui->pbUndoDeny->setPalette(palDeny);
-        ui->pbUndoDeny->update();
 
         ui->pbUndo->setEnabled(false);
 
@@ -960,16 +995,9 @@ void SchachApp::undoMove() {
             if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
                 ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
             }
-            // Reset pbUndoAccept button color and disable
-            ui->pbUndoAccept->setPalette(ui->pbUndoAccept->style()->standardPalette());
-            ui->pbUndoAccept->setAutoFillBackground(false); // Disable autofill
-            ui->pbUndoAccept->update();
+
             ui->pbUndoAccept->setEnabled(false);
 
-            // Reset pbUndoDeny button color and disable
-            ui->pbUndoDeny->setPalette(ui->pbUndoDeny->style()->standardPalette());
-            ui->pbUndoDeny->setAutoFillBackground(false); // Disable autofill
-            ui->pbUndoDeny->update();
             ui->pbUndoDeny->setEnabled(false);
 
             // Exit the event loop when the button is clicked
@@ -983,16 +1011,10 @@ void SchachApp::undoMove() {
             if(server) server->sendUndoResponse(true);
 
             // Exit the event loop when the button is clicked
-            // Reset pbUndoAccept button color and disable
-            ui->pbUndoAccept->setPalette(ui->pbUndoAccept->style()->standardPalette());
-            ui->pbUndoAccept->setAutoFillBackground(false); // Disable autofill
-            ui->pbUndoAccept->update();
+
             ui->pbUndoAccept->setEnabled(false);
 
-            // Reset pbUndoDeny button color and disable
-            ui->pbUndoDeny->setPalette(ui->pbUndoDeny->style()->standardPalette());
-            ui->pbUndoDeny->setAutoFillBackground(false); // Disable autofill
-            ui->pbUndoDeny->update();
+
             ui->pbUndoDeny->setEnabled(false);
             if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
                 ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
@@ -1204,6 +1226,23 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
     // Update score display (assuming you have labels for scores)
     ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
     ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+
+    ui->scorelbl1->setStyleSheet(
+        "font-size: 20px;"
+        "font-weight: bold;"
+        "color: #2c3e50;"
+        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "padding: 5px;"
+    );
+
+    ui->scorelbl2->setStyleSheet(
+        "font-size: 20px;"
+        "font-weight: bold;"
+        "color: #2c3e50;"
+        "font-family: 'Comic Sans MS', cursive, sans-serif;"
+        "padding: 5px;"
+    );
+
 }
 
 void SchachApp::undoScoreUpdate() {
@@ -1244,6 +1283,22 @@ void SchachApp::undoScoreUpdate() {
         // Update score display (assuming you have labels for scores)
         ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
         ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
+
+        ui->scorelbl1->setStyleSheet(
+            "font-size: 20px;"
+            "font-weight: bold;"
+            "color: #2c3e50;"
+            "font-family: 'Comic Sans MS', cursive, sans-serif;"
+            "padding: 5px;"
+        );
+
+        ui->scorelbl2->setStyleSheet(
+            "font-size: 20px;"
+            "font-weight: bold;"
+            "color: #2c3e50;"
+            "font-family: 'Comic Sans MS', cursive, sans-serif;"
+            "padding: 5px;"
+        );
     }
 }
 

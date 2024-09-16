@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1372</width>
-    <height>989</height>
+    <width>1229</width>
+    <height>1075</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,7 @@ background-color: rgb(134, 255, 142)
     <rect>
      <x>270</x>
      <y>50</y>
-     <width>821</width>
+     <width>891</width>
      <height>911</height>
     </rect>
    </property>
@@ -350,9 +350,9 @@ QComboBox::down-arrow {
     <widget class="QLabel" name="DisplayGame">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>20</x>
        <y>20</y>
-       <width>761</width>
+       <width>771</width>
        <height>81</height>
       </rect>
      </property>
@@ -443,7 +443,7 @@ QPushButton:disabled {
       <rect>
        <x>20</x>
        <y>630</y>
-       <width>371</width>
+       <width>381</width>
        <height>171</height>
       </rect>
      </property>
@@ -474,7 +474,7 @@ QGroupBox::title {
        <rect>
         <x>20</x>
         <y>40</y>
-        <width>321</width>
+        <width>331</width>
         <height>51</height>
        </rect>
       </property>
@@ -536,10 +536,10 @@ QPushButton:disabled {
      </property>
      <property name="geometry">
       <rect>
-       <x>590</x>
-       <y>40</y>
-       <width>191</width>
-       <height>111</height>
+       <x>600</x>
+       <y>10</y>
+       <width>281</width>
+       <height>171</height>
       </rect>
      </property>
      <property name="currentIndex">
@@ -549,10 +549,10 @@ QPushButton:disabled {
       <widget class="QGroupBox" name="grpPawnPromotion">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>0</y>
-         <width>141</width>
-         <height>111</height>
+         <x>10</x>
+         <y>10</y>
+         <width>241</width>
+         <height>161</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -580,10 +580,10 @@ QGroupBox::title {
        <widget class="QWidget" name="verticalLayoutWidget">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>20</x>
           <y>30</y>
-          <width>122</width>
-          <height>72</height>
+          <width>201</width>
+          <height>111</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -674,7 +674,66 @@ QPushButton:disabled {
        </widget>
       </widget>
      </widget>
-     <widget class="QWidget" name="defaultpage"/>
+     <widget class="QWidget" name="defaultpage">
+      <widget class="QGroupBox" name="ScoregrpBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>241</width>
+         <height>151</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QGroupBox {
+    background-color: #f2f2f2; 
+    border: 2px solid #76c7b7; 
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left; 
+    padding: 0 5px; 
+    font-size: 10px;
+    font-weight: bold; 
+    color: #2c3e50;
+	font-family: 'Comic Sans MS', cursive, sans-serif;
+}</string>
+       </property>
+       <property name="title">
+        <string>Score</string>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget_3">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>40</y>
+          <width>201</width>
+          <height>61</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="scorelbl2">
+           <property name="text">
+            <string>ScoreBlack</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="scorelbl1">
+           <property name="text">
+            <string>ScoreWhite</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
     </widget>
     <widget class="QWidget" name="horizontalLayoutWidget">
      <property name="geometry">
@@ -705,14 +764,14 @@ QPushButton:disabled {
     <widget class="QLabel" name="lblCurrentPlayerName">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>30</y>
+       <x>40</x>
+       <y>20</y>
        <width>561</width>
        <height>91</height>
       </rect>
      </property>
      <property name="text">
-      <string>CurrentPlayerName</string>
+      <string>Display</string>
      </property>
     </widget>
     <widget class="QWidget" name="horizontalLayoutWidget_2">
@@ -740,29 +799,6 @@ QPushButton:disabled {
        </widget>
       </item>
      </layout>
-    </widget>
-    <widget class="QListWidget" name="lstMoveHistory">
-     <property name="geometry">
-      <rect>
-       <x>610</x>
-       <y>240</y>
-       <width>191</width>
-       <height>421</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pbUndo">
-     <property name="geometry">
-      <rect>
-       <x>610</x>
-       <y>830</y>
-       <width>191</width>
-       <height>33</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Undo Move</string>
-     </property>
     </widget>
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
@@ -2220,7 +2256,7 @@ QPushButton:disabled {
       <rect>
        <x>40</x>
        <y>159</y>
-       <width>561</width>
+       <width>551</width>
        <height>41</height>
       </rect>
      </property>
@@ -2236,68 +2272,6 @@ QPushButton:disabled {
       </rect>
      </property>
      <layout class="QHBoxLayout" name="deadplayer1"/>
-    </widget>
-    <widget class="QPushButton" name="pbUndoAccept">
-     <property name="geometry">
-      <rect>
-       <x>610</x>
-       <y>870</y>
-       <width>91</width>
-       <height>33</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Accept Undo</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pbUndoDeny">
-     <property name="geometry">
-      <rect>
-       <x>710</x>
-       <y>870</y>
-       <width>91</width>
-       <height>33</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Deny Undo</string>
-     </property>
-    </widget>
-    <widget class="QListWidget" name="lstInGameConsole">
-     <property name="geometry">
-      <rect>
-       <x>610</x>
-       <y>670</y>
-       <width>191</width>
-       <height>131</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLabel" name="scorelbl2">
-     <property name="geometry">
-      <rect>
-       <x>610</x>
-       <y>180</y>
-       <width>191</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>ScoreBlack</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="scorelbl1">
-     <property name="geometry">
-      <rect>
-       <x>610</x>
-       <y>210</y>
-       <width>181</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>ScoreWhite</string>
-     </property>
     </widget>
     <widget class="QLabel" name="label">
      <property name="geometry">
@@ -2543,6 +2517,163 @@ QPushButton:disabled {
      <property name="text">
       <string>Oppenent player</string>
      </property>
+    </widget>
+    <widget class="QGroupBox" name="NetworkgrpBox">
+     <property name="geometry">
+      <rect>
+       <x>610</x>
+       <y>190</y>
+       <width>241</width>
+       <height>711</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {
+    background-color: #f2f2f2; 
+    border: 2px solid #76c7b7; 
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left; 
+    padding: 0 5px; 
+    font-size: 10px;
+    font-weight: bold; 
+    color: #2c3e50;
+	font-family: 'Comic Sans MS', cursive, sans-serif;
+}</string>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
+     <widget class="QListWidget" name="lstMoveHistory">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>221</width>
+        <height>471</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="lstInGameConsole">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>490</y>
+        <width>221</width>
+        <height>131</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pbUndo">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>630</y>
+        <width>221</width>
+        <height>33</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #76c7b7; /* Light blue-green (teal) */
+    color: black;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #5bb7a5; /* Slightly darker teal for hover */
+}
+
+QPushButton:pressed {
+    background-color: #4fa89a; /* Darker blue-green when pressed */
+}
+
+QPushButton:disabled {
+    background-color: lightgrey;
+    color: grey;
+}</string>
+      </property>
+      <property name="text">
+       <string>Undo Move</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pbUndoDeny">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>670</y>
+        <width>101</width>
+        <height>33</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #76c7b7; /* Light blue-green (teal) */
+    color: black;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #5bb7a5; /* Slightly darker teal for hover */
+}
+
+QPushButton:pressed {
+    background-color: #4fa89a; /* Darker blue-green when pressed */
+}
+
+QPushButton:disabled {
+    background-color: lightgrey;
+    color: grey;
+}</string>
+      </property>
+      <property name="text">
+       <string>Deny Undo</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pbUndoAccept">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>670</y>
+        <width>101</width>
+        <height>33</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #76c7b7; /* Light blue-green (teal) */
+    color: black;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #5bb7a5; /* Slightly darker teal for hover */
+}
+
+QPushButton:pressed {
+    background-color: #4fa89a; /* Darker blue-green when pressed */
+}
+
+QPushButton:disabled {
+    background-color: lightgrey;
+    color: grey;
+}</string>
+      </property>
+      <property name="text">
+       <string>Accept Undo</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
