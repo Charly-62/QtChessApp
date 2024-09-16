@@ -12,12 +12,9 @@ Game::Game(class SchachApp* gui, QObject* parent)
     : QObject(parent), whiteTurn(true), gui(gui)
 {
     initBoard();
-
 }
 
-
 Game::~Game() {}
-
 
 void Game::initBoard() {
     // Initialize white pieces

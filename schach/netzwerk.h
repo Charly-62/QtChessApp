@@ -88,19 +88,17 @@ public:
         return opponentgroup;
     }
 
-    /**
-     * @brief Receives a move from the network.
-     * @param moveData The data received over the network containing move information.
-     */
-    void receiveMove();
-    void processMessage(QDataStream& stream);
 
     /**
      * @brief Initializes the socket if it's not already initialized.
      */
     void initializeSocket();
 
-
+    /**
+     * @brief Receives a move from the network.
+     * @param moveData The data received over the network containing move information.
+     */
+    void receiveMove();
 
 protected:
     QTcpSocket* _socket = nullptr; ///< TCP socket used for network communication.
@@ -110,6 +108,12 @@ private:
     Game* gameInstance; ///< Reference to the game instance.
     int opponentgroup = 0; // Playing against this group
     void onSocketError(QAbstractSocket::SocketError socketError);
+
+    /**
+     * @brief processMessage Processes the received message
+     * @param stream Received data
+     */
+    void processMessage(QDataStream& stream);
 
 signals:
 
