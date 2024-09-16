@@ -14,7 +14,7 @@ void Netzwerk::initializeSocket() {
     if (!_socket) {
         _socket = new QTcpSocket(this);
         connect(_socket, &QTcpSocket::readyRead, this, &Netzwerk::receiveMove);
-        // connect(_socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &Netzwerk::onSocketError);
+        connect(_socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &Netzwerk::onSocketError);
     }
 }
 
@@ -349,7 +349,7 @@ void Netzwerk::processMessage(QDataStream& stream) {
 
     // Chat command
     else if (command == 0x80) { // Chat message
-        if (length > 255) {
+        if (length > 250) {
             emit logInGameMsg("Received chat message too long.");
             emit logNetzwerkMsg("Received chat message too long.");
             emit logInGameMsg("Disconnecting for safety.");
