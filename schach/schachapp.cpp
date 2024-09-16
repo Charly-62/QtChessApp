@@ -19,8 +19,6 @@ SchachApp::SchachApp(QWidget *parent)
 {
     ui->setupUi(this);
     ui-> GAME ->setCurrentWidget(ui->initalpage);
-    // initializeBoard();
-    // setupChessBoard();
     setDeviceController();
 
     on_cbHostClient_currentTextChanged("Local");
@@ -40,14 +38,12 @@ SchachApp::SchachApp(QWidget *parent)
     connect(player2Timer, &QTimer::timeout, this, &SchachApp::updatePlayer2Timer);
 
     ui->cbPawnPromotion->setCurrentText("Not Selected");
-    //connect(ui->pbPawnPromotion, &QPushButton::clicked, this, &SchachApp::onPbPawnPromotionClicked);
     ui->pbPawnPromotion->setEnabled(false);
     ui->cbPawnPromotion->setEnabled(false);
 
     setWelcomeMessage();
     WelcomeDisplay();
     ui->swpawnpromotion->setCurrentWidget(ui->defaultpage);
-    //ui->lblCurrentPlayerName->setText("Welcome to a new game ");
 
     connect(chessGame, &Game::pieceCaptured, this, &SchachApp::pieceCaptured);
 
@@ -79,38 +75,34 @@ SchachApp::~SchachApp()
 void SchachApp::WelcomeDisplay(){
     QFont font;
         font.setBold(true);
-        font.setPointSize(16); // Increase the font size
-        font.setFamily("Arial"); // Set a font family, like Arial or any other you prefer
+        font.setPointSize(16);
+        font.setFamily("Arial");
 
         ui-> DisplayGame->setFont(font);
         ui-> DisplayGame->setText("Welcome! Please choose your settings");
-        ui->DisplayGame->setAlignment(Qt::AlignCenter);
-
-        // Set a gradient background and text color
+        ui->DisplayGame->setAlignment(Qt::AlignCenter);       
         ui->DisplayGame->setStyleSheet(
-            "color: #ffffff;" // Text color
-            "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3a3a3a, stop:1 #000000);" // Gradient background
-            "padding: 10px;" // Padding around the text
-            "border-radius: 10px;" // Rounded corners
-                    );
+            "color: #ffffff;"
+            "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3a3a3a, stop:1 #000000);"
+            "padding: 10px;"
+            "border-radius: 10px;"
+         );
 }
 
 void SchachApp::StartDisplay(){
     QFont font;
         font.setBold(true);
-        font.setPointSize(16); // Increase the font size
-        font.setFamily("Arial"); // Set a font family, like Arial or any other you prefer
+        font.setPointSize(16);
+        font.setFamily("Arial");
 
         ui-> DisplayGame->setFont(font);
         ui-> DisplayGame->setText("Click on Start Game");
         ui->DisplayGame->setAlignment(Qt::AlignCenter);
-
-        // Set a gradient background and text color
         ui->DisplayGame->setStyleSheet(
-            "color: #ffffff;" // Text color
-            "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3a3a3a, stop:1 #000000);" // Gradient background
-            "padding: 10px;" // Padding around the text
-            "border-radius: 10px;" // Rounded corners
+            "color: #ffffff;"
+            "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3a3a3a, stop:1 #000000);"
+            "padding: 10px;"
+            "border-radius: 10px;"
                     );
 }
 
@@ -119,21 +111,17 @@ void SchachApp::setWelcomeMessage()
 {
     QFont font;
         font.setBold(true);
-        font.setPointSize(16); // Increase the font size
-        font.setFamily("Arial"); // Set a font family, like Arial or any other you prefer
+        font.setPointSize(16);
+        font.setFamily("Arial");
 
         ui->lblCurrentPlayerName->setFont(font);
         ui->lblCurrentPlayerName->setText("Welcome to a New Game!");
-
-        // Center the text
         ui->lblCurrentPlayerName->setAlignment(Qt::AlignCenter);
-
-        // Set a gradient background and text color
         ui->lblCurrentPlayerName->setStyleSheet(
-            "color: #ffffff;" // Text color
-            "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3a3a3a, stop:1 #000000);" // Gradient background
-            "padding: 10px;" // Padding around the text
-            "border-radius: 10px;" // Rounded corners
+            "color: #ffffff;"
+            "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3a3a3a, stop:1 #000000);"
+            "padding: 10px;"
+            "border-radius: 10px;"
         );
 
 
@@ -252,7 +240,7 @@ void SchachApp::setupChessBoard() {
         }
     }
 
-    // Update score display (assuming you have labels for scores)
+    // Update score display
     ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
     ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
     ui->scorelbl1->setStyleSheet(
@@ -273,8 +261,6 @@ void SchachApp::setupChessBoard() {
 }
 
 
-
-
 void SchachApp::highlightPossibleMove(const std::pair<int, int>& move) {
     int row = move.second;
     int col = move.first;
@@ -282,7 +268,7 @@ void SchachApp::highlightPossibleMove(const std::pair<int, int>& move) {
 
     if (button) {
      if (!originalButtonStyles.contains(button)) {
-          originalButtonStyles[button] = button->styleSheet(); // Store the current style if not already stored
+          originalButtonStyles[button] = button->styleSheet();
        }
         button->setStyleSheet("background-color: rgb(255, 231, 142);");
     }
@@ -468,7 +454,6 @@ void SchachApp::updatePlayer1Timer() {
         updateTimerDisplay(player1TimeRemaining);  // Update the UI for player 1
     } else {
         player1Timer->stop();  // Stop the timer if time runs out
-        //handleTimeOut(true);  // Handle timeout for player 1
     }
 }
 
@@ -478,13 +463,12 @@ void SchachApp::updatePlayer2Timer() {
         updateTimerDisplay(player2TimeRemaining);  // Update the UI for player 2
     } else {
         player2Timer->stop();  // Stop the timer if time runs out
-        //handleTimeOut(false);  // Handle timeout for player 2
     }
 }
 
 void SchachApp::updatecurrentPlayerLabel() {
     QFont font;
-    font.setBold(true); // Make the font bold
+    font.setBold(true);
     ui->lblCurrentPlayerName->setFont(font);
 
 
@@ -502,11 +486,11 @@ void SchachApp::updatecurrentPlayerLabel() {
         }
 //    }
     if (isLocalGame) {
-        if (player2TimeRemaining <= 0){
+        if (player2TimeRemaining == 0){
             labelText = " ♔ WHITE WINS ♔ ";
             style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
 //            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
-         }else if (player1TimeRemaining <= 0){
+         }else if (player1TimeRemaining == 0){
             labelText = " ♚ BLACK WINS ♚";
             style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
 //            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
@@ -515,11 +499,11 @@ void SchachApp::updatecurrentPlayerLabel() {
     } else {
         if ((isLocalPlayerWhite && chessGame->getWhiteTurn()) ||
             (!isLocalPlayerWhite && !chessGame->getWhiteTurn())) {
-            if (player1TimeRemaining <= 0){
+            if (player1TimeRemaining == 0){
                         labelText = "You Lose";
                      }
         } else {
-            if (player1TimeRemaining <= 0){
+            if (player2TimeRemaining == 0){
                         labelText = "You Win";
                      }
         }
@@ -539,7 +523,7 @@ void SchachApp::updatecurrentPlayerLabel() {
                 font-size: 20px;
                 font-weight: bold;
                 text-align: center;
-                border: 2px solid #006400; /* Border color matching text */
+                border: 2px solid #006400;
             )";
         blockguitmp = true;
         }
@@ -583,7 +567,7 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
          }
      }
      qDebug() << "score White vs black " << whiteScore <<" vs  " << blackScore;
-     // Update score display (assuming you have labels for scores)
+     // Update score display
          ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
          ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
          ui->scorelbl1->setStyleSheet(
@@ -603,8 +587,6 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
          );
 
 }
-
-
 
 quint8 SchachApp::PawnPromotion(int row) {
     quint8 promotionType = 0x00;
@@ -627,8 +609,6 @@ quint8 SchachApp::PawnPromotion(int row) {
         // Connect the OK button's clicked signal to a lambda function
         connect(ui->pbPawnPromotion, &QPushButton::clicked, this, [&]() {
             QString mode = ui->cbPawnPromotion->currentText();
-
-
 
             if (mode == "Queen") {
                 promotionType = 0x4;
@@ -674,7 +654,7 @@ quint8 SchachApp::PawnPromotion(int row) {
         loop.exec();
     }
     ui->gridLayout->setEnabled(true);
-    // Update score display (assuming you have labels for scores)
+    // Update score display
     ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
     ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
     ui->scorelbl1->setStyleSheet(
@@ -696,10 +676,6 @@ quint8 SchachApp::PawnPromotion(int row) {
 }
 
 
-/**
- * @brief Changes the color of the IPAddress line edit if it is a valid or invalid IPv4 address (maybe add also IPv6 addresses)
- * @param arg1
- */
 void SchachApp::on_leIP_textChanged(const QString &arg1)
 {
     QString state = "0";
@@ -769,7 +745,6 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
         isLocalGame = false;
         // Update bConnect button for client
         ui->bConnect->setText("Connect");
-
         ui->bStart->setEnabled(false);
         ui->leIP->setEnabled(true);
         ui->spnPort->setEnabled(true);
@@ -933,7 +908,6 @@ void SchachApp::moveReceived(MoveInfo moveInfo) {
 
         // Push the moveInfo onto the move history
         chessGame->moveHistory.push_back(moveInfo);
-
         chessGame->updateCheckStatus();
 
         // Format and display the move
@@ -1257,7 +1231,7 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
         ui->deadplayer2->addWidget(capturedPieceLabel);
         whiteScore += pieceValue;
     }
-    // Update score display (assuming you have labels for scores)
+    // Update score display
     ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
     ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
 
@@ -1314,7 +1288,7 @@ void SchachApp::undoScoreUpdate() {
         }
 
         // Update the score labels
-        // Update score display (assuming you have labels for scores)
+        // Update score display
         ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
         ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
 
