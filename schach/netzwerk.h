@@ -80,6 +80,7 @@ signals:
     void moveReceived(MoveInfo moveInfo);
     void gameStarted(bool ServerStarts, QString& groupNumber);
 
+    void moveRejected();
     void undoMove();
     void undoAccepted(bool accepted);
 

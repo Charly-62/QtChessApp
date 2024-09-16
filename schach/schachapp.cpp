@@ -728,6 +728,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             connect(client, &Netzwerk::moveReceived, this, &SchachApp::moveReceived);
             connect(client, &Netzwerk::undoMove, this, &SchachApp::undoMove);
             connect(client, &Netzwerk::ChatMsgReceived, this, &SchachApp::onChatMsgReceived);
+            connect(client, &Netzwerk::moveRejected, this, &SchachApp::undoMove);
         }
     } else if(mode == "Server") {
         isLocalGame = false;
@@ -766,6 +767,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             connect(server, &Netzwerk::ChatMsgReceived, this, &SchachApp::onChatMsgReceived);
             connect(server, &MyTCPServer::client_Connected, this, &SchachApp::on_client_connected);
             connect(server, &MyTCPServer::client_Disconnected, this, &SchachApp::on_client_disconnected);
+            connect(server, &Netzwerk::moveRejected, this, &SchachApp::undoMove);
         }
     } else if(mode == "Local") {
         isLocalGame = true;

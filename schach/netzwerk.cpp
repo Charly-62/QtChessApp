@@ -14,7 +14,7 @@ void Netzwerk::initializeSocket() {
     if (!_socket) {
         _socket = new QTcpSocket(this);
         connect(_socket, &QTcpSocket::readyRead, this, &Netzwerk::receiveMove);
-        // connect(_socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &Netzwerk::onSocketError);
+        connect(_socket, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this, &Netzwerk::onSocketError);
     }
 }
 
@@ -268,21 +268,28 @@ void Netzwerk::processMessage(QDataStream& stream) {
                 break;
             case 0x03:
                 emit logInGameMsg("Move rejected: No piece at start position.");
+                emit moveRejected(); // Connected with undoMove()
                 break;
             case 0x04:
                 emit logInGameMsg("Move rejected: Move not allowed.");
+                emit moveRejected(); // Connected with undoMove()
                 break;
             case 0x06:
                 emit logInGameMsg("Move rejected: No capture made.");
+                emit moveRejected(); // Connected with undoMove()
                 break;
             case 0x07:
                 emit logInGameMsg("Move rejected: Not your turn.");
+                emit moveRejected(); // Connected with undoMove()
                 break;
             case 0x08:
                 emit logInGameMsg("Move rejected: No checkmate.");
+                emit moveRejected(); // Connected with undoMove()
                 break;
             default:
                 emit logInGameMsg("Unknown move response received.");
+                emit logInGameMsg("Disconnecting for safety.");
+                _socket->disconnect();
                 break;
         }
     }
