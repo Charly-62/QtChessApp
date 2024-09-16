@@ -11,7 +11,7 @@
 #include<iostream>
 
 bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row, int promotion) const{
-    // Step 1: Check if the source and destination are within bounds (0 to 7)
+    // Check if the source and destination are within bounds (0 to 7)
     if (s_col < 0 || s_col >= 8 || s_row < 0 || s_row >= 8 ||
         e_col < 0 || e_col >= 8 || e_row < 0 || e_row >= 8) {
         return false;  // Move is out of bounds
@@ -26,17 +26,17 @@ bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row,
     // Get pointer to the moving piece
     std::shared_ptr<Piece> movingPiece = chessGame->getPieceAt(s_col, s_row);
 
-    // Step 2: Check if there is a piece at the source position
+    // Check if there is a piece at the source position
     if (!movingPiece) {
         return false;  // No piece to move
     }
 
-    //check correct turn
+    // Check correct turn
     if(movingPiece->checkIfWhite() != isWhiteTurn){
         return false;
     }
 
-    // Step 3: Get the possible moves for the piece and check if the destination is valid
+    // Get the possible moves for the piece and check if the destination is valid
     std::vector<std::pair<int, int>> possibleMoves = movingPiece->getPossibleMoves(chessGame);
     bool validMove = false;
     for (const auto& move : possibleMoves) {
@@ -51,20 +51,9 @@ bool Logik::isLegal(Game* chessGame, int s_col, int s_row, int e_col, int e_row,
         return false;  // Invalid move for this piece
     }
 
-    //check if King is in check
-//    std::pair<int, int> kingPosition = chessGame->findKing(isWhiteTurn);
-//    std::pair<int, int> b_kingPosition = chessGame->findKing(!isWhiteTurn);
-
-//    bool isCheck = chessGame->isSquareAttacked(kingPosition.first, kingPosition.second, isWhiteTurn);
-//    bool b_isCheck = chessGame->isSquareAttacked(b_kingPosition.first, kingPosition.second, !isWhiteTurn);
-
-//    chessGame->setCheck(isCheck, isWhiteTurn);
-//    chessGame->setCheck(b_isCheck, !isWhiteTurn);
-
-
-    //Pinning
+    // Pinning
     // Simulate the move
-    //Create a copy of the game for simulating the move
+    // Create a copy of the game for simulating the move
     Game* simulatedGame = chessGame->clone();
     simulatedGame->updateBoard(s_col, s_row, e_col, e_row);
 
@@ -120,13 +109,13 @@ bool Logik::isCheckmate(Game* game) const {
     // Determine whose turn it is (player who just moved)
     bool isWhiteTurn = game->getWhiteTurn();
 
-    // Step 1: Check if the opponent is in check
+    // Check if the opponent is in check
     if(!game->getCheck(!isWhiteTurn)){
         qDebug() << "IS NOT CHECKMATE!!!!!";
         return false;
     }
 
-    // Step 2: Iterate over all pieces of the opponent
+    // Iterate over all pieces of the opponent
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
             std::shared_ptr<Piece> piece = game->board[col][row];
@@ -144,27 +133,6 @@ bool Logik::isCheckmate(Game* game) const {
                     Game* simulatedGame = game->clone();
                     simulatedGame->updateBoard(col, row, targetCol, targetRow);
 
-                    // // Handle pawn promotion
-                    // if (isPawnPromotion(simulatedGame, col, row, targetRow)) {
-                    //     switch (promotion) {
-                    //     case 0x10:
-                    //         simulatedGame->board[targetCol][targetRow] = std::make_shared<Bishop>(simulatedGame->board[targetCol][targetRow]->checkIfWhite(), targetCol, targetRow);
-                    //         break;
-                    //     case 0x20:
-                    //         simulatedGame->board[targetCol][targetRow] = std::make_shared<Knight>(simulatedGame->board[targetCol][targetRow]->checkIfWhite(), targetCol, targetRow);
-                    //         break;
-                    //     case 0x30:
-                    //         simulatedGame->board[targetCol][targetRow] = std::make_shared<Rook>(simulatedGame->board[targetCol][targetRow]->checkIfWhite(), targetCol, targetRow);
-                    //         break;
-                    //     case 0x40:
-                    //         simulatedGame->board[targetCol][targetRow] = std::make_shared<Queen>(simulatedGame->board[targetCol][targetRow]->checkIfWhite(), targetCol, targetRow);
-                    //         break;
-                    //     default:
-                    //         simulatedGame->board[targetCol][targetRow] = std::make_shared<Queen>(simulatedGame->board[targetCol][targetRow]->checkIfWhite(), targetCol, targetRow);
-                    //         break;
-                    //     }
-                    // }
-
                     // Check if the move leaves the king in check
                     std::pair<int, int> simulKingPosition = simulatedGame->findKing(!isWhiteTurn);
                     bool simulIsCheck = simulatedGame->isSquareAttacked(simulKingPosition.first, simulKingPosition.second, !isWhiteTurn);
@@ -172,7 +140,7 @@ bool Logik::isCheckmate(Game* game) const {
                     // If the king is not in check after the move, it's not checkmate
                     if (!simulIsCheck) {
                         delete simulatedGame;
-                        qDebug() << "IS NOT CHECKMATE!!!!!";
+                        qDebug() << "IS NOT A CHECKMATE!";
                         return false;
                     }
 
@@ -183,7 +151,7 @@ bool Logik::isCheckmate(Game* game) const {
         }
     }
 
-    // Step 3: No legal moves found and opponent is in check -> Checkmate
+    // No legal moves found and opponent is in check > Checkmate!
     qDebug() << "CHECKMATE!!!!";
     return true;
 }
@@ -191,24 +159,24 @@ bool Logik::isCheckmate(Game* game) const {
 
 bool Logik::isStalemate(Game* game) const {
     // Determine if it's white or black's turn
-    bool isWhiteTurn = game->getWhiteTurn();  // True for white, false for black
+    bool isWhiteTurn = game->getWhiteTurn();
 
     // Find the king's position for the player whose turn it is
     std::pair<int, int> kingPosition = game->findKing(isWhiteTurn);
     if (kingPosition.first == -1 || kingPosition.second == -1) {
-        // King not found, this should not happen in a valid game
+        // King not found (hopefully not...)
         return false;
     }
 
     int kingCol = kingPosition.first;
     int kingRow = kingPosition.second;
 
-    // Step 1: Check if the current player is in check
+    // Check if the current player is in check
     if (game->isSquareAttacked(kingCol, kingRow, isWhiteTurn)) {
         return false;  // If the king is in check, it can't be stalemate
     }
 
-    // Step 2: Check if any legal move exists for the current player
+    // Check if any legal move exists for the current player
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
             std::shared_ptr<Piece> piece = game->getPieceAt(col, row);
@@ -229,7 +197,7 @@ bool Logik::isStalemate(Game* game) const {
         }
     }
 
-    // Step 3: If no legal moves exist and the player is not in check, it's stalemate
+    // If no legal moves exist and the player is not in check, it's stalemate
     return true;
 }
 

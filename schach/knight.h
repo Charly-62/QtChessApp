@@ -1,5 +1,5 @@
 /**
- * @file game.h
+ * @file knight.h
  * @brief This file contains the implementation of the knight class, representing a knight in chess.
  */
 

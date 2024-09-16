@@ -1,5 +1,5 @@
 /**
- * @file game.h
+ * @file king.h
  * @brief This file contains the implementation of the king class, representing a king in chess.
  */
 

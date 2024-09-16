@@ -3,12 +3,11 @@
  * @brief This file contains the main function for the chess programm.
  */
 
-#include <iostream>
-
 #include "schachapp.h"
 #include "game.h"
 
 #include <QApplication>
+#include <iostream>
 
 using namespace std;
 
