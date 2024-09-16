@@ -47,6 +47,8 @@ public:
 
     void sendChatMsg(QString message);
 
+    void sendName(QString);
+
     int getopponentgroup() {
         return opponentgroup;
     }
@@ -83,6 +85,8 @@ signals:
     void moveRejected();
     void undoMove();
     void undoAccepted(bool accepted);
+
+    void opponentNameReceived(QString oppName);
 
     void ChatMsgReceived(QString message);
 

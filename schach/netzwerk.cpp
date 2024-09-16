@@ -18,6 +18,20 @@ void Netzwerk::initializeSocket() {
     }
 }
 
+void Netzwerk::sendName(QString NameToSend) {
+    QByteArray NameMsg = NameToSend.toUtf8();
+    quint8 length = NameMsg.size();
+
+    QByteArray SendMessage;
+    QDataStream stream(&SendMessage, QIODevice::WriteOnly);
+
+    stream << quint8(0x91) << quint8(length);
+    stream.writeRawData(NameMsg.constData(), length);
+
+    _socket->write(SendMessage);
+    _socket->flush();
+}
+
 void Netzwerk::sendGameStart(bool ServerStarts) {
 
     QByteArray gameStartMessage;
@@ -381,6 +395,29 @@ void Netzwerk::processMessage(QDataStream& stream) {
         stream >> accepted;
         qDebug() << "Undo received" << accepted;
         emit undoAccepted(accepted);
+    }
+
+    else if(command == 0x91) {
+        if (length > 25) {
+            emit logInGameMsg("Received name message too long.");
+            emit logNetzwerkMsg("Received name message too long.");
+            emit logInGameMsg("Disconnecting for safety.");
+            emit logNetzwerkMsg("Disconnecting for safety.");
+            _socket->disconnect();
+        }
+
+        QByteArray NameMsg(length, Qt::Uninitialized);
+        int bytesRead = stream.readRawData(NameMsg.data(), length);
+
+        if (bytesRead != length) {
+            emit logInGameMsg("Failed to read complete name message.");
+            emit logInGameMsg("Disconnecting for safety.");
+            _socket->disconnect();
+        }
+
+        QString oppName = QString::fromUtf8(NameMsg);
+        emit opponentNameReceived(oppName);
+
     }
 
     // Unvalid command
