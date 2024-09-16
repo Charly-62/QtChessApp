@@ -751,8 +751,6 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
         ui->spnPort->setEnabled(true);
         ui->cbStartingPlayer->setEnabled(false);
         ui->bConnect->setEnabled(true);
-        ui->bSendName->setEnabled(true);
-        ui->lename->setEnabled(true);
 
         // Switch to Client mode
         if(server) {
@@ -788,8 +786,6 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
         ui->spnPort->setEnabled(true);
         ui->cbStartingPlayer->setEnabled(true);
         ui->bConnect->setEnabled(true);
-        ui->bSendName->setEnabled(true);
-        ui->lename->setEnabled(true);
 
         // Switch to Server mode
         if(client) {
@@ -879,6 +875,8 @@ void SchachApp::device_connected() {
     ui->bConnect->setText("Disconnect");
     ui->lstChat->setEnabled(true);
     ui->leSendChat->setEnabled(true);
+    ui->bSendName->setEnabled(true);
+    ui->lename->setEnabled(true);
 }
 
 void SchachApp::device_disconnected() {
@@ -888,6 +886,8 @@ void SchachApp::device_disconnected() {
     ui->bConnect->setText("Connect");
     ui->lstChat->setEnabled(false);
     ui->leSendChat->setEnabled(false);
+    ui->bSendName->setEnabled(false);
+    ui->lename->setEnabled(false);
 }
 
 void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
@@ -1404,11 +1404,15 @@ void SchachApp::onChatMsgReceived(QString message) {
 }
 
 void SchachApp::on_client_connected() {
+    ui->bSendName->setEnabled(true);
+    ui->lename->setEnabled(true);
     ui->lstChat->setEnabled(true);
     ui->leSendChat->setEnabled(true);
 }
 
 void SchachApp::on_client_disconnected() {
+    ui->bSendName->setEnabled(false);
+    ui->lename->setEnabled(false);
     ui->lstChat->setEnabled(false);
     ui->leSendChat->setEnabled(false);
 }
