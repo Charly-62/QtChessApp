@@ -3,17 +3,7 @@
 #include "mytcpclient.h"
 #include "piece.h"
 #include "game.h"
-#include <QPushButton>
-#include <QComboBox>
-#include <QMetaEnum>
-#include <QDebug>
-#include <iostream>
-#include <QEventLoop>
-#include <QComboBox>
-#include <QStackedWidget>
-#include <QStack>
-#include <QWidget>
-#include <QFile>
+
 
 
 SchachApp::SchachApp(QWidget *parent)
