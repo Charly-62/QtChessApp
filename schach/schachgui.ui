@@ -25,8 +25,8 @@ background-color: rgb(134, 255, 142)
   <widget class="QStackedWidget" name="GAME">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>70</y>
+     <x>250</x>
+     <y>0</y>
      <width>891</width>
      <height>911</height>
     </rect>
@@ -35,7 +35,7 @@ background-color: rgb(134, 255, 142)
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="initalpage">
     <widget class="QGroupBox" name="grpNetwork">
@@ -161,42 +161,6 @@ QPushButton:disabled {
       </property>
      </widget>
     </widget>
-    <widget class="QPushButton" name="bStart">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>480</y>
-       <width>201</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-    background-color: #76c7b7; /* Light blue-green (teal) */
-    color: black;
-    border-radius: 10px;
-    padding: 5px;
-    font-size: 14px;
-}
-
-QPushButton:hover {
-    background-color: #5bb7a5; /* Slightly darker teal for hover */
-}
-
-QPushButton:pressed {
-    background-color: #4fa89a; /* Darker blue-green when pressed */
-}
-
-QPushButton:disabled {
-    background-color: lightgrey;
-    color: grey;
-}
-</string>
-     </property>
-     <property name="text">
-      <string>Start Game</string>
-     </property>
-    </widget>
     <widget class="QGroupBox" name="groupBox">
      <property name="geometry">
       <rect>
@@ -237,12 +201,12 @@ QGroupBox::title {
         <x>20</x>
         <y>30</y>
         <width>191</width>
-        <height>74</height>
+        <height>79</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout_2">
        <property name="formAlignment">
-        <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
        </property>
        <item row="0" column="0">
         <widget class="QLabel" name="lblHostClient">
@@ -350,9 +314,9 @@ QComboBox::down-arrow {
     <widget class="QLabel" name="DisplayGame">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>20</y>
-       <width>571</width>
+       <width>511</width>
        <height>81</height>
       </rect>
      </property>
@@ -513,6 +477,74 @@ QPushButton:disabled {
         <width>181</width>
         <height>31</height>
        </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>400</y>
+       <width>221</width>
+       <height>151</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {
+    background-color: #f2f2f2; 
+    border: 2px solid #76c7b7; 
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left; 
+    padding: 0 5px; 
+    font-size: 30px;
+    font-weight: bold; 
+    color: #2c3e50;
+	font-family: 'Comic Sans MS', cursive, sans-serif;
+}</string>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
+     <widget class="QPushButton" name="bStart">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>201</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #76c7b7; /* Light blue-green (teal) */
+    color: black;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #5bb7a5; /* Slightly darker teal for hover */
+}
+
+QPushButton:pressed {
+    background-color: #4fa89a; /* Darker blue-green when pressed */
+}
+
+QPushButton:disabled {
+    background-color: lightgrey;
+    color: grey;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Start Game</string>
       </property>
      </widget>
     </widget>
@@ -726,8 +758,8 @@ QGroupBox::title {
     <widget class="QWidget" name="horizontalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>200</y>
+       <x>10</x>
+       <y>120</y>
        <width>561</width>
        <height>33</height>
       </rect>
@@ -747,14 +779,17 @@ QGroupBox::title {
         </property>
        </widget>
       </item>
+      <item>
+       <layout class="QHBoxLayout" name="deadplayer2"/>
+      </item>
      </layout>
     </widget>
     <widget class="QLabel" name="lblCurrentPlayerName">
      <property name="geometry">
       <rect>
-       <x>40</x>
+       <x>10</x>
        <y>20</y>
-       <width>561</width>
+       <width>511</width>
        <height>91</height>
       </rect>
      </property>
@@ -792,7 +827,7 @@ QGroupBox::title {
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>240</y>
+       <y>160</y>
        <width>562</width>
        <height>562</height>
       </rect>
@@ -805,7 +840,7 @@ QGroupBox::title {
      </property>
      <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,1,1,1,1" columnstretch="1,1,1,1,1,1,1,1" rowminimumheight="70,70,70,70,70,70,70,70" columnminimumwidth="70,70,70,70,70,70,70,70">
       <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
+       <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
       </property>
       <property name="bottomMargin">
        <number>0</number>
@@ -2239,17 +2274,6 @@ QGroupBox::title {
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="horizontalLayoutWidget_4">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>159</y>
-       <width>551</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="deadplayer2"/>
-    </widget>
     <widget class="QWidget" name="horizontalLayoutWidget_3">
      <property name="geometry">
       <rect>
@@ -2424,7 +2448,7 @@ QPushButton:disabled {
        <x>40</x>
        <y>800</y>
        <width>561</width>
-       <height>19</height>
+       <height>22</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="XAxisLayout">
@@ -2434,7 +2458,7 @@ QPushButton:disabled {
          <string>A</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2444,7 +2468,7 @@ QPushButton:disabled {
          <string>B</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2454,7 +2478,7 @@ QPushButton:disabled {
          <string>C</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2464,7 +2488,7 @@ QPushButton:disabled {
          <string>D</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2474,7 +2498,7 @@ QPushButton:disabled {
          <string>E</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2484,7 +2508,7 @@ QPushButton:disabled {
          <string>F</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2494,7 +2518,7 @@ QPushButton:disabled {
          <string>G</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2504,7 +2528,7 @@ QPushButton:disabled {
          <string>H</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2513,8 +2537,8 @@ QPushButton:disabled {
     <widget class="QWidget" name="verticalLayoutWidget_4">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>240</y>
+       <x>10</x>
+       <y>160</y>
        <width>21</width>
        <height>561</height>
       </rect>
@@ -2526,7 +2550,7 @@ QPushButton:disabled {
          <string>8</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2536,7 +2560,7 @@ QPushButton:disabled {
          <string>7</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2546,7 +2570,7 @@ QPushButton:disabled {
          <string>6</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2556,7 +2580,7 @@ QPushButton:disabled {
          <string>5</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2566,7 +2590,7 @@ QPushButton:disabled {
          <string>4</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2576,7 +2600,7 @@ QPushButton:disabled {
          <string>3</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2586,7 +2610,7 @@ QPushButton:disabled {
          <string>2</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2596,7 +2620,7 @@ QPushButton:disabled {
          <string>1</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2608,9 +2632,9 @@ QPushButton:disabled {
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>70</y>
+     <y>20</y>
      <width>241</width>
-     <height>551</height>
+     <height>531</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -2641,7 +2665,7 @@ QGroupBox::title {
       <x>20</x>
       <y>30</y>
       <width>201</width>
-      <height>501</height>
+      <height>481</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="ChatLayout">
