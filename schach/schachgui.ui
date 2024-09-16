@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1368</width>
-    <height>1131</height>
+    <width>680</width>
+    <height>779</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,10 +25,10 @@ background-color: rgb(134, 255, 142)
   <widget class="QStackedWidget" name="GAME">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>0</x>
      <y>0</y>
-     <width>891</width>
-     <height>911</height>
+     <width>681</width>
+     <height>591</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -41,10 +41,10 @@ background-color: rgb(134, 255, 142)
     <widget class="QGroupBox" name="grpNetwork">
      <property name="geometry">
       <rect>
-       <x>240</x>
+       <x>320</x>
        <y>120</y>
-       <width>281</width>
-       <height>151</height>
+       <width>331</width>
+       <height>161</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -74,7 +74,7 @@ QGroupBox::title {
        <rect>
         <x>20</x>
         <y>30</y>
-        <width>241</width>
+        <width>291</width>
         <height>71</height>
        </rect>
       </property>
@@ -128,8 +128,8 @@ QGroupBox::title {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>110</y>
-        <width>241</width>
+        <y>120</y>
+        <width>291</width>
         <height>31</height>
        </rect>
       </property>
@@ -164,9 +164,9 @@ QPushButton:disabled {
     <widget class="QGroupBox" name="groupBox">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>120</y>
-       <width>221</width>
+       <x>30</x>
+       <y>130</y>
+       <width>271</width>
        <height>131</height>
       </rect>
      </property>
@@ -198,15 +198,15 @@ QGroupBox::title {
      <widget class="QWidget" name="formLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>30</x>
         <y>30</y>
-        <width>191</width>
+        <width>221</width>
         <height>79</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout_2">
        <property name="formAlignment">
-        <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
        </property>
        <item row="0" column="0">
         <widget class="QLabel" name="lblHostClient">
@@ -314,9 +314,9 @@ QComboBox::down-arrow {
     <widget class="QLabel" name="DisplayGame">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>30</x>
        <y>20</y>
-       <width>511</width>
+       <width>621</width>
        <height>81</height>
       </rect>
      </property>
@@ -327,10 +327,10 @@ QComboBox::down-arrow {
     <widget class="QGroupBox" name="groupBox_2">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>280</y>
-       <width>281</width>
-       <height>271</height>
+       <x>320</x>
+       <y>290</y>
+       <width>331</width>
+       <height>281</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -359,8 +359,8 @@ QGroupBox::title {
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>220</y>
-        <width>241</width>
+        <y>230</y>
+        <width>291</width>
         <height>31</height>
        </rect>
       </property>
@@ -396,8 +396,8 @@ QPushButton:disabled {
        <rect>
         <x>20</x>
         <y>30</y>
-        <width>241</width>
-        <height>181</height>
+        <width>291</width>
+        <height>191</height>
        </rect>
       </property>
      </widget>
@@ -405,9 +405,9 @@ QPushButton:disabled {
     <widget class="QGroupBox" name="groupBox_4">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>260</y>
-       <width>221</width>
+       <x>30</x>
+       <y>270</y>
+       <width>271</width>
        <height>131</height>
       </rect>
      </property>
@@ -438,7 +438,7 @@ QGroupBox::title {
        <rect>
         <x>20</x>
         <y>80</y>
-        <width>181</width>
+        <width>231</width>
         <height>31</height>
        </rect>
       </property>
@@ -472,9 +472,9 @@ QPushButton:disabled {
      <widget class="QLineEdit" name="lename">
       <property name="geometry">
        <rect>
-        <x>22</x>
-        <y>40</y>
-        <width>181</width>
+        <x>20</x>
+        <y>30</y>
+        <width>231</width>
         <height>31</height>
        </rect>
       </property>
@@ -483,10 +483,10 @@ QPushButton:disabled {
     <widget class="QGroupBox" name="groupBox_5">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>400</y>
-       <width>221</width>
-       <height>151</height>
+       <x>30</x>
+       <y>410</y>
+       <width>271</width>
+       <height>161</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -515,8 +515,8 @@ QGroupBox::title {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
-        <width>201</width>
+        <y>110</y>
+        <width>251</width>
         <height>31</height>
        </rect>
       </property>
@@ -556,14 +556,14 @@ QPushButton:disabled {
      </property>
      <property name="geometry">
       <rect>
-       <x>600</x>
-       <y>10</y>
-       <width>281</width>
-       <height>171</height>
+       <x>460</x>
+       <y>0</y>
+       <width>201</width>
+       <height>121</height>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="pawnpromotionpage">
       <widget class="QGroupBox" name="grpPawnPromotion">
@@ -571,8 +571,8 @@ QPushButton:disabled {
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>241</width>
-         <height>161</height>
+         <width>181</width>
+         <height>101</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -602,8 +602,8 @@ QGroupBox::title {
          <rect>
           <x>20</x>
           <y>30</y>
-          <width>201</width>
-          <height>111</height>
+          <width>151</width>
+          <height>61</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -700,8 +700,8 @@ QPushButton:disabled {
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>241</width>
-         <height>151</height>
+         <width>181</width>
+         <height>101</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -730,8 +730,8 @@ QGroupBox::title {
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>40</y>
-          <width>201</width>
+          <y>20</y>
+          <width>141</width>
           <height>61</height>
          </rect>
         </property>
@@ -741,12 +741,21 @@ QGroupBox::title {
            <property name="text">
             <string>ScoreBlack</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="scorelbl1">
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
            <property name="text">
             <string>ScoreWhite</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -758,9 +767,9 @@ QGroupBox::title {
     <widget class="QWidget" name="horizontalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>120</y>
-       <width>561</width>
+       <x>40</x>
+       <y>80</y>
+       <width>421</width>
        <height>33</height>
       </rect>
      </property>
@@ -787,10 +796,10 @@ QGroupBox::title {
     <widget class="QLabel" name="lblCurrentPlayerName">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>40</x>
        <y>20</y>
-       <width>511</width>
-       <height>91</height>
+       <width>421</width>
+       <height>51</height>
       </rect>
      </property>
      <property name="text">
@@ -801,8 +810,8 @@ QGroupBox::title {
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>830</y>
-       <width>561</width>
+       <y>550</y>
+       <width>421</width>
        <height>33</height>
       </rect>
      </property>
@@ -821,15 +830,18 @@ QGroupBox::title {
         </property>
        </widget>
       </item>
+      <item>
+       <layout class="QHBoxLayout" name="deadplayer1"/>
+      </item>
      </layout>
     </widget>
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>160</y>
-       <width>562</width>
-       <height>562</height>
+       <y>120</y>
+       <width>418</width>
+       <height>407</height>
       </rect>
      </property>
      <property name="minimumSize">
@@ -838,9 +850,9 @@ QGroupBox::title {
        <height>70</height>
       </size>
      </property>
-     <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,1,1,1,1" columnstretch="1,1,1,1,1,1,1,1" rowminimumheight="70,70,70,70,70,70,70,70" columnminimumwidth="70,70,70,70,70,70,70,70">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,1,1,1,1" columnstretch="1,1,1,1,1,1,1,1" rowminimumheight="50,50,50,50,50,50,50,50" columnminimumwidth="50,50,50,50,50,50,50,50">
       <property name="sizeConstraint">
-       <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+       <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <property name="bottomMargin">
        <number>0</number>
@@ -858,8 +870,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -880,8 +892,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -902,8 +914,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -924,8 +936,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -946,8 +958,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -968,8 +980,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -990,8 +1002,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1012,8 +1024,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1034,8 +1046,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1056,8 +1068,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1078,8 +1090,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1100,8 +1112,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1122,8 +1134,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1144,8 +1156,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1166,8 +1178,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1188,8 +1200,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1210,8 +1222,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1232,8 +1244,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1254,8 +1266,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1276,8 +1288,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1298,8 +1310,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1321,8 +1333,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1343,8 +1355,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1365,8 +1377,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1387,8 +1399,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1409,8 +1421,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1434,8 +1446,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1462,8 +1474,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1484,8 +1496,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1506,8 +1518,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1528,8 +1540,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1550,8 +1562,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1572,8 +1584,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1594,8 +1606,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1616,8 +1628,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1638,8 +1650,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1660,8 +1672,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1682,8 +1694,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1704,8 +1716,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1726,8 +1738,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1748,8 +1760,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1770,8 +1782,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1795,8 +1807,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1817,8 +1829,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1839,8 +1851,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1861,8 +1873,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1883,8 +1895,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1905,8 +1917,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1927,8 +1939,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1949,8 +1961,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1971,8 +1983,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -1993,8 +2005,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2015,8 +2027,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2037,8 +2049,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2059,8 +2071,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2081,8 +2093,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2103,8 +2115,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2125,8 +2137,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2147,8 +2159,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2169,8 +2181,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2191,8 +2203,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2213,8 +2225,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2235,8 +2247,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2260,8 +2272,8 @@ QGroupBox::title {
         </property>
         <property name="minimumSize">
          <size>
-          <width>70</width>
-          <height>70</height>
+          <width>50</width>
+          <height>50</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -2274,24 +2286,13 @@ QGroupBox::title {
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="horizontalLayoutWidget_3">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>860</y>
-       <width>561</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="deadplayer1"/>
-    </widget>
     <widget class="QGroupBox" name="NetworkgrpBox">
      <property name="geometry">
       <rect>
-       <x>610</x>
-       <y>190</y>
-       <width>241</width>
-       <height>711</height>
+       <x>470</x>
+       <y>120</y>
+       <width>181</width>
+       <height>461</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -2321,8 +2322,8 @@ QGroupBox::title {
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>221</width>
-        <height>471</height>
+        <width>161</width>
+        <height>261</height>
        </rect>
       </property>
      </widget>
@@ -2330,9 +2331,9 @@ QGroupBox::title {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>490</y>
-        <width>221</width>
-        <height>131</height>
+        <y>280</y>
+        <width>161</width>
+        <height>111</height>
        </rect>
       </property>
      </widget>
@@ -2340,9 +2341,9 @@ QGroupBox::title {
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>630</y>
-        <width>221</width>
-        <height>33</height>
+        <y>400</y>
+        <width>161</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2374,10 +2375,10 @@ QPushButton:disabled {
      <widget class="QPushButton" name="pbUndoDeny">
       <property name="geometry">
        <rect>
-        <x>130</x>
-        <y>670</y>
-        <width>101</width>
-        <height>33</height>
+        <x>100</x>
+        <y>430</y>
+        <width>71</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2403,16 +2404,16 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>Deny Undo</string>
+       <string>Deny </string>
       </property>
      </widget>
      <widget class="QPushButton" name="pbUndoAccept">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>670</y>
-        <width>101</width>
-        <height>33</height>
+        <y>430</y>
+        <width>81</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -2438,7 +2439,7 @@ QPushButton:disabled {
 }</string>
       </property>
       <property name="text">
-       <string>Accept Undo</string>
+       <string>Accept </string>
       </property>
      </widget>
     </widget>
@@ -2446,9 +2447,9 @@ QPushButton:disabled {
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>800</y>
-       <width>561</width>
-       <height>22</height>
+       <y>530</y>
+       <width>421</width>
+       <height>16</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="XAxisLayout">
@@ -2458,7 +2459,7 @@ QPushButton:disabled {
          <string>A</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2468,7 +2469,7 @@ QPushButton:disabled {
          <string>B</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2478,7 +2479,7 @@ QPushButton:disabled {
          <string>C</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2488,7 +2489,7 @@ QPushButton:disabled {
          <string>D</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2498,7 +2499,7 @@ QPushButton:disabled {
          <string>E</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2508,7 +2509,7 @@ QPushButton:disabled {
          <string>F</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2518,7 +2519,7 @@ QPushButton:disabled {
          <string>G</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2528,7 +2529,7 @@ QPushButton:disabled {
          <string>H</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2537,10 +2538,10 @@ QPushButton:disabled {
     <widget class="QWidget" name="verticalLayoutWidget_4">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>160</y>
-       <width>21</width>
-       <height>561</height>
+       <x>20</x>
+       <y>120</y>
+       <width>16</width>
+       <height>411</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="YAxisLayout">
@@ -2549,18 +2550,12 @@ QPushButton:disabled {
         <property name="text">
          <string>8</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
-        </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="labelY7">
         <property name="text">
          <string>7</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2569,18 +2564,12 @@ QPushButton:disabled {
         <property name="text">
          <string>6</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
-        </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="labelY5">
         <property name="text">
          <string>5</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2589,18 +2578,12 @@ QPushButton:disabled {
         <property name="text">
          <string>4</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
-        </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="labelY3">
         <property name="text">
          <string>3</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2609,18 +2592,12 @@ QPushButton:disabled {
         <property name="text">
          <string>2</string>
         </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
-        </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="labelY1">
         <property name="text">
          <string>1</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2631,10 +2608,10 @@ QPushButton:disabled {
   <widget class="QGroupBox" name="groupBox_3">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>241</width>
-     <height>531</height>
+     <x>30</x>
+     <y>590</y>
+     <width>621</width>
+     <height>171</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -2663,9 +2640,9 @@ QGroupBox::title {
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>30</y>
-      <width>201</width>
-      <height>481</height>
+      <y>20</y>
+      <width>591</width>
+      <height>131</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="ChatLayout">

@@ -266,7 +266,7 @@ void SchachApp::setupChessBoard() {
     ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
     ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
     ui->scorelbl1->setStyleSheet(
-        "font-size: 20px;"
+        "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
         "font-family: 'Comic Sans MS', cursive, sans-serif;"
@@ -274,7 +274,7 @@ void SchachApp::setupChessBoard() {
     );
 
     ui->scorelbl2->setStyleSheet(
-        "font-size: 20px;"
+        "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
         "font-family: 'Comic Sans MS', cursive, sans-serif;"
@@ -612,7 +612,7 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
          ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
          ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
          ui->scorelbl1->setStyleSheet(
-             "font-size: 20px;"
+             "font-size: 12px;"
              "font-weight: bold;"
              "color: #2c3e50;"
              "font-family: 'Comic Sans MS', cursive, sans-serif;"
@@ -620,7 +620,7 @@ void SchachApp::movePiece(int fromRow, int fromCol, int toRow, int toCol) {
          );
 
          ui->scorelbl2->setStyleSheet(
-             "font-size: 20px;"
+             "font-size: 12px;"
              "font-weight: bold;"
              "color: #2c3e50;"
              "font-family: 'Comic Sans MS', cursive, sans-serif;"
@@ -703,7 +703,7 @@ quint8 SchachApp::PawnPromotion(int row) {
     ui->scorelbl1->setText(QString("White Score: %1").arg(whiteScore));
     ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
     ui->scorelbl1->setStyleSheet(
-        "font-size: 20px;"
+        "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
         "font-family: 'Comic Sans MS', cursive, sans-serif;"
@@ -711,7 +711,7 @@ quint8 SchachApp::PawnPromotion(int row) {
     );
 
     ui->scorelbl2->setStyleSheet(
-        "font-size: 20px;"
+        "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
         "font-family: 'Comic Sans MS', cursive, sans-serif;"
@@ -1287,7 +1287,7 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
     ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
 
     ui->scorelbl1->setStyleSheet(
-        "font-size: 20px;"
+        "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
         "font-family: 'Comic Sans MS', cursive, sans-serif;"
@@ -1295,7 +1295,7 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
     );
 
     ui->scorelbl2->setStyleSheet(
-        "font-size: 20px;"
+        "font-size: 12px;"
         "font-weight: bold;"
         "color: #2c3e50;"
         "font-family: 'Comic Sans MS', cursive, sans-serif;"
@@ -1344,7 +1344,7 @@ void SchachApp::undoScoreUpdate() {
         ui->scorelbl2->setText(QString("Black Score: %1").arg(blackScore));
 
         ui->scorelbl1->setStyleSheet(
-            "font-size: 20px;"
+            "font-size: 12px;"
             "font-weight: bold;"
             "color: #2c3e50;"
             "font-family: 'Comic Sans MS', cursive, sans-serif;"
@@ -1352,7 +1352,7 @@ void SchachApp::undoScoreUpdate() {
         );
 
         ui->scorelbl2->setStyleSheet(
-            "font-size: 20px;"
+            "font-size: 12px;"
             "font-weight: bold;"
             "color: #2c3e50;"
             "font-family: 'Comic Sans MS', cursive, sans-serif;"
