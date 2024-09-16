@@ -7,10 +7,6 @@
 #include "logik.h"
 #include "piece.h"
 #include "schachapp.h"
-#include <iostream>
-#include <QString>
-#include <QComboBox>
-#include <QEvent>
 
 Game::Game(class SchachApp* gui, QObject* parent)
     : QObject(parent), whiteTurn(true), gui(gui)
@@ -258,21 +254,20 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
         this->lastMoveWasTwoSquarePawnMove =  8;
     }
 
-    //change the Piece hasMoved boolean to true
+    // Change the Piece hasMoved boolean to true
     movingPiece->setMoved(true);
-    // Change the turn
 }
 
 
 std::pair<int, int> Game::findKing(bool isWhite) const {
-    // Loop through the entire board (assuming 8x8 board)
+    // Loop through the board
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
             std::shared_ptr<Piece> piece = getPieceAt(col, row);
 
             // Check if the piece is a King and belongs to the specified team
             if (piece != nullptr && dynamic_cast<King*>(piece.get()) != nullptr && piece->checkIfWhite() == isWhite) {
-                // Return the position of the King (col, row)
+                // Return the position of the King
                 return {col, row};
             }
         }

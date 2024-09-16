@@ -1,6 +1,6 @@
 /**
  * @file game.h
- * @brief This file contains the implementation of the game class which manages the chessboard and some game logic.
+ * @brief This file contains the declaration of the Game class which manages the chessboard and game logic.
  */
 
 #ifndef GAME_H
@@ -14,13 +14,17 @@
 #include <QWidget>
 #include <QTcpSocket>
 #include <QDataStream>
+#include <iostream>
+#include <QString>
+#include <QComboBox>
+#include <QEvent>
 
 
 class SchachApp;
 class Netzwerk;
 
 /**
- * @brief Struct with the informations for each move
+ * @brief Struct containing information for each move.
  */
 struct MoveInfo {
 
@@ -44,7 +48,7 @@ struct MoveInfo {
 };
 
 /**
- * @class game
+ * @class Game
  * @brief Manages the state of the chess game.
  */
 class Game : public QObject
@@ -52,15 +56,15 @@ class Game : public QObject
     Q_OBJECT
 public:
 
-     /**
-     * @brief Constructor for the game instance.
+    /**
+     * @brief Constructor for the Game class.
      * @param gui Pointer to the SchachApp (GUI) object.
-     * @param netzwerkInsance Pointer to the Netzwerk object.
+     * @param parent Pointer to the parent QObject, default is nullptr.
      */
     Game(SchachApp* gui, QObject* parent = nullptr);
 
     /**
-     * @brief Destructor for the game class.
+     * @brief Destructor for the Game class.
      */
     ~Game();
 
@@ -68,11 +72,11 @@ public:
     Logik logikInstance;
 
     /**
-     * @brief updateBoard Makes a move on the board
-     * @param s_col starting col
-     * @param s_row starting row
-     * @param e_col ending col
-     * @param e_row ending row
+     * @brief Updates the board by making a move.
+     * @param s_col Starting column.
+     * @param s_row Starting row.
+     * @param e_col Ending column.
+     * @param e_row Ending row.
      */
     void updateBoard(int s_col, int s_row, int e_col, int e_row);
 
@@ -112,12 +116,21 @@ public:
      */
     std::pair<int, int> findKing(bool isWhite) const;
 
+    /**
+     * @brief Checks if it is white's turn.
+     * @return True if it is white's turn, otherwise false.
+     */
     bool getWhiteTurn(){
         return whiteTurn;
     }
 
-    std::shared_ptr<Piece> board[8][8];
+    std::shared_ptr<Piece> board[8][8]; ///< 2D array representing the chessboard.
 
+    /**
+     * @brief Checks if the King is in check.
+     * @param isWhite True to check white's King, false for black's King.
+     * @return True if the specified King is in check, otherwise false.
+     */
     bool getCheck(bool isWhite) const{
         if(isWhite){
             return whiteKingChecked;
@@ -125,6 +138,12 @@ public:
         return blackKingChecked;
     }
 
+
+    /**
+     * @brief Sets whether the King is in check.
+     * @param check True if the King is in check, otherwise false.
+     * @param isWhite True to set white's King, false for black's King.
+     */
     void setCheck(bool check, bool isWhite) {
         if(isWhite){
             whiteKingChecked = check;
@@ -133,30 +152,48 @@ public:
         }
     }
 
+    /**
+     * @brief Clones the current game state.
+     * @return A pointer to the cloned Game instance.
+     */
     Game* clone() const;
 
-    std::vector<MoveInfo> moveHistory; // Stack to keep track of move history
+    std::vector<MoveInfo> moveHistory; ///< Stack to track the history of moves.
+
+    /**
+     * @brief Undoes the specified move.
+     * @param moveInfo Information about the move to undo.
+     */
     void undoMove(MoveInfo moveInfo);
 
-    //the int value is the column of lastMoveWasTwoSquarePawnMove // 8 means lastMoveWasTwoSquarePawnMove is false
-    int lastMoveWasTwoSquarePawnMove = 8;
+    int lastMoveWasTwoSquarePawnMove = 8; ///< Indicates the column of the last pawn two-square move, 8 means no such move.
+
+    /**
+     * @brief Switches the turn to the other player.
+     */
     void switchTurn();
+
+    /**
+     * @brief Switches the turn and sets whether it is white's turn.
+     * @param whiteTurn True if it is white's turn, otherwise false.
+     */
     void switchTurn(bool);
-    int rowPawnPromotion;
 
-    bool isCheckmate = false;
+    int rowPawnPromotion; ///< Row where a pawn can promote.
 
- //   bool pawnPromotionCompleted ;
+    bool isCheckmate = false; ///< Flag to indicate if the game is in checkmate.
 
+    /**
+     * @brief Updates the status of whether the King is in check.
+     */
     void updateCheckStatus();
 
 private:
 
-    bool whiteTurn;
-    bool whiteKingChecked;
-    bool blackKingChecked;
-    SchachApp* gui;
-
+    bool whiteTurn; ///< Indicates if it is white's turn.
+    bool whiteKingChecked; ///< Indicates if white's King is in check.
+    bool blackKingChecked; ///< Indicates if black's King is in check.
+    SchachApp* gui; ///< Pointer to the GUI instance.
 
     /**
      * @brief Initializes the chessboard with the pieces in their starting positions.
@@ -164,6 +201,10 @@ private:
     void initBoard();
 
 signals:
+    /**
+     * @brief Signal emitted when a piece is captured.
+     * @param capturedPiece The piece that was captured.
+     */
     void pieceCaptured(std::shared_ptr<Piece> capturedPiece);
 
 };

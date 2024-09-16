@@ -1,5 +1,4 @@
 #include "mytcpclient.h"
-#include <QTimer>
 
 MyTCPClient::MyTCPClient(Game* gameInstance, QObject *parent)
     : Netzwerk(gameInstance, parent) {
@@ -42,8 +41,8 @@ void MyTCPClient::attemptReconnect(int remainingAttempts) {
     QTimer::singleShot(3000, this, [this, remainingAttempts]() {
         _socket->connectToHost(_ip, _port);
 
-        // Wait for the connection to establish asynchronously
-        if (_socket->waitForConnected(5000)) { // Wait for up to 5 seconds
+        // Wait for the connection to establish
+        if (_socket->waitForConnected(5000)) {        // Wait for up to 5 seconds
             emit logInGameMsg("Reconnected successfully!");
             emit logNetzwerkMsg("Reconnected successfully!");
         } else {
@@ -55,8 +54,6 @@ void MyTCPClient::attemptReconnect(int remainingAttempts) {
         }
     });
 }
-
-
 
 void MyTCPClient::disconnect() {
     _socket->close();

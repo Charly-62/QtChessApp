@@ -1,5 +1,5 @@
 /**
- * @file game.h
+ * @file logik.h
  * @brief This file contains the declaration of the logik class which handles game logic.
  */
 

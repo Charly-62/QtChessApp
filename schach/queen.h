@@ -1,5 +1,5 @@
 /**
- * @file game.h
+ * @file queen.h
  * @brief This file contains the implementation of the queen class, representing a queen in chess.
  */
 

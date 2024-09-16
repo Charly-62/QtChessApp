@@ -256,7 +256,7 @@ void Netzwerk::processMessage(QDataStream& stream) {
             sendMoveResponse(statusCode);
 
         } else {
-            // Extract expected consequences
+            // Expected consequences
             bool expectedCapture = (moveInfo.consequences & 0x01);
             bool expectedCheckmate = (moveInfo.consequences & 0x02);
 
@@ -265,7 +265,7 @@ void Netzwerk::processMessage(QDataStream& stream) {
             simulatedGame->updateBoard(startCol, startRow, endCol, endRow);
             simulatedGame->updateCheckStatus();
 
-            // Determine actual consequences
+            // Determine consequences
             bool actualCapture = (gameInstance->getPieceAt(endCol, endRow) != nullptr);
             bool actualCheckmate = simulatedGame->logikInstance.isCheckmate(simulatedGame);
 
@@ -363,7 +363,7 @@ void Netzwerk::processMessage(QDataStream& stream) {
     }
 
     // Chat command
-    else if (command == 0x80) { // Chat message
+    else if (command == 0x80) {
         if (length > 250) {
             emit logInGameMsg("Received chat message too long.");
             emit logNetzwerkMsg("Received chat message too long.");

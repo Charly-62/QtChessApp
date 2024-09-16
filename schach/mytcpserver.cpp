@@ -27,8 +27,6 @@ void MyTCPServer::startListening(int port) {
 void MyTCPServer::stopListening() {
     if(_socket) {
         _socket->disconnectFromHost();
-        //delete _socket;
-        //_socket = nullptr;
     }
 
     if(server->isListening()) {

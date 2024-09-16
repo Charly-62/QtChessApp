@@ -1,5 +1,5 @@
 /**
- * @file game.h
+ * @file pawn.h
  * @brief This file contains the implementation of the pawn class, representing a pawn in chess.
  */
 

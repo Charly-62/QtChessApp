@@ -19,7 +19,6 @@ SOURCES += \
     mytcpserver.cpp \
     netzwerk.cpp \
     pawn.cpp \
-    piece.cpp \
     queen.cpp \
     rook.cpp \
     schachapp.cpp
