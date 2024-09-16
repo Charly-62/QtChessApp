@@ -176,6 +176,27 @@ void SchachApp::initializeBoard()
         buttons[6][4] = ui->E7; buttons[6][5] = ui->F7; buttons[6][6] = ui->G7; buttons[6][7] = ui->H7;
         buttons[7][0] = ui->A8; buttons[7][1] = ui->B8; buttons[7][2] = ui->C8; buttons[7][3] = ui->D8;
         buttons[7][4] = ui->E8; buttons[7][5] = ui->F8; buttons[7][6] = ui->G8; buttons[7][7] = ui->H8;
+
+
+        ui->labelX1->setText("A");
+        ui->labelX2->setText("B");
+        ui->labelX3->setText("C");
+        ui->labelX4->setText("D");
+        ui->labelX5->setText("E");
+        ui->labelX6->setText("F");
+        ui->labelX7->setText("G");
+        ui->labelX8->setText("H");
+
+
+        ui->labelY1->setText("1");
+        ui->labelY2->setText("2");
+        ui->labelY3->setText("3");
+        ui->labelY4->setText("4");
+        ui->labelY5->setText("5");
+        ui->labelY6->setText("6");
+        ui->labelY7->setText("7");
+        ui->labelY8->setText("8");
+
     } else if(!isLocalPlayerWhite){
         buttons[7][7] = ui->A1; buttons[7][6] = ui->B1; buttons[7][5] = ui->C1; buttons[7][4] = ui->D1;
         buttons[7][3] = ui->E1; buttons[7][2] = ui->F1; buttons[7][1] = ui->G1; buttons[7][0] = ui->H1;
@@ -193,6 +214,25 @@ void SchachApp::initializeBoard()
         buttons[1][3] = ui->E7; buttons[1][2] = ui->F7; buttons[1][1] = ui->G7; buttons[1][0] = ui->H7;
         buttons[0][7] = ui->A8; buttons[0][6] = ui->B8; buttons[0][5] = ui->C8; buttons[0][4] = ui->D8;
         buttons[0][3] = ui->E8; buttons[0][2] = ui->F8; buttons[0][1] = ui->G8; buttons[0][0] = ui->H8;
+
+        ui->labelX1->setText("H");
+        ui->labelX2->setText("G");
+        ui->labelX3->setText("F");
+        ui->labelX4->setText("E");
+        ui->labelX5->setText("D");
+        ui->labelX6->setText("C");
+        ui->labelX7->setText("B");
+        ui->labelX8->setText("A");
+
+
+        ui->labelY1->setText("8");
+        ui->labelY2->setText("7");
+        ui->labelY3->setText("6");
+        ui->labelY4->setText("5");
+        ui->labelY5->setText("4");
+        ui->labelY6->setText("3");
+        ui->labelY7->setText("2");
+        ui->labelY8->setText("1");
     }
 
     setupChessBoard();
@@ -241,6 +281,10 @@ void SchachApp::setupChessBoard() {
         "padding: 5px;"
     );
 }
+
+
+
+
 void SchachApp::highlightPossibleMove(const std::pair<int, int>& move) {
     int row = move.second;
     int col = move.first;
@@ -453,23 +497,26 @@ void SchachApp::updatecurrentPlayerLabel() {
     font.setBold(true); // Make the font bold
     ui->lblCurrentPlayerName->setFont(font);
 
-    QString Player1Name = ui->leName1->text(); // Get white player's name
-    QString Player2Name = ui->leName2->text(); // Get black player's name
 
     QString labelText;
     QString style;
 
-    if (Player1Name != "Enter your name" && Player2Name != "Enter the opponent's name") {
-        if (chessGame->getWhiteTurn()) {
-            labelText = "♔ " + Player1Name + "'s Turn";
-            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
-//            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
-        } else {
-            labelText = "♚ " + Player2Name + "'s Turn";
-            style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
-//            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
-        }
-    } else {
+//    if (LocalName != "Player 1" && OpponentName != "Player 2") {
+//        if (isLocalPlayerWhite && chessGame->getWhiteTurn()) {
+//            labelText = LocalName + "'s Turn";  // Local white player’s turn
+//            style = "color: #006400; font: bold 18px 'Arial'; background-color: #ffffff; padding: 10px; border-radius: 5px;";
+//        } else if (!isLocalPlayerWhite && !chessGame->getWhiteTurn()) {
+//            labelText = LocalName + "'s Turn";  // Local black player’s turn
+//            style = "color: #006400; font: bold 18px 'Arial'; background-color: #ffffff; padding: 10px; border-radius: 5px;";
+//        } else if (isLocalPlayerWhite && !chessGame->getWhiteTurn()) {
+//            labelText = OpponentName + "'s Turn";  // Opponent's turn
+//            style = "color: #006400; font: bold 18px 'Arial'; background-color: #000000; padding: 10px; border-radius: 5px;";
+//        } else if (!isLocalPlayerWhite && chessGame->getWhiteTurn()) {
+//            labelText = OpponentName + "'s Turn";  // Opponent's turn
+//            style = "color: #006400; font: bold 18px 'Arial'; background-color: #000000; padding: 10px; border-radius: 5px;";
+//        }
+
+//    } else {
         if (chessGame->getWhiteTurn()) {
             labelText = "♔ White's Turn";
             style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
@@ -479,7 +526,7 @@ void SchachApp::updatecurrentPlayerLabel() {
             style = "color: #ffffff; font: bold 18px 'Arial';background-color: #000000; padding: 10px; border-radius: 5px;";
 //            style = "color: #000000; font: bold 18px 'Arial';background-color: #ffffff; padding: 10px; border-radius: 5px;";
         }
-    }
+//    }
     if (isLocalGame) {
         if (player2TimeRemaining <= 0){
             labelText = " ♔ WHITE WINS ♔ ";

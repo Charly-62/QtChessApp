@@ -175,5 +175,7 @@ private:
 
     QStack<CapturedPieceInfo> capturedPiecesStack;
 
+
+
 };
 #endif // SCHACHAPP_H
