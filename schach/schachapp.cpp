@@ -1427,6 +1427,8 @@ void SchachApp::on_leSendChat_returnPressed()
         ui->lstChat->addItem("You: " + censoredMessage);
     }
 
+    ui->lstChat->scrollToBottom();
+
     // Send the censored message
     if(client) {
         client->sendChatMsg(originalMessage);
@@ -1434,6 +1436,7 @@ void SchachApp::on_leSendChat_returnPressed()
     else if(server) {
         server->sendChatMsg(originalMessage);
     }
+
 }
 
 void SchachApp::onChatMsgReceived(QString message) {
@@ -1447,6 +1450,7 @@ void SchachApp::onChatMsgReceived(QString message) {
     else {
         ui->lstChat->addItem("Opponent: " + censoredMessage);
     }
+    ui->lstChat->scrollToBottom();
 }
 
 void SchachApp::on_client_connected() {
