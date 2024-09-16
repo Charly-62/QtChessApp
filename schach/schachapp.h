@@ -47,6 +47,7 @@ public:
     quint8 PawnPromotion(int rowPawnPromotion);
 
 
+
 private slots:
     void handleSquareClick(int row, int col);
 
@@ -73,6 +74,10 @@ private slots:
     void on_pbUndo_clicked();
 
     void on_leSendChat_returnPressed();
+
+    void on_bSendName_clicked();
+
+    void on_lename_returnPressed();
 
 private:
     Ui::SchachApp *ui;  ///< Pointer to the UI elements of the chess application.
@@ -135,6 +140,10 @@ private:
     QWidget* gamepage ;
 
     void undoMove();
+
+    QString LocalName = "Player 1";
+    QString OpponentName = "Player 2";
+    void opponentNameReceived(QString oppName);
 
     void onChatMsgReceived(QString message);
     QString censorMessage(const QString& message) const;

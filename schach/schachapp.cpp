@@ -63,6 +63,9 @@ SchachApp::SchachApp(QWidget *parent)
 
     loadBannedWords();
 
+    ui->currentplayername->setText(LocalName);
+    ui->opponentplayername->setText(OpponentName);
+
 }
 
 SchachApp::~SchachApp()
@@ -750,6 +753,8 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
         ui->spnPort->setEnabled(true);
         ui->cbStartingPlayer->setEnabled(false);
         ui->bConnect->setEnabled(true);
+        ui->bSendName->setEnabled(true);
+        ui->lename->setEnabled(true);
 
         // Switch to Client mode
         if(server) {
@@ -773,6 +778,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             connect(client, &Netzwerk::undoMove, this, &SchachApp::undoMove);
             connect(client, &Netzwerk::ChatMsgReceived, this, &SchachApp::onChatMsgReceived);
             connect(client, &Netzwerk::moveRejected, this, &SchachApp::undoMove);
+            connect(client, &Netzwerk::opponentNameReceived, this, &SchachApp::opponentNameReceived);
         }
     } else if(mode == "Server") {
         isLocalGame = false;
@@ -784,6 +790,8 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
         ui->spnPort->setEnabled(true);
         ui->cbStartingPlayer->setEnabled(true);
         ui->bConnect->setEnabled(true);
+        ui->bSendName->setEnabled(true);
+        ui->lename->setEnabled(true);
 
         // Switch to Server mode
         if(client) {
@@ -812,6 +820,7 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
             connect(server, &MyTCPServer::client_Connected, this, &SchachApp::on_client_connected);
             connect(server, &MyTCPServer::client_Disconnected, this, &SchachApp::on_client_disconnected);
             connect(server, &Netzwerk::moveRejected, this, &SchachApp::undoMove);
+            connect(server, &Netzwerk::opponentNameReceived, this, &SchachApp::opponentNameReceived);
         }
     } else if(mode == "Local") {
         isLocalGame = true;
@@ -826,6 +835,9 @@ void SchachApp::on_cbHostClient_currentTextChanged(const QString &mode) {
 
         ui->lstChat->setEnabled(false);
         ui->leSendChat->setEnabled(false);
+
+        ui->bSendName->setEnabled(false);
+        ui->lename->setEnabled(false);
 
         if(server) {
             server->stopListening();
@@ -1455,4 +1467,22 @@ QString SchachApp::censorMessage(const QString& message) const {
     }
 
     return censoredMessage;
+}
+
+void SchachApp::on_bSendName_clicked()
+{
+    LocalName = ui->lename->text();
+    ui->currentplayername->setText(LocalName);
+    if(client) client->sendName(LocalName);
+    if(server) server->sendName(LocalName);
+}
+
+void SchachApp::on_lename_returnPressed()
+{
+    on_bSendName_clicked();
+}
+
+void SchachApp::opponentNameReceived(QString oppName) {
+    OpponentName = oppName;
+    ui->opponentplayername->setText(OpponentName);
 }
