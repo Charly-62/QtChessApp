@@ -226,10 +226,11 @@ void SchachApp::setupChessBoard() {
             std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);  // Get piece from the game
             if (piece != nullptr) {  // If there is a piece at this position
                 QString iconName = QString(":/Figuren/") + piece->getType() + (piece->checkIfWhite() ? "W" : "B") + ".png";
+
                 buttons[row][col]->setIcon(QIcon(iconName));
             }
             // Set the icon size and connect the button click to the handler
-            buttons[row][col]->setIconSize(QSize(80, 80));
+            buttons[row][col]->setIconSize(QSize(60, 60));
 
             if (!originalButtonStyles.contains(buttons[row][col])) {
                             originalButtonStyles[buttons[row][col]] = buttons[row][col]->styleSheet();
