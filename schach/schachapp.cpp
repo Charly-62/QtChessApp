@@ -1046,6 +1046,7 @@ void SchachApp::undoMove() {
     // Undo the move in the game logic
     chessGame->undoMove(lastMove);
 
+
     // Update the GUI
     // Re-fetch all pieces and update the icons on the board
     for (int row = 0; row < 8; ++row) {
@@ -1395,10 +1396,16 @@ void SchachApp::onChatMsgReceived(QString message) {
 
     // Check if any words were censored
     if(originalMessage != censoredMessage) {
-        ui->lstChat->addItem("Opponent: " + censoredMessage + " [Censored]");
+        if(OpponentName == "Player 2")
+            ui->lstChat->addItem("Opponent: " + censoredMessage + " [Censored]");
+        else
+            ui->lstChat->addItem(OpponentName + ": " + censoredMessage + " [Censored]");
     }
     else {
-        ui->lstChat->addItem("Opponent: " + censoredMessage);
+        if(OpponentName == "Player 2")
+            ui->lstChat->addItem("Opponent: " + censoredMessage);
+        else
+            ui->lstChat->addItem(OpponentName + ": " + censoredMessage);
     }
     ui->lstChat->scrollToBottom();
 }
