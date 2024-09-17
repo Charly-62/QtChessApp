@@ -262,23 +262,25 @@ void Netzwerk::processMessage(QDataStream& stream) {
 
             // Simulate the move
             Game* simulatedGame = gameInstance->clone();
-            simulatedGame->updateBoard(startCol, startRow, endCol, endRow);
-            simulatedGame->updateCheckStatus();
+            simulatedGame->switchTurn();
+            MoveInfo simuInfo = simulatedGame->tryMove(startCol, startRow, endCol, endRow);
 
             // Determine consequences
             bool actualCapture = (gameInstance->getPieceAt(endCol, endRow) != nullptr);
-            bool actualCheckmate = simulatedGame->logikInstance.isCheckmate(simulatedGame);
+            bool actualCheckmate = (simuInfo.consequences & 0x02);
+
+            qDebug() << expectedCheckmate << " " << actualCheckmate;
 
             delete simulatedGame;
 
             // Validate consequences
-            if (expectedCapture && !actualCapture) {
+            if (expectedCapture != actualCapture) {
                 statusCode = 0x06;  // Not OK, expected capture but none
                 sendMoveResponse(statusCode);
                 return;
             }
 
-            if (expectedCheckmate && !actualCheckmate) {
+            if (expectedCheckmate != actualCheckmate) {
                 statusCode = 0x08;  // Not OK, expected checkmate but none
                 sendMoveResponse(statusCode);
                 return;
