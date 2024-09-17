@@ -227,6 +227,8 @@ void Game::updateBoard(int s_col, int s_row, int e_col, int e_row) {
     // --- EN PASSANT LOGIC ---
     if (movingPiece->getType() == "pawn" && s_col != e_col && getPieceAt(e_col, e_row) == nullptr) {
         // This means the pawn moved diagonally to an empty square, indicating en passant
+        qDebug() << "In en passant";
+        emit isEnPassant(1, movingPiece->checkIfWhite());
         int capturedPawnRow = (movingPiece->checkIfWhite()) ? e_row - 1 : e_row + 1;
         std::shared_ptr<Piece> capturedPawn = getPieceAt(e_col, capturedPawnRow);
 

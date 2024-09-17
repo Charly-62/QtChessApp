@@ -35,7 +35,7 @@ background-color: rgb(134, 255, 142)
     <string notr="true"/>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="initalpage">
     <widget class="QGroupBox" name="grpNetwork">
@@ -206,7 +206,7 @@ QGroupBox::title {
       </property>
       <layout class="QFormLayout" name="formLayout_2">
        <property name="formAlignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
        </property>
        <item row="0" column="0">
         <widget class="QLabel" name="lblHostClient">
@@ -603,7 +603,7 @@ QGroupBox::title {
           <x>20</x>
           <y>30</y>
           <width>151</width>
-          <height>61</height>
+          <height>72</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -742,20 +742,20 @@ QGroupBox::title {
             <string>ScoreBlack</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignCenter</set>
+            <set>Qt::AlignmentFlag::AlignCenter</set>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="scorelbl1">
            <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
+            <enum>Qt::LayoutDirection::LeftToRight</enum>
            </property>
            <property name="text">
             <string>ScoreWhite</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignCenter</set>
+            <set>Qt::AlignmentFlag::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -852,7 +852,7 @@ QGroupBox::title {
      </property>
      <layout class="QGridLayout" name="gridLayout" rowstretch="1,1,1,1,1,1,1,1" columnstretch="1,1,1,1,1,1,1,1" rowminimumheight="50,50,50,50,50,50,50,50" columnminimumwidth="50,50,50,50,50,50,50,50">
       <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
+       <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
       </property>
       <property name="bottomMargin">
        <number>0</number>
@@ -2449,7 +2449,7 @@ QPushButton:disabled {
        <x>40</x>
        <y>530</y>
        <width>421</width>
-       <height>16</height>
+       <height>18</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="XAxisLayout">
@@ -2459,7 +2459,7 @@ QPushButton:disabled {
          <string>A</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2469,7 +2469,7 @@ QPushButton:disabled {
          <string>B</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2479,7 +2479,7 @@ QPushButton:disabled {
          <string>C</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2489,7 +2489,7 @@ QPushButton:disabled {
          <string>D</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2499,7 +2499,7 @@ QPushButton:disabled {
          <string>E</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2509,7 +2509,7 @@ QPushButton:disabled {
          <string>F</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2519,7 +2519,7 @@ QPushButton:disabled {
          <string>G</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -2529,7 +2529,7 @@ QPushButton:disabled {
          <string>H</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
       </item>

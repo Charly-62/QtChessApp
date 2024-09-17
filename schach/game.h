@@ -207,6 +207,13 @@ signals:
      */
     void pieceCaptured(std::shared_ptr<Piece> capturedPiece);
 
+    /**
+     * @brief isEnPassant Emitted when in passant move
+     * @param score
+     * @param isWhite
+     */
+    void isEnPassant(int score, bool isWhite);
+
 };
 
 #endif // GAME_H

@@ -304,7 +304,7 @@ private:
      */
     void startTurnTimer();
 
-
+    void addScore(int score, bool whiteScore);
     int whiteScore ;  ///< Score for the white player.
     int blackScore ; ///< Score for the black player.
 

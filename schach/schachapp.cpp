@@ -47,6 +47,8 @@ SchachApp::SchachApp(QWidget *parent)
 
     connect(chessGame, &Game::pieceCaptured, this, &SchachApp::pieceCaptured);
 
+    connect(chessGame, &Game::isEnPassant, this, &SchachApp::addScore);
+
     loadBannedWords();
 
     ui->currentplayername->setText(LocalName);
@@ -530,8 +532,6 @@ void SchachApp::updatecurrentPlayerLabel() {
         }
     ui->lblCurrentPlayerName->setText(labelText);
     ui->lblCurrentPlayerName->setStyleSheet(style);
-
-
 
 }
 
@@ -1490,4 +1490,32 @@ void SchachApp::on_lename_returnPressed()
 void SchachApp::opponentNameReceived(QString oppName) {
     OpponentName = oppName;
     ui->opponentplayername->setText(OpponentName);
+}
+
+void SchachApp::addScore(int score, bool white) {
+
+    if(white) {
+        whiteScore += score;
+    } else {
+        blackScore += score;
+    }
+
+    // Update score display
+    ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
+    ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
+    ui->scorelbl1->setStyleSheet(
+        "font-size: 12px;"
+        "font-weight: bold;"
+        "color: #2c3e50;"
+        "font-family: Arial, sans-serif;"
+        "padding: 5px;"
+        );
+
+    ui->scorelbl2->setStyleSheet(
+        "font-size: 12px;"
+        "font-weight: bold;"
+        "color: #2c3e50;"
+        "font-family: Arial, sans-serif;"
+        "padding: 5px;"
+        );
 }
