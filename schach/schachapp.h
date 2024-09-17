@@ -232,6 +232,7 @@ private:
      */
     void undoMove();
 
+    void onPawnPromoted(int pieceValue, bool isWhite);
 
     /**
      * @brief Updates the score display after undoing a move.

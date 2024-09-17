@@ -47,6 +47,8 @@ SchachApp::SchachApp(QWidget *parent)
 
     connect(chessGame, &Game::pieceCaptured, this, &SchachApp::pieceCaptured);
 
+    connect(chessGame, &Game::pawnPromoted, this, &SchachApp::onPawnPromoted);
+
     connect(chessGame, &Game::isEnPassant, this, &SchachApp::addScore);
 
     loadBannedWords();
@@ -897,7 +899,7 @@ void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
 }
 
 void SchachApp::moveReceived(MoveInfo moveInfo) {
-    MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row, moveInfo.promotion);
+    MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
 
     if(result.islegal) {
         movePiece(moveInfo.s_row, moveInfo.s_col, moveInfo.e_row, moveInfo.e_col);
@@ -1277,6 +1279,31 @@ void SchachApp::undoScoreUpdate() {
             }
         }
 
+        // Handle pawn promotion undo
+        if (!chessGame->moveHistory.empty()) {
+            MoveInfo lastMove = chessGame->moveHistory.back();
+            if (lastMove.promotion != 0x00) {
+                int promotionValue = 0;
+                switch (lastMove.promotion) {
+                case 0x1:
+                case 0x2:
+                    promotionValue = 3;
+                    break;
+                case 0x3:
+                    promotionValue = 5;
+                    break;
+                case 0x4:
+                    promotionValue = 9;
+                    break;
+                }
+                if (chessGame->getWhiteTurn()) {
+                    whiteScore -= promotionValue;
+                } else {
+                    blackScore -= promotionValue;
+                }
+            }
+        }
+
         // Update the score labels
         // Update score display
         ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
@@ -1493,6 +1520,33 @@ void SchachApp::addScore(int score, bool white) {
         whiteScore += score;
     } else {
         blackScore += score;
+    }
+
+    // Update score display
+    ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
+    ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
+    ui->scorelbl1->setStyleSheet(
+        "font-size: 12px;"
+        "font-weight: bold;"
+        "color: #2c3e50;"
+        "font-family: Arial, sans-serif;"
+        "padding: 5px;"
+        );
+
+    ui->scorelbl2->setStyleSheet(
+        "font-size: 12px;"
+        "font-weight: bold;"
+        "color: #2c3e50;"
+        "font-family: Arial, sans-serif;"
+        "padding: 5px;"
+        );
+}
+
+void SchachApp::onPawnPromoted(int pieceValue, bool isWhite) {
+    if (isWhite) {
+        whiteScore += pieceValue;
+    } else {
+        blackScore += pieceValue;
     }
 
     // Update score display
