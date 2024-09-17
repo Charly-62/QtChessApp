@@ -45,7 +45,7 @@ void Game::initBoard() {
 }
 
 
-MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
+MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row, quint8 promotionType) {
     MoveInfo moveInfo = {s_col, s_row, e_col, e_row,
                          0x00, 0x00, true,
                          nullptr, false, false, 8, nullptr,
@@ -107,7 +107,7 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row) {
 
 
     // Check for pawn promotion
-    moveInfo.promotion = 0x00; // No promotion by default
+    moveInfo.promotion = promotionType; // No promotion by default
 
     if (logikInstance.isPawnPromotion(this, s_col, s_row, e_row)) {
         int promotionValue = 0;

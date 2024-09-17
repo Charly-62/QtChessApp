@@ -353,8 +353,13 @@ void SchachApp::handleSquareClick(int row, int col) {
 
         qDebug() << "Attempting to move to:" << col << row;
 
-        // Attempt to move and get MoveInfo
-        MoveInfo moveInfo = chessGame->tryMove(selectedCol, selectedRow, col, row);
+        MoveInfo moveInfo;
+        if (chessGame->logikInstance.isPawnPromotion(chessGame, selectedCol, selectedRow, row)) {
+            quint8 promotionType = PawnPromotion(row);
+            moveInfo = chessGame->tryMove(selectedCol, selectedRow, col, row, promotionType);
+        } else {
+            moveInfo = chessGame->tryMove(selectedCol, selectedRow, col, row);
+        }
         qDebug() << "isLegal:" << moveInfo.islegal;
 
         if (moveInfo.islegal) {  // Move is valid
@@ -615,32 +620,12 @@ quint8 SchachApp::PawnPromotion(int row) {
 
             if (mode == "Queen") {
                 promotionType = 0x4;
-                if (isLocalPlayerWhite) {
-                    whiteScore += 8;  // Queen value
-                } else {
-                    blackScore += 8;  // Queen value
-                }
             } else if (mode == "Rook") {
                 promotionType = 0x3;
-                if (isLocalPlayerWhite) {
-                    whiteScore += 4;  // Rook value
-                } else {
-                    blackScore += 4;  // Rook value
-                }
             } else if (mode == "Knight") {
                 promotionType = 0x2;
-                if (isLocalPlayerWhite) {
-                    whiteScore += 2;  // Knight value
-                } else {
-                    blackScore += 2;  // Knight value
-                }
             } else if (mode == "Bishop") {
                 promotionType = 0x1;
-                if (isLocalPlayerWhite) {
-                    whiteScore += 2;  // Bishop value
-                } else {
-                    blackScore += 2;  // Bishop value
-                }
             }
             qDebug() << "Promotion type selected: " << promotionType << mode;
 
@@ -657,24 +642,6 @@ quint8 SchachApp::PawnPromotion(int row) {
         loop.exec();
     }
     ui->gridLayout->setEnabled(true);
-    // Update score display
-    ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
-    ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
-    ui->scorelbl1->setStyleSheet(
-        "font-size: 12px;"
-        "font-weight: bold;"
-        "color: #2c3e50;"
-        "font-family: Arial, sans-serif;"
-        "padding: 5px;"
-    );
-
-    ui->scorelbl2->setStyleSheet(
-        "font-size: 12px;"
-        "font-weight: bold;"
-        "color: #2c3e50;"
-        "font-family: Arial, sans-serif;"
-        "padding: 5px;"
-    );
     return promotionType;
 }
 
@@ -899,7 +866,7 @@ void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
 }
 
 void SchachApp::moveReceived(MoveInfo moveInfo) {
-    MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row);
+    MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row, moveInfo.promotion);
 
     if(result.islegal) {
         movePiece(moveInfo.s_row, moveInfo.s_col, moveInfo.e_row, moveInfo.e_col);
