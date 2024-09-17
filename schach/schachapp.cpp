@@ -897,7 +897,6 @@ void SchachApp::device_stateChanged(QAbstractSocket::SocketState state) {
 }
 
 void SchachApp::moveReceived(MoveInfo moveInfo) {
-
     MoveInfo result = chessGame->tryMove(moveInfo.s_col, moveInfo.s_row, moveInfo.e_col, moveInfo.e_row, moveInfo.promotion);
 
     if(result.islegal) {
@@ -907,12 +906,14 @@ void SchachApp::moveReceived(MoveInfo moveInfo) {
         startTurnTimer();  // Start the timer for the next turn
         updatecurrentPlayerLabel();
 
-        // Push the moveInfo onto the move history
-        chessGame->moveHistory.push_back(moveInfo);
+        // Push the detailed moveInfo onto the move history
+        chessGame->moveHistory.push_back(result);
+
+        // Update check status
         chessGame->updateCheckStatus();
 
         // Format and display the move
-        addMoveToHistory(moveInfo);
+        addMoveToHistory(result);
 
         if(!isLocalGame && ((chessGame->getWhiteTurn() && isLocalPlayerWhite) || (!chessGame->getWhiteTurn() && !isLocalPlayerWhite)))
             ui->pbUndo->setEnabled(false);
@@ -921,8 +922,6 @@ void SchachApp::moveReceived(MoveInfo moveInfo) {
         updateNetzwerkConsole("Invalid move received");
     }
 }
-
-
 
 
 // Client version of gameStarted()
@@ -977,7 +976,6 @@ void SchachApp::on_bStart_clicked()
 }
 
 void SchachApp::undoMove() {
-
     if (chessGame->moveHistory.empty()) {
         updateNetzwerkConsole("No moves to undo");
         return;
@@ -986,11 +984,8 @@ void SchachApp::undoMove() {
     bool stopundo = false;
 
     if (!isLocalGame && ((client && client->undoMovetmp == true) || (server && server->undoMovetmp == true))) {
-
         ui->pbUndoAccept->setEnabled(true);
-
         ui->pbUndoDeny->setEnabled(true);
-
         ui->pbUndo->setEnabled(false);
 
         QEventLoop loop;
@@ -1001,15 +996,13 @@ void SchachApp::undoMove() {
         *conn1 = connect(ui->pbUndoDeny, &QPushButton::clicked, this, [&]() {
             if(client) client->sendUndoResponse(false);
             if(server) server->sendUndoResponse(false);
-            if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
-                ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
+            if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){
+                ui->pbUndo->setEnabled(true);
             }
 
             ui->pbUndoAccept->setEnabled(false);
-
             ui->pbUndoDeny->setEnabled(false);
 
-            // Exit the event loop when the button is clicked
             stopundo = true;
             disconnect(*conn1);
             loop.quit();
@@ -1019,14 +1012,10 @@ void SchachApp::undoMove() {
             if(client) client->sendUndoResponse(true);
             if(server) server->sendUndoResponse(true);
 
-            // Exit the event loop when the button is clicked
-
             ui->pbUndoAccept->setEnabled(false);
-
-
             ui->pbUndoDeny->setEnabled(false);
-            if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){ // Enable pbUndo just if local game or network mode but only against group 1
-                ui->pbUndo->setEnabled(true); // Enable Undo button after each move (it is disabled if the opponent denies the undo over the network)
+            if(isLocalGame || (client && client->getopponentgroup() == 1) || (server && server->getopponentgroup() == 1)){
+                ui->pbUndo->setEnabled(true);
             }
             disconnect(*conn2);
             loop.quit();
@@ -1046,28 +1035,27 @@ void SchachApp::undoMove() {
     // Undo the move in the game logic
     chessGame->undoMove(lastMove);
 
+    // Undo the score update
+    undoScoreUpdate();
 
     // Update the GUI
-    // Re-fetch all pieces and update the icons on the board
     for (int row = 0; row < 8; ++row) {
         for (int col = 0; col < 8; ++col) {
             QPushButton* button = buttons[row][col];
-            std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);  // Get piece from the game
+            std::shared_ptr<Piece> piece = chessGame->getPieceAt(col, row);
 
             if (piece != nullptr) {
                 QString iconName = QString(":/Figuren/") + piece->getType() + (piece->checkIfWhite() ? "W" : "B") + ".png";
-                button->setIcon(QIcon(iconName));  // Set the correct icon for the piece
+                button->setIcon(QIcon(iconName));
             } else {
-                button->setIcon(QIcon());  // Clear icon if no piece exists
+                button->setIcon(QIcon());
             }
         }
     }
 
-    // Update other game states, timers, labels
-    startTurnTimer();    // Restart the timer for the player whose turn it now is
+    startTurnTimer();
     updatecurrentPlayerLabel();
 
-    // Remove the move from the move history display and disable the button if it´s empty
     removeLastMoveFromHistory();
     ui->pbUndo->setEnabled(!chessGame->moveHistory.empty());
     if(chessGame->moveHistory.empty()) {
@@ -1075,9 +1063,9 @@ void SchachApp::undoMove() {
         player2TimeRemaining = 10*60;
         ui->lblPlayer1Timer->setText("10:00");
         ui->lblPlayer2Timer->setText("10:00");
-
     }
 }
+
 void SchachApp::on_pbClear_clicked()
 {
     ui->lstNetzwerkConsole->clear();
