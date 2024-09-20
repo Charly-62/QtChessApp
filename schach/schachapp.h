@@ -16,12 +16,9 @@
 #include <QStack>
 #include <QMetaEnum>
 #include <QDebug>
-#include <iostream>
 #include <QEventLoop>
 #include <QComboBox>
 #include <QFile>
-
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -64,6 +61,7 @@ public:
      */
     quint8 PawnPromotion(int rowPawnPromotion);
 
+    void addScore(int score, bool whiteScore);
 
 private slots:
 
@@ -148,7 +146,7 @@ private slots:
     /**
      * @brief Handles the event when the "Enter" key is pressed in the name input field.
      */
-    void on_lename_returnPressed();    
+    void on_lename_returnPressed();
 
     /**
      * @brief Handles the event when the "Enter" key is pressed in the chat input field.
@@ -305,7 +303,6 @@ private:
      */
     void startTurnTimer();
 
-    void addScore(int score, bool whiteScore);
     int whiteScore ;  ///< Score for the white player.
     int blackScore ; ///< Score for the black player.
 

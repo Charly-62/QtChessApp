@@ -139,7 +139,7 @@ MoveInfo Game::tryMove(int s_col, int s_row, int e_col, int e_row, quint8 promot
             qDebug() << "Game: Promotion type unspecified. Defaulted to Queen.";
             break;
         }
-        emit pawnPromoted(promotionValue, movingPiece->checkIfWhite());
+        emit pawnPromoted(promotionValue - 1, movingPiece->checkIfWhite()); // -1 because of pawn loss
 
     }
 
@@ -349,6 +349,26 @@ void Game::undoMove(MoveInfo moveInfo) {
         // Replace the promoted piece with the original pawn
         board[moveInfo.s_col][moveInfo.s_row] = moveInfo.pawnBeforePromotion;
         movingPiece = nullptr;
+
+        // Undo score for promotion
+        int undoScore = 0;
+        switch(moveInfo.promotion) {
+            case 0x1:
+                undoScore = 2;
+                break;
+            case 0x2:
+                undoScore = 2;
+                break;
+            case 0x3:
+                undoScore = 4;
+                break;
+            case 0x4:
+                undoScore = 8;
+                break;
+        }
+
+        gui->addScore(-undoScore, !whiteTurn);
+
     }
 
     // Restore lastMoveWasTwoSquarePawnMove
