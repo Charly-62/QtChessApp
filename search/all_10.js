@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['schachapp_89',['SchachApp',['../classSchachApp.html#af5d805da788a9597533910bcf5a1b8d1',1,'SchachApp::SchachApp()'],['../classSchachApp.html',1,'SchachApp']]],
+  ['sendchatmsg_90',['sendChatMsg',['../classNetzwerk.html#a6c5f6b6506038ff188834e2fc234428a',1,'Netzwerk']]],
+  ['sendgamestart_91',['sendGameStart',['../classNetzwerk.html#af18f411a14746af1cfb949ae5dbcdea7',1,'Netzwerk']]],
+  ['sendgamestartresponse_92',['sendGameStartResponse',['../classNetzwerk.html#a62e046f44f151e158cb61777cc05bb7a',1,'Netzwerk']]],
+  ['sendmove_93',['sendMove',['../classNetzwerk.html#a685af19c43311cb140e727c98cdddf33',1,'Netzwerk']]],
+  ['sendmoveresponse_94',['sendMoveResponse',['../classNetzwerk.html#aa99fbcc2b6530e466f84cbcc6fb41469',1,'Netzwerk']]],
+  ['sendname_95',['sendName',['../classNetzwerk.html#a2380197b8c4c46124bb43245a26b0d99',1,'Netzwerk']]],
+  ['sendundo_96',['sendUndo',['../classNetzwerk.html#ae4e7dbc1b718ddb63d394c420820f532',1,'Netzwerk']]],
+  ['sendundoresponse_97',['sendUndoResponse',['../classNetzwerk.html#a7f4d1eda12f19feb88735880ae228127',1,'Netzwerk']]],
+  ['serverstatus_98',['serverStatus',['../classMyTCPServer.html#a167bf3d46402daa005c0ce788bb730bd',1,'MyTCPServer']]],
+  ['setcheck_99',['setCheck',['../classGame.html#ad387915618a48121cb991b8b8170b27c',1,'Game']]],
+  ['setmoved_100',['setMoved',['../classPiece.html#ad7d7a318692e8fd999b0781e7bf4b111',1,'Piece']]],
+  ['setposition_101',['setPosition',['../classPiece.html#ae60712c5564b7d4d5b00aa01cd0f5497',1,'Piece']]],
+  ['startlistening_102',['startListening',['../classMyTCPServer.html#abe868123876d34a5f453f8aca10043ce',1,'MyTCPServer']]],
+  ['state_103',['state',['../classMyTCPClient.html#a7d3b74459d2852a656b41b02ecc6f11b',1,'MyTCPClient']]],
+  ['statechanged_104',['stateChanged',['../classMyTCPClient.html#a7a5b56fe83a1f56a2ae0acbaa713e363',1,'MyTCPClient']]],
+  ['stoplistening_105',['stopListening',['../classMyTCPServer.html#a1bfa67eab70c2ebf98a656cb7c14dea1',1,'MyTCPServer']]],
+  ['switchturn_106',['switchTurn',['../classGame.html#a7f043cd607b895dedd713a74bb54d87e',1,'Game::switchTurn()'],['../classGame.html#a2c179b58bf8d94fc5140fdc73c2c0e4b',1,'Game::switchTurn(bool)']]]
+];
