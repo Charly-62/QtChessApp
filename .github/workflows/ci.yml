@@ -81,15 +81,17 @@ jobs:
           name: docs-artifacts
           path: docs
 
-      - name: Add .nojekyll
+      - name: Prepare Deployment Directory
         run: |
-          touch ./build/.nojekyll
-          touch ./docs/html/.nojekyll
+          mkdir -p deploy
+          cp -r build/* deploy/build/
+          cp -r docs/html/* deploy/
+          touch deploy/.nojekyll
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./deploy
           allow_empty_commit: true
