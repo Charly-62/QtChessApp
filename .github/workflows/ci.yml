@@ -63,17 +63,11 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build, docs]
+    needs: docs
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: build
 
       - name: Download Docs Artifacts
         uses: actions/download-artifact@v4
@@ -84,7 +78,6 @@ jobs:
       - name: Prepare Deployment Directory
         run: |
           mkdir -p deploy
-          cp -r build/* deploy/build/
           cp -r docs/html/* deploy/
           touch deploy/.nojekyll
 
