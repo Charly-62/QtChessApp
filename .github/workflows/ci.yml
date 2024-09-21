@@ -48,6 +48,7 @@ jobs:
       - name: Generate Documentation
         run: |
           mkdir -p docs
+          cd docs
           doxygen Doxyfile
 
       - name: Upload Docs Artifacts
