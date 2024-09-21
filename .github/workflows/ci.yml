@@ -1,13 +1,13 @@
 name: CI Workflow
 
-# This workflow triggers on any push or pull request to the 'main' branch
+# This workflow triggers on any push or pull request to the 'master' branch
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   # Build Job
