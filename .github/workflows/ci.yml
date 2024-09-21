@@ -1,6 +1,5 @@
 name: CI Workflow
 
-# This workflow triggers on any push or pull request to the 'master' branch
 on:
   push:
     branches:
@@ -10,22 +9,18 @@ on:
       - master
 
 jobs:
-  # Build Job
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Install dependencies (Qt and make)
       - name: Install Qt and Build Tools
         run: |
           sudo apt-get update
           sudo apt-get install -y qt5-qmake qtbase5-dev make
 
-      # Step 3: Build the project
       - name: Build Project
         run: |
           mkdir -p build
@@ -33,34 +28,28 @@ jobs:
           qmake ../schach/schach.pro
           make
 
-      # Step 4: Upload build artifacts
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build-artifacts
           path: build/*
 
-  # Documentation Job
   docs:
     runs-on: ubuntu-latest
+    needs: build  # This ensures the 'docs' job runs only if 'build' succeeds
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Install Doxygen for generating documentation
       - name: Install Doxygen
         run: sudo apt-get install -y doxygen
 
-      # Step 3: Generate the documentation
       - name: Generate Documentation
         run: |
           mkdir -p docs
-          cd docs
           doxygen Doxyfile
 
-      # Step 4: Upload documentation artifacts
       - name: Upload Docs Artifacts
         uses: actions/upload-artifact@v3
         with:
