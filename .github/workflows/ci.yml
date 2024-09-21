@@ -8,6 +8,10 @@ on:
     branches:
       - master
 
+concurrency:
+  group: deploy-gh-pages
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -57,12 +61,16 @@ jobs:
           name: docs-artifacts
           path: docs/*
 
+      - name: Add .nojekyll
+        run: touch ./docs/html/.nojekyll
+
       - name: Deploy Documentation to GitHub Pages
         if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/html
+          allow_empty_commit: true
 
   deploy-build:
     runs-on: ubuntu-latest
@@ -78,8 +86,12 @@ jobs:
           name: build-artifacts
           path: build
 
+      - name: Add .nojekyll
+        run: touch ./build/.nojekyll
+
       - name: Deploy Build to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+          allow_empty_commit: true
