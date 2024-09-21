@@ -58,7 +58,7 @@ jobs:
         run: |
           mkdir -p docs
           cd docs
-          doxygen sDoxyfile
+          doxygen Doxyfile
 
       # Step 4: Upload documentation artifacts
       - name: Upload Docs Artifacts
