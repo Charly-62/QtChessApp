@@ -618,7 +618,7 @@ quint8 SchachApp::PawnPromotion(int row) {
         connect(ui->pbPawnPromotion, &QPushButton::clicked, this, [&]() {
             QString mode = ui->cbPawnPromotion->currentText();
 
-            if (mode == "Queen") {
+            if (mode == "Queen" || mode == "Not Selected") {
                 promotionType = 0x4;
             } else if (mode == "Rook") {
                 promotionType = 0x3;
@@ -1005,7 +1005,7 @@ void SchachApp::undoMove() {
     chessGame->undoMove(lastMove);
 
     // Undo the score update
-    undoScoreUpdate();
+    undoScoreUpdate(lastMove);
 
     // Update the GUI
     for (int row = 0; row < 8; ++row) {
@@ -1162,22 +1162,15 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
     QString type = capturedPiece->getType();
     QLabel *capturedPieceLabel = new QLabel();
     QString imagePath = QString(":/Figuren/") + type + (capturedPiece->checkIfWhite() ? "W" : "B") + ".png";
-
     QPixmap originalPixmap(imagePath);
-    QSize newSize(32, 32);
-    QPixmap scaledPixmap = originalPixmap.scaled(newSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QPixmap scaledPixmap = originalPixmap.scaled(QSize(32, 32), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    capturedPieceLabel->setPixmap(scaledPixmap);
 
-    capturedPieceLabel->setPixmap(QPixmap(scaledPixmap));
-
-    // Calculate piece value
     int pieceValue = 0;
     if (type == "pawn") pieceValue = 1;
     else if (type == "horse" || type == "bishop") pieceValue = 3;
     else if (type == "rook") pieceValue = 5;
     else if (type == "queen") pieceValue = 9;
-
-    CapturedPieceInfo info = {type, capturedPiece->checkIfWhite(), pieceValue};
-    capturedPiecesStack.push(info);
 
     if (capturedPiece->checkIfWhite()) {
         ui->deadplayer1->addWidget(capturedPieceLabel);
@@ -1186,6 +1179,7 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
         ui->deadplayer2->addWidget(capturedPieceLabel);
         whiteScore += pieceValue;
     }
+
     // Update score display
     ui->scorelbl1->setText(QString(" ♔ White Score: %1").arg(whiteScore));
     ui->scorelbl2->setText(QString(" ♚ Black Score: %1").arg(blackScore));
@@ -1208,39 +1202,27 @@ void SchachApp::pieceCaptured(std::shared_ptr<Piece> capturedPiece) {
 
 }
 
-void SchachApp::undoScoreUpdate() {
-    if (!capturedPiecesStack.isEmpty()) {
-        // Retrieve the last captured piece information
-        CapturedPieceInfo lastCapturedPiece = capturedPiecesStack.pop();
+void SchachApp::undoScoreUpdate(const MoveInfo& moveInfo) {
+    // Handle normal captures
+    if (moveInfo.capturedPiece != nullptr) {
+        adjustScoreAndCapturedPiecesDisplay(moveInfo.capturedPiece);
+    }
 
-        // Undo the score update
-        if (lastCapturedPiece.isWhite) {
-            addScore(-lastCapturedPiece.value, false);
+    // Handle en passant captures
+    if (moveInfo.enPassantCapturedPawn != nullptr) {
+        adjustScoreAndCapturedPiecesDisplay(moveInfo.enPassantCapturedPawn);
+    }
 
-            // Remove the last piece from the dead pieces display for black
-            if (ui->deadplayer1->count() > 0) {
-                // Access the last widget by iterating through the layout items
-                QLayoutItem* lastItem = ui->deadplayer1->itemAt(ui->deadplayer1->count() - 1);
-                if (lastItem) {
-                    QWidget* lastPiece = lastItem->widget();
-                    ui->deadplayer1->removeWidget(lastPiece);
-                    delete lastPiece; // Delete widget to free memory
-                }
-            }
-        } else {
-            addScore(-lastCapturedPiece.value, true);
-
-            // Remove the last piece from the dead pieces display for white
-            if (ui->deadplayer2->count() > 0) {
-                // Access the last widget by iterating through the layout items
-                QLayoutItem* lastItem = ui->deadplayer2->itemAt(ui->deadplayer2->count() - 1);
-                if (lastItem) {
-                    QWidget* lastPiece = lastItem->widget();
-                    ui->deadplayer2->removeWidget(lastPiece);
-                    delete lastPiece; // Delete widget to free memory
-                }
-            }
+    // Handle promotions
+    if (moveInfo.promotion != 0x00) {
+        int undoScore = 0;
+        switch(moveInfo.promotion) {
+        case 0x1: undoScore = 2; break; // Bishop
+        case 0x2: undoScore = 2; break; // Knight
+        case 0x3: undoScore = 4; break; // Rook
+        case 0x4: undoScore = 8; break; // Queen
         }
+        addScore(-undoScore, moveInfo.pawnBeforePromotion->checkIfWhite());
     }
 }
 
@@ -1289,6 +1271,8 @@ void SchachApp::on_pbUndo_clicked() {
     if(acceptedmain) {
         qDebug() << "Undoing the move";
         undoMove();
+        qDebug() << "White Score: " << whiteScore;
+        qDebug() << "Black Score: " << blackScore;
     }
 
 }
@@ -1455,4 +1439,35 @@ void SchachApp::addScore(int score, bool white) {
         "font-family: Arial, sans-serif;"
         "padding: 5px;"
         );
+}
+
+void SchachApp::adjustScoreAndCapturedPiecesDisplay(std::shared_ptr<Piece> capturedPiece) {
+    QString type = capturedPiece->getType();
+
+    int pieceValue = 0;
+    if (type == "pawn") pieceValue = 1;
+    else if (type == "horse" || type == "bishop") pieceValue = 3;
+    else if (type == "rook") pieceValue = 5;
+    else if (type == "queen") pieceValue = 9;
+
+    if (capturedPiece->checkIfWhite()) {
+        addScore(-pieceValue, false);
+        // Remove from dead pieces display for black
+        removeLastCapturedPiece(ui->deadplayer1);
+    } else {
+        addScore(-pieceValue, true);
+        // Remove from dead pieces display for white
+        removeLastCapturedPiece(ui->deadplayer2);
+    }
+}
+
+void SchachApp::removeLastCapturedPiece(QLayout* layout) {
+    if (layout->count() > 0) {
+        QLayoutItem* lastItem = layout->takeAt(layout->count() - 1);
+        if (lastItem) {
+            QWidget* lastPiece = lastItem->widget();
+            if (lastPiece) delete lastPiece;
+            delete lastItem;
+        }
+    }
 }

@@ -161,6 +161,10 @@ private:
       */
     void WelcomeDisplay();
 
+    void adjustScoreAndCapturedPiecesDisplay(std::shared_ptr<Piece> capturedPiece);
+
+    void removeLastCapturedPiece(QLayout* layout);
+
     /**
      * @brief Displays the start message when the game is ready to begin.
      */
@@ -235,7 +239,7 @@ private:
     /**
      * @brief Updates the score display after undoing a move.
      */
-    void undoScoreUpdate();
+    void undoScoreUpdate(const MoveInfo& moveInfo);
 
 
     MyTCPClient* client = nullptr; ///< Client for network communication.
@@ -380,10 +384,6 @@ private:
         bool isWhite;
         int value;
     };
-
-    QStack<CapturedPieceInfo> capturedPiecesStack; ///< Stack of captured pieces.
-
-
 
 };
 #endif // SCHACHAPP_H

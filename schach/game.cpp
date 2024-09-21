@@ -349,26 +349,6 @@ void Game::undoMove(MoveInfo moveInfo) {
         // Replace the promoted piece with the original pawn
         board[moveInfo.s_col][moveInfo.s_row] = moveInfo.pawnBeforePromotion;
         movingPiece = nullptr;
-
-        // Undo score for promotion
-        int undoScore = 0;
-        switch(moveInfo.promotion) {
-            case 0x1:
-                undoScore = 2;
-                break;
-            case 0x2:
-                undoScore = 2;
-                break;
-            case 0x3:
-                undoScore = 4;
-                break;
-            case 0x4:
-                undoScore = 8;
-                break;
-        }
-
-        gui->addScore(-undoScore, !whiteTurn);
-
     }
 
     // Restore lastMoveWasTwoSquarePawnMove

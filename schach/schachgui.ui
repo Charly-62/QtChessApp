@@ -563,7 +563,7 @@ QPushButton:disabled {
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="pawnpromotionpage">
       <widget class="QGroupBox" name="grpPawnPromotion">
@@ -601,9 +601,9 @@ QGroupBox::title {
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>30</y>
-          <width>151</width>
-          <height>72</height>
+          <y>20</y>
+          <width>141</width>
+          <height>73</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -2449,7 +2449,7 @@ QPushButton:disabled {
        <x>40</x>
        <y>530</y>
        <width>421</width>
-       <height>18</height>
+       <height>22</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="XAxisLayout">
