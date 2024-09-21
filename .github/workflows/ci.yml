@@ -56,12 +56,13 @@ jobs:
       # Step 3: Generate the documentation
       - name: Generate Documentation
         run: |
-          cd QtChessApp/docs
-          doxygen Doxyfile
+          mkdir -p docs
+          cd docs
+          doxygen sDoxyfile
 
       # Step 4: Upload documentation artifacts
       - name: Upload Docs Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: docs-artifacts
-          path: QtChessApp/docs/*
+          path: docs/*
