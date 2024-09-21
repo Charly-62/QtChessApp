@@ -1,4 +1,4 @@
-name: CI Workflow
+name: CI and Build Workflow
 
 on:
   push:
@@ -61,67 +61,9 @@ jobs:
           name: docs-artifacts
           path: docs/*
 
-  build-binaries:
-    runs-on: ${{ matrix.os }}
-    needs: [build, docs]
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          version: '5.15.2'
-
-      - name: Install Dependencies
-        run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-            sudo apt-get update
-            sudo apt-get install -y build-essential
-          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-            brew install <your-dependencies>  # Replace with actual dependencies
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            choco install <your-dependencies> -y  # Replace with actual dependencies
-          fi
-
-      - name: Build Project
-        run: |
-          mkdir build
-          cd build
-          qmake ../schach/schach.pro
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            nmake  # or 'jom' if you're using it
-          else
-            make
-          fi
-
-      - name: Package Build
-        run: |
-          cd build
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-            zip -r ../QtChessApp_Linux.zip *
-          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-            zip -r ../QtChessApp_macOS.zip *
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            zip -r ../QtChessApp_Windows.zip *
-          fi
-
-      - name: Upload Binaries
-        uses: actions/upload-artifact@v4
-        with:
-          name: QtChessApp-${{ matrix.os }}
-          path: |
-            QtChessApp_Linux.zip
-            QtChessApp_macOS.zip
-            QtChessApp_Windows.zip
-
   deploy:
     runs-on: ubuntu-latest
-    needs: build-binaries
+    needs: [build, docs]
 
     steps:
       - name: Checkout repository
@@ -139,31 +81,14 @@ jobs:
           name: docs-artifacts
           path: docs
 
-      - name: Download Binaries
-        uses: actions/download-artifact@v4
-        with:
-          name: QtChessApp-*
-          path: binaries
-
       - name: Prepare Deployment Directory
         run: |
           mkdir -p deploy/build
-          mkdir -p deploy/binaries
           cp -r build/* deploy/build/
           cp -r docs/html/* deploy/
-          cp -r binaries/* deploy/binaries/
           touch deploy/.nojekyll
 
-      - name: Verify Deployment Directory
-        run: |
-          echo "Contents of deploy/:"
-          ls -la deploy/
-          echo "Contents of deploy/build/:"
-          ls -la deploy/build/
-          echo "Contents of deploy/binaries/:"
-          ls -la deploy/binaries/
-
-      - name: Deploy Documentation to GitHub Pages
+      - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v4
         with:
@@ -171,51 +96,83 @@ jobs:
           publish_dir: ./deploy
           allow_empty_commit: true
 
-  create-release:
-    runs-on: ubuntu-latest
+  build-binaries:
     needs: deploy
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      fail-fast: false
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Qt
+        uses: jurplel/install-qt-action@v2
         with:
-          tag_name: v1.0.${{ github.run_number }}  # Customize your versioning
-          release_name: Release v1.0.${{ github.run_number }}
-          draft: false
-          prerelease: false
+          version: '5.15.2'
 
-      - name: Upload Release Asset (Windows)
-        uses: actions/upload-release-asset@v1
+      - name: Install Dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./deploy/binaries/QtChessApp_Windows.zip
-          asset_name: QtChessApp_Windows.zip
-          asset_content_type: application/zip
+          PKG_CONFIG_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/lib/pkgconfig
+          Qt5_Dir: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64
+          QT_PLUGIN_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/plugins
+          QML2_IMPORT_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/qml
 
-      - name: Upload Release Asset (Linux)
-        uses: actions/upload-release-asset@v1
+      - name: Install Dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install <your-dependencies>  # Replace with actual dependencies
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./deploy/binaries/QtChessApp_Linux.zip
-          asset_name: QtChessApp_Linux.zip
-          asset_content_type: application/zip
+          PKG_CONFIG_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/lib/pkgconfig
+          Qt5_Dir: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64
+          QT_PLUGIN_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/plugins
+          QML2_IMPORT_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/qml
 
-      - name: Upload Release Asset (macOS)
-        uses: actions/upload-release-asset@v1
+      - name: Install Dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install <your-dependencies> -y  # Replace with actual dependencies
+        shell: powershell
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PKG_CONFIG_PATH: C:\Users\runner\work\QtChessApp\Qt\5.15.2\clang_64\lib\pkgconfig
+          Qt5_Dir: C:\Users\runner\work\QtChessApp\Qt\5.15.2\clang_64
+          QT_PLUGIN_PATH: C:\Users\runner\work\QtChessApp\Qt\5.15.2\clang_64\plugins
+          QML2_IMPORT_PATH: C:\Users\runner\work\QtChessApp\Qt\5.15.2\clang_64\qml
+
+      - name: Build Project
+        run: |
+          mkdir build
+          cd build
+          qmake ../schach/schach.pro
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            nmake  # or 'jom' if using
+          else
+            make
+          fi
+
+      - name: Package Build
+        run: |
+          cd build
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            zip -r ../QtChessApp_Linux.zip *
+          elif [[ "${{ runner.os }}" == "macOS" ]]; then
+            zip -r ../QtChessApp_macOS.zip *
+          elif [[ "${{ runner.os }}" == "Windows" ]]; then
+            zip -r ../QtChessApp_Windows.zip *
+          fi
+
+      - name: Upload Binaries
+        uses: actions/upload-artifact@v4
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./deploy/binaries/QtChessApp_macOS.zip
-          asset_name: QtChessApp_macOS.zip
-          asset_content_type: application/zip
+          name: QtChessApp-${{ matrix.os }}
+          path: |
+            QtChessApp_Linux.zip
+            QtChessApp_macOS.zip
+            QtChessApp_Windows.zip

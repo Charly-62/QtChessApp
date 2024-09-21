@@ -45,7 +45,7 @@ A custom protocol handles move and game state transmission, serialized via `QDat
 | `0x01` - Game Start    | `0x02`                | `quint8`: Who starts (`0x00` - Server, `0x01` - Client) <br> `quint8`: Group number                                                                 | Server → Client |
 | `0x02` - Response      | `0x01`                | `quint8`: Group number                                                                                                                               | Client → Server |
 | `0x03` - Move          | `0x05`                | `quint8`: Start column <br> `quint8`: Start row <br> `quint8`: Target column <br> `quint8`: Target row <br> `quint8`: Move metadata (castling, etc.) | Bi-directional  |
-| `0x04` - Move Response | `0x01`                | `quint8`: Move status (`0x00` - OK, `0x01` - Illegal move, `0x02` - Checkmate, etc.)                                                                 | Server → Client |
+| `0x04` - Move Response | `0x01`                | `quint8`: Move status (`0x00` - OK, `0x01` - Illegal move, `0x02` - Checkmate, etc.)                                                                 | Bi-directional  |
 
 ### Move Metadata Encoding
 
