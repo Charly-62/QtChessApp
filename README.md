@@ -1,37 +1,42 @@
 # QtChessApp
 
-**QtChessApp** is a network-based chess game built with C++ and Qt, allowing two players to compete in real-time over a network. The project emphasizes correct chess rule enforcement, efficient network communication, and a responsive GUI, making it both a practical and educational tool for studying networked game development.
+**QtChessApp** is a C++ and Qt-based chess game that allows two players to compete over a network in real time. The project focuses on enforcing chess rules, efficient network communication, and an interactive GUI, making it ideal for studying networked game development.
 
 ## Features
 
 ### Chess Rules and Game Logic
-- Full implementation of chess rules, including:
-  - **Castling** (both short and long)
+- Full implementation of chess rules:
+  - **Castling** (short and long)
   - **En Passant**
-  - **Pawn Promotion** (to Queen, Rook, Bishop, or Knight)
-- Comprehensive move validation using the `logik` class, ensuring legality before applying moves.
-- **Turn Management**: Alternates between players, tracking whose turn it is and preventing illegal moves.
-- **Piece Classes**: Each piece type (Pawn, Rook, Knight, Bishop, Queen, King) has its own class derived from the base `piece` class, with specific movement rules.
+  - **Pawn Promotion** (Queen, Rook, Bishop, Knight)
+  - **Pinning**
+- Move validation via the `logik` class ensures all moves are legal before execution.
+- **Turn Management**: Alternates turns and prevents illegal moves.
+- **Piece Classes**: Each piece has its own class with specific movement rules, derived from the base `piece` class.
+- **Undo Moves**: Undo moves is supported in both local and network mode. In network mode, undo requires the opponent’s acceptance.
 
 ### Graphical User Interface (GUI)
-- Developed with Qt's widgets and layouts, allowing for a dynamic and interactive chessboard display.
-- **Features**:
-  - Visual representation of the chessboard and pieces.
-  - **Move input** via mouse interaction, with highlighted possible moves.
-  - Real-time game updates to reflect the current board state.
-  - Easy connection to network functions for setting roles (Server/Client) and managing connections.
-- The `SchachApp` class manages all interactions with the GUI.
+- Built with Qt widgets, providing a responsive chessboard display.
+- **Key Features**:
+  - Mouse-based move input with visual highlights for possible moves.
+  - Real-time updates of the board state.
+  - Integrated game controls for setting roles (Server/Client) and managing connections.
+  - Timer, score tracking, and display of captured pieces.
+- Managed by the `SchachApp` class.
 
 ### Networking
-- **TCP/IP Protocol**: The game uses TCP for reliable transmission of game data between two clients.
-- **Client/Server Architecture**: 
-  - One player acts as the server, while the other connects as a client.
-  - The server is responsible for initiating the game and broadcasting moves.
-- **Qt’s QTcpSocket** and `QDataStream` are used to handle network communication, ensuring cross-platform compatibility and robust data handling.
+- **TCP/IP Protocol**: Reliable transmission of game data between clients.
+- **Client/Server Architecture**:
+  - One player acts as a server, and the other connects as a client.
+  - The server initiates and broadcasts moves.
+- Uses **QTcpSocket** and **QDataStream** for cross-platform, robust communication.
+- **Reconnection Support**: Automatic client reconnection after unexpected disconnection.
+- **Chat & Names**: In-game chat with built-in censorship for English and German swear words.
+- **Safety**: Packet validation, buffering, controlled disconnections, and DoS protection.
 
-### TCP Protocol
+### Custom TCP Protocol
 
-The game uses a custom protocol for transmitting moves and game state information. Each message is serialized using `QDataStream`, and the protocol ensures minimal but complete data transfer for each action.
+A custom protocol handles move and game state transmission, serialized via `QDataStream`. The protocol ensures minimal yet comprehensive data transfer for each action.
 
 #### Protocol Message Structure
 
@@ -42,52 +47,43 @@ The game uses a custom protocol for transmitting moves and game state informatio
 | `0x03` - Move          | `0x05`                | `quint8`: Start column <br> `quint8`: Start row <br> `quint8`: Target column <br> `quint8`: Target row <br> `quint8`: Move metadata (castling, etc.) | Bi-directional  |
 | `0x04` - Move Response | `0x01`                | `quint8`: Move status (`0x00` - OK, `0x01` - Illegal move, `0x02` - Checkmate, etc.)                                                                 | Server → Client |
 
-### Advanced Move Metadata Encoding
+### Move Metadata Encoding
 
-The `move metadata` byte is split into two 4-bit nibbles:
-- **Most Significant Nibble (MSN)**: Encodes special moves such as pawn promotion.
-  - `0x1`: Bishop promotion
-  - `0x2`: Knight promotion
-  - `0x3`: Rook promotion
-  - `0x4`: Queen promotion
-- **Least Significant Nibble (LSN)**: Encodes move consequences.
-  - `0x0`: Regular move
-  - `0x1`: Capture
-  - `0x2`: Checkmate
-  - `0x4`: Castling
+The `move metadata` byte is divided into two 4-bit nibbles:
+- **MSN (Most Significant Nibble)**: Encodes special moves (e.g., pawn promotion).
+- **LSN (Least Significant Nibble)**: Encodes move consequences (e.g., capture, checkmate, castling).
 
-### Key Classes and Responsibilities
+### Key Classes
 
 1. **Game Logic**:
-   - `game`: Handles the board, piece movement, and turn management.
-   - `piece` and its derived classes (`pawn`, `rook`, `knight`, etc.): Define movement rules for each piece.
-   - `logik`: Ensures moves are legal before they are executed.
+   - `game`: Manages the board, piece movement, and turn management.
+   - `piece` and derived classes (e.g., `pawn`, `rook`, `knight`): Define specific movement rules for each piece.
+   - `logik`: Validates the legality of moves before they are executed.
 
 2. **Networking**:
-   - `netzwerk`: Manages all aspects of the network connection, including sending and receiving moves.
-   - `QTcpSocket` and `QDataStream`: Facilitate the TCP connection and serial data transfer.
-   
+   - `netzwerk`: Handles network connections and sends/receives moves.
+   - **QTcpSocket** and **QDataStream**: Facilitate TCP communication and data transfer.
+
 3. **GUI**:
-   - `SchachApp`: Provides the chessboard interface and manages player interaction with the game.
-   - Uses `QWidget` and related Qt classes for layout and event handling.
+   - `SchachApp`: Provides the interface for player interaction, game control, and visual display.
+   - Built using `QWidget` and Qt’s event handling system.
 
 ### Memory Management
-- The project uses **smart pointers** (`std::unique_ptr`, `std::shared_ptr`) where appropriate, minimizing memory leaks and ensuring safe object ownership.
-- **Valgrind** has been used for leak detection during development.
+- Utilizes **smart pointers** (`std::unique_ptr`, `std::shared_ptr`) for automatic memory management and prevention of memory leaks.
+- Memory issues were tracked and resolved using **Valgrind**.
 
 ## Build and Run
 
-This project is developed using **Qt Creator** and requires Qt5 for building and running. To set up the project:
+To build and run the project, use **Qt Creator** with Qt5 installed:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Charly-62/QtChessApp.git
-   cd QtChessApp
+   git clone https://github.com/Charly-62/QtChessApp.git QtChessApp
 
-2. Open 'schach.pro' in Qt Creator.
+2. Open `schach.pro` in Qt Creator.
 
-3. Build and run the project from Qt Creator.
+3. Build and run the project within Qt Creator.
 
 ## Continuous Documentation
 
-The project is documented using Doxygen, and documentation is automatically generated and published with each push. You can access the latest documentation at: https://Charly-62.github.io/QtChessApp/.
+The project is documented with Doxygen, and documentation is automatically generated and published with every push using GitHub Actions and a CI Workflow. The latest documentation is available at: https://Charly-62.github.io/QtChessApp/.
