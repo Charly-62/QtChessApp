@@ -1,0 +1,16 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node16 [label="QObject",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node16 -> Node0 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node0 [label="Game",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classGame.html",tooltip="Manages the state of the chess game."];
+  Node16 -> Node18 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node18 [label="Netzwerk",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classNetzwerk.html",tooltip="Manages network communication between players in the chess game."];
+  Node18 -> Node19 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node19 [label="MyTCPClient",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classMyTCPClient.html",tooltip="Handles the client-side TCP communication for the chess game."];
+  Node18 -> Node20 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node20 [label="MyTCPServer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classMyTCPServer.html",tooltip="Handles the server-side TCP communication for the chess game."];
+}

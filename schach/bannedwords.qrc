@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>List_of_banned_words/de.txt</file>
-        <file>List_of_banned_words/en.txt</file>
-    </qresource>
-</RCC>
