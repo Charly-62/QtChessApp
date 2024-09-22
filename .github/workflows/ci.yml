@@ -197,6 +197,10 @@ jobs:
           # Validate the .desktop file
           sudo apt-get install -y desktop-file-utils
           desktop-file-validate AppDir/usr/share/applications/schach.desktop
+          if [ $? -ne 0 ]; then
+            echo "Invalid .desktop file."
+            exit 1
+          fi
       
           # List AppDir contents for debugging
           echo "Contents of AppDir:"
@@ -209,10 +213,16 @@ jobs:
           echo "Files in build dir after linuxdeployqt:"
           ls -l
       
-          # Move the generated AppImage to the parent directory
-          mv Schach*.AppImage ../Schach-4444bb1-x86_64.AppImage
+          # Check if the AppImage was created
+          if [ -f Schach*.AppImage ]; then
+            echo "AppImage created successfully."
+            # Move the generated AppImage to the parent directory
+            mv Schach*.AppImage ../Schach-4444bb1-x86_64.AppImage
+          else
+            echo "AppImage not found. linuxdeployqt may have failed."
+            exit 1
+          fi
         shell: /bin/bash -e {0}
-
 
       # Build Project for Windows
       - name: Build Project (Windows)
@@ -263,9 +273,7 @@ jobs:
       - name: Package Build (Linux)
         if: runner.os == 'Linux'
         run: |
-          cd build
-          mv Schach-4444bb1-x86_64.AppImage ../Schach-4444bb1-x86_64.AppImage
-          chmod +x ../Schach-4444bb1-x86_64.AppImage
+          chmod +x Schach-4444bb1-x86_64.AppImage
         shell: /bin/bash -e {0}
 
       # Package Build for Windows
@@ -275,12 +283,12 @@ jobs:
         run: |
           Compress-Archive -Path build\release\* -DestinationPath QtChessApp_Windows.zip
 
-      # Upload Binaries
+      # Upload Binaries (Adjusted Paths)
       - name: Upload Binaries
         uses: actions/upload-artifact@v4
         with:
           name: QtChessApp-${{ matrix.os }}
           path: |
+            Schach-4444bb1-x86_64.AppImage
             QtChessApp_*.zip
-            QtChessApp_*.AppImage
           retention-days: 30
