@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Schach
+Exec=schach
+Icon=schach
+Type=Application
+Categories=Game;
