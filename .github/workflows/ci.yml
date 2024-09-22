@@ -107,12 +107,12 @@ jobs:
       # Install Python 3.x if needed
       - name: Set up Python 3.x
         if: runner.os != 'Windows'
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
       - name: Set up Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: '5.15.2'
           setup-python: true
