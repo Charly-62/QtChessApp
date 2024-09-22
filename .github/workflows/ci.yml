@@ -120,8 +120,9 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           version: '5.15.2'
+          cached: true
         env:
-          AQT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AQT_GITHUB_TOKEN: ${{ secrets.AQT_PAT }}
 
       # Install Dependencies for Linux
       - name: Install Dependencies (Linux)
@@ -173,7 +174,7 @@ jobs:
           mkdir build
           cd build
           qmake ../schach/schach.pro
-          nmake
+          nmake  # or 'jom' if using
 
       # Package Build for Linux and macOS
       - name: Package Build (Linux/macOS)
