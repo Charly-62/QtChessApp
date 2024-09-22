@@ -93,7 +93,7 @@ jobs:
           allow_empty_commit: true
 
   build-binaries:
-    needs: deploy
+    # needs: deploy
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
