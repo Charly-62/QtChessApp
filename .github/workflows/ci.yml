@@ -153,9 +153,23 @@ jobs:
         run: |
           mkdir build
           cd build
-          qmake ../schach/schach.pro
+          qmake ../schach/schach.pro "CONFIG+=release"
           make
         shell: /bin/bash -e {0}
+
+      - name: Deploy Qt Libraries (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          cd build
+          macdeployqt schach.app
+
+      - name: Deploy Qt Libraries (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          cd build
+          wget -O linuxdeployqt.AppImage https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+          chmod +x linuxdeployqt.AppImage
+          ./linuxdeployqt.AppImage schach -appimage
 
       # Build Project for Windows
       - name: Build Project (Windows)
@@ -170,13 +184,25 @@ jobs:
           qmake ../schach/schach.pro
           nmake
 
-      # Package Build for Linux and macOS
-      - name: Package Build (Linux/macOS)
-        if: runner.os != 'Windows'
+      - name: Deploy Qt Libraries (Windows)
+        if: runner.os == 'Windows'
         run: |
           cd build
-          zip -r ../QtChessApp_${{ matrix.os }}.zip *
-        shell: /bin/bash -e {0}
+          windeployqt schach.exe
+
+      # Package Build for macOS
+      - name: Package Build (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          cd build
+          zip -r ../QtChessApp_macOS.zip schach.app
+
+      # Package Build for Linux
+      - name: Package Build (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          cd build
+          mv schach.AppImage ../QtChessApp_Linux.AppImage
 
       # Package Build for Windows
       - name: Package Build (Windows)
@@ -193,4 +219,5 @@ jobs:
           name: QtChessApp-${{ matrix.os }}
           path: |
             QtChessApp_*.zip
+            QtChessApp_*.AppImage
           retention-days: 30
