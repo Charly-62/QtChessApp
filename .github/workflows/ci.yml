@@ -112,6 +112,7 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           version: '5.15.2'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Install Dependencies for Linux
       - name: Install Dependencies (Linux)
@@ -166,12 +167,14 @@ jobs:
       # Build Project for Windows
       - name: Build Project (Windows)
         if: runner.os == 'Windows'
+        shell: cmd
         run: |
+          for /f "usebackq tokens=*" %i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set InstallDir=%i
+          call "%InstallDir%\VC\Auxiliary\Build\vcvars64.bat"
           mkdir build
           cd build
           qmake ../schach/schach.pro
           nmake  # or 'jom' if using
-        shell: powershell
 
       # Package Build for Linux and macOS
       - name: Package Build (Linux/macOS)
