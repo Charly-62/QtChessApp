@@ -108,11 +108,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Cache Qt Installation
+        uses: actions/cache@v3
+        with:
+          path: ${{ runner.os == 'Windows' && 'C:\\Qt' || '~/Qt' }}
+          key: ${{ runner.os }}-qt-5.15.2
+          restore-keys: |
+            ${{ runner.os }}-qt-
+
       - name: Set up Qt
         uses: jurplel/install-qt-action@v2
         with:
           version: '5.15.2'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          AQT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Install Dependencies for Linux
       - name: Install Dependencies (Linux)
@@ -121,11 +130,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential libgl1-mesa-dev libx11-dev
         shell: /bin/bash -e {0}
-        env:
-          PKG_CONFIG_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/lib/pkgconfig
-          Qt5_Dir: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64
-          QT_PLUGIN_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/plugins
-          QML2_IMPORT_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/qml
 
       # Install Dependencies for macOS
       - name: Install Dependencies (macOS)
@@ -135,11 +139,6 @@ jobs:
           brew install pkg-config
           brew install openssl
         shell: /bin/bash -e {0}
-        env:
-          PKG_CONFIG_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/lib/pkgconfig
-          Qt5_Dir: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64
-          QT_PLUGIN_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/plugins
-          QML2_IMPORT_PATH: /Users/runner/work/QtChessApp/Qt/5.15.2/clang_64/qml
 
       # Install Dependencies for Windows
       - name: Install Dependencies (Windows)
@@ -148,11 +147,6 @@ jobs:
           choco install git -y
           choco install cmake -y
         shell: powershell
-        env:
-          PKG_CONFIG_PATH: C:\Users\runner\work\QtChessApp\Qt\5.15.2\clang_64\lib\pkgconfig
-          Qt5_Dir: C:\Users\runner\work\QtChessApp\Qt\5.15.2\clang_64
-          QT_PLUGIN_PATH: C:\Users\runner\work\QtChessApp\Qt\5.15.2\clang_64\plugins
-          QML2_IMPORT_PATH: C:\Users\runner\work\QtChessApp\Qt\5.15.2\clang_64\qml
 
       # Build Project for Linux and macOS
       - name: Build Project (Linux/macOS)
@@ -169,8 +163,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: cmd
         run: |
-          for /f "usebackq tokens=*" %i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set InstallDir=%i
-          call "%InstallDir%\VC\Auxiliary\Build\vcvars64.bat"
+          call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat"
           mkdir build
           cd build
           qmake ../schach/schach.pro
@@ -181,11 +174,7 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           cd build
-          if [[ "${{ runner.os }}" == "Linux" ]]; then
-            zip -r ../QtChessApp_Linux.zip *
-          elif [[ "${{ runner.os }}" == "macOS" ]]; then
-            zip -r ../QtChessApp_macOS.zip *
-          fi
+          zip -r ../QtChessApp_${{ runner.os }}.zip *
         shell: /bin/bash -e {0}
 
       # Package Build for Windows
@@ -196,22 +185,11 @@ jobs:
           Compress-Archive -Path * -DestinationPath ../QtChessApp_Windows.zip
         shell: powershell
 
-      # Upload Binaries for Linux and macOS
-      - name: Upload Binaries (Linux/macOS)
-        if: runner.os != 'Windows'
+      # Upload Binaries
+      - name: Upload Binaries
         uses: actions/upload-artifact@v4
         with:
           name: QtChessApp-${{ matrix.os }}
           path: |
-            QtChessApp_Linux.zip
-            QtChessApp_macOS.zip
-          retention-days: 30
-
-      # Upload Binaries for Windows
-      - name: Upload Binaries (Windows)
-        if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v4
-        with:
-          name: QtChessApp-Windows
-          path: QtChessApp_Windows.zip
+            QtChessApp_*.zip
           retention-days: 30
