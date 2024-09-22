@@ -179,10 +179,17 @@ jobs:
           mkdir -p AppDir/usr/share/applications
           mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
       
-          # Copy the binary, .desktop file, and icon into AppDir
+          # Copy the binary and .desktop file into AppDir
           cp schach AppDir/usr/bin/
           cp ../schach/schach.desktop AppDir/usr/share/applications/
-          cp ../schach/icons/schach.png AppDir/usr/share/icons/hicolor/256x256/apps/
+      
+          # Copy the icon if it exists
+          ICON_PATH="../schach/icons/schach.png"
+          if [ -f "$ICON_PATH" ]; then
+            cp "$ICON_PATH" AppDir/usr/share/icons/hicolor/256x256/apps/
+          else
+            echo "Icon file not found at $ICON_PATH, skipping icon copy."
+          fi
       
           # Ensure the binary is executable
           chmod +x AppDir/usr/bin/schach
@@ -198,9 +205,14 @@ jobs:
           # Run linuxdeployqt with the path to the .desktop file
           ./linuxdeployqt.AppImage AppDir/usr/share/applications/schach.desktop -appimage
       
+          # List files after running linuxdeployqt
+          echo "Files in build directory after running linuxdeployqt:"
+          ls -l
+      
           # Move the generated AppImage to the parent directory
           mv Schach*.AppImage ../QtChessApp_Linux.AppImage
         shell: /bin/bash -e {0}
+
 
       # Build Project for Windows
       - name: Build Project (Windows)
