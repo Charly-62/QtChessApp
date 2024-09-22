@@ -169,7 +169,8 @@ jobs:
           cd build
           wget -O linuxdeployqt.AppImage https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
           chmod +x linuxdeployqt.AppImage
-          ./linuxdeployqt.AppImage schach -appimage
+          ./linuxdeployqt.AppImage --appimage-extract
+          ./squashfs-root/AppRun schach -appimage
 
       # Build Project for Windows
       - name: Build Project (Windows)
@@ -181,13 +182,14 @@ jobs:
           call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
           mkdir build
           cd build
-          qmake ../schach/schach.pro
+          qmake ../schach/schach.pro -spec win32-msvc "CONFIG+=release"
           nmake
 
       - name: Deploy Qt Libraries (Windows)
         if: runner.os == 'Windows'
+        shell: cmd
         run: |
-          cd build
+          cd build\release
           windeployqt schach.exe
 
       # Package Build for macOS
@@ -203,14 +205,14 @@ jobs:
         run: |
           cd build
           mv schach.AppImage ../QtChessApp_Linux.AppImage
+          chmod +x ../QtChessApp_Linux.AppImage
 
       # Package Build for Windows
       - name: Package Build (Windows)
         if: runner.os == 'Windows'
-        run: |
-          cd build
-          Compress-Archive -Path * -DestinationPath ../QtChessApp_Windows.zip
         shell: powershell
+        run: |
+          Compress-Archive -Path build\release\* -DestinationPath QtChessApp_Windows.zip
 
       # Upload Binaries
       - name: Upload Binaries
