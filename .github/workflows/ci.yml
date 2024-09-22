@@ -93,7 +93,7 @@ jobs:
           allow_empty_commit: true
 
   build-binaries:
-    # needs: deploy
+    needs: build
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -106,20 +106,21 @@ jobs:
 
       # Install Python 3.x if needed
       - name: Set up Python 3.x
-        if: runner.os != 'Windows'  # Windows runners already have Python 3.x
+        if: runner.os != 'Windows'
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
       - name: Set up Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v2
         with:
           version: '5.15.2'
           setup-python: true
-          host: ${{ runner.os == 'Windows' && 'windows' || runner.os == 'macOS' && 'mac' || 'linux' }}
+          host: ${{ matrix.os == 'windows-latest' && 'windows' || matrix.os == 'macos-latest' && 'mac' || 'linux' }}
           target: 'desktop'
-          arch: ${{ runner.os == 'Windows' && 'win64_msvc2019_64' || runner.os == 'macOS' && 'clang_64' || 'gcc_64' }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          arch: ${{ matrix.os == 'windows-latest' && 'win64_msvc2019_64' || matrix.os == 'macos-latest' && 'clang_64' || 'gcc_64' }}
+        env:
+          AQT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Install Dependencies for Linux
       - name: Install Dependencies (Linux)
@@ -134,7 +135,8 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install pkg-config openssl
+          brew list pkg-config || brew install pkg-config
+          brew list openssl@3 || brew install openssl@3
         shell: /bin/bash -e {0}
 
       # Install Dependencies for Windows
@@ -144,8 +146,6 @@ jobs:
           choco install git -y
           choco install cmake -y
         shell: powershell
-
-      # Remove the 'Set VSINSTALLDIR' step
 
       # Build Project for Linux and macOS
       - name: Build Project (Linux/macOS)
@@ -175,7 +175,7 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           cd build
-          zip -r ../QtChessApp_${{ runner.os }}.zip *
+          zip -r ../QtChessApp_${{ matrix.os }}.zip *
         shell: /bin/bash -e {0}
 
       # Package Build for Windows
