@@ -97,7 +97,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-20.04, macos-latest, windows-latest]  # Changed from ubuntu-latest to ubuntu-20.04
       fail-fast: false
 
     steps:
@@ -157,20 +157,26 @@ jobs:
           make
         shell: /bin/bash -e {0}
 
+      # Deploy Qt Libraries (macOS)
       - name: Deploy Qt Libraries (macOS)
         if: runner.os == 'macOS'
         run: |
           cd build
           macdeployqt schach.app
+        shell: /bin/bash -e {0}
 
+      # Deploy Qt Libraries (Linux)
       - name: Deploy Qt Libraries (Linux)
         if: runner.os == 'Linux'
         run: |
           cd build
           wget -O linuxdeployqt.AppImage https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
           chmod +x linuxdeployqt.AppImage
-          ./linuxdeployqt.AppImage --appimage-extract
-          ./squashfs-root/AppRun schach -appimage
+          mkdir -p AppDir/usr/bin
+          cp schach schach.desktop AppDir/usr/bin/
+          ./linuxdeployqt.AppImage AppDir/usr/bin/schach -appimage
+          mv schach-x86_64.AppImage ../QtChessApp_Linux.AppImage
+        shell: /bin/bash -e {0}
 
       # Build Project for Windows
       - name: Build Project (Windows)
@@ -185,12 +191,29 @@ jobs:
           qmake ../schach/schach.pro -spec win32-msvc "CONFIG+=release"
           nmake
 
+      # List Build Directory (Windows) for Debugging
+      - name: List Build Directory (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          echo "Contents of build directory:"
+          dir build
+          echo "Contents of build\\release directory:"
+          dir build\release
+
+      # Deploy Qt Libraries (Windows)
       - name: Deploy Qt Libraries (Windows)
         if: runner.os == 'Windows'
         shell: cmd
         run: |
           cd build\release
-          windeployqt schach.exe
+          if exist schach.exe (
+            echo "schach.exe found. Running windeployqt..."
+            windeployqt schach.exe
+          ) else (
+            echo "Error: schach.exe not found in build\release."
+            exit /b 1
+          )
 
       # Package Build for macOS
       - name: Package Build (macOS)
@@ -198,14 +221,16 @@ jobs:
         run: |
           cd build
           zip -r ../QtChessApp_macOS.zip schach.app
+        shell: /bin/bash -e {0}
 
       # Package Build for Linux
       - name: Package Build (Linux)
         if: runner.os == 'Linux'
         run: |
           cd build
-          mv schach.AppImage ../QtChessApp_Linux.AppImage
+          mv QtChessApp_Linux.AppImage ../QtChessApp_Linux.AppImage
           chmod +x ../QtChessApp_Linux.AppImage
+        shell: /bin/bash -e {0}
 
       # Package Build for Windows
       - name: Package Build (Windows)
