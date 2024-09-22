@@ -264,8 +264,8 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           cd build
-          mv QtChessApp_Linux.AppImage ../QtChessApp_Linux.AppImage
-          chmod +x ../QtChessApp_Linux.AppImage
+          mv Schach-4444bb1-x86_64.AppImage ../Schach-4444bb1-x86_64.AppImage
+          chmod +x ../Schach-4444bb1-x86_64.AppImage
         shell: /bin/bash -e {0}
 
       # Package Build for Windows
