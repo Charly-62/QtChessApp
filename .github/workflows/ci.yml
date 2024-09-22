@@ -20,22 +20,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Qt and Build Tools (Ubuntu)
+      - name: Install Qt and Build Tools
         run: |
           sudo apt-get update
           sudo apt-get install -y qt5-qmake qtbase5-dev make
-
-      - name: Build Project (Ubuntu)
+      - name: Build Project
         run: |
           mkdir -p build
           cd build
           qmake ../schach/schach.pro
           make
-
-      - name: Upload Build Artifacts (Ubuntu)
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts-ubuntu
+          name: build-artifacts
           path: build/*
 
   docs:
@@ -54,7 +52,6 @@ jobs:
           mkdir -p docs
           cd docs
           doxygen Doxyfile
-
       - name: Upload Docs Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -69,10 +66,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download Build Artifacts (Ubuntu)
+      - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: build-artifacts-ubuntu
+          name: build-artifacts
           path: build
 
       - name: Download Docs Artifacts
@@ -87,7 +84,6 @@ jobs:
           cp -r build/* deploy/build/
           cp -r docs/html/* deploy/
           touch deploy/.nojekyll
-
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v4
@@ -111,7 +107,7 @@ jobs:
       - name: Cache Qt Installation
         uses: actions/cache@v3
         with:
-          path: ${{ runner.os == 'Windows' && 'C:\\Qt' || (runner.os == 'macOS' && '/Users/runner/Qt') || '/home/runner/Qt' }}
+          path: ${{ runner.os == 'Windows' && 'C:\\Qt' || '~/Qt' }}
           key: ${{ runner.os }}-qt-5.15.2
           restore-keys: |
             ${{ runner.os }}-qt-
@@ -120,10 +116,8 @@ jobs:
         uses: jurplel/install-qt-action@v2
         with:
           version: '5.15.2'
-          cached: true
-          dir: ${{ runner.os == 'Windows' && 'C:\\Qt' || (runner.os == 'macOS' && '/Users/runner/Qt') || '/home/runner/Qt' }}
         env:
-          AQT_GITHUB_TOKEN: ${{ secrets.AQT_PAT }}
+          AQT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Install Dependencies for Linux
       - name: Install Dependencies (Linux)
@@ -150,12 +144,13 @@ jobs:
           choco install cmake -y
         shell: powershell
 
-      # Setup MSVC environment for Windows
-      - name: Setup MSVC
+      # **Set VSINSTALLDIR Environment Variable**
+      - name: Set VSINSTALLDIR
         if: runner.os == 'Windows'
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: x64
+        shell: powershell
+        run: |
+          $vsInstallDir = & 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe' -latest -property installationPath
+          Write-Host "VSINSTALLDIR=$vsInstallDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
       # Build Project for Linux and macOS
       - name: Build Project (Linux/macOS)
@@ -172,6 +167,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: cmd
         run: |
+          call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat"
           mkdir build
           cd build
           qmake ../schach/schach.pro
