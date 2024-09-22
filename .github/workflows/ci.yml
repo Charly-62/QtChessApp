@@ -93,7 +93,7 @@ jobs:
           allow_empty_commit: true
 
   build-binaries:
-    # needs: deploy
+    needs: deploy
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -104,20 +104,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Cache Qt Installation
-        uses: actions/cache@v3
+      # Install Python 3.x if needed
+      - name: Set up Python 3.x
+        if: runner.os != 'Windows'  # Windows runners already have Python 3.x
+        uses: actions/setup-python@v4
         with:
-          path: ${{ runner.os == 'Windows' && 'C:\\Qt' || '~/Qt' }}
-          key: ${{ runner.os }}-qt-5.15.2
-          restore-keys: |
-            ${{ runner.os }}-qt-
+          python-version: '3.x'
 
       - name: Set up Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
           version: '5.15.2'
-        env:
-          AQT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          setup-python: true
+          host: ${{ runner.os == 'Windows' && 'windows' || runner.os == 'macOS' && 'mac' || 'linux' }}
+          target: 'desktop'
+          arch: ${{ runner.os == 'Windows' && 'win64_msvc2019_64' || runner.os == 'macOS' && 'clang_64' || 'gcc_64' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Install Dependencies for Linux
       - name: Install Dependencies (Linux)
@@ -132,8 +134,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install pkg-config
-          brew install openssl
+          brew install pkg-config openssl
         shell: /bin/bash -e {0}
 
       # Install Dependencies for Windows
@@ -144,13 +145,7 @@ jobs:
           choco install cmake -y
         shell: powershell
 
-      # **Set VSINSTALLDIR Environment Variable**
-      - name: Set VSINSTALLDIR
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: |
-          $vsInstallDir = & 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe' -latest -property installationPath
-          Write-Host "VSINSTALLDIR=$vsInstallDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      # Remove the 'Set VSINSTALLDIR' step
 
       # Build Project for Linux and macOS
       - name: Build Project (Linux/macOS)
@@ -167,7 +162,9 @@ jobs:
         if: runner.os == 'Windows'
         shell: cmd
         run: |
-          call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat"
+          "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath > vs_path.txt
+          set /p VS_PATH=<vs_path.txt
+          call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
           mkdir build
           cd build
           qmake ../schach/schach.pro
