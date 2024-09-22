@@ -170,12 +170,36 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           cd build
+          # Download linuxdeployqt
           wget -O linuxdeployqt.AppImage https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
           chmod +x linuxdeployqt.AppImage
+      
+          # Create the AppDir structure
           mkdir -p AppDir/usr/bin
-          cp schach ../schach/schach.desktop AppDir/usr/bin/
-          ./linuxdeployqt.AppImage AppDir/usr/bin/schach -appimage
-          mv schach-x86_64.AppImage ../QtChessApp_Linux.AppImage
+          mkdir -p AppDir/usr/share/applications
+          mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
+      
+          # Copy the binary, .desktop file, and icon into AppDir
+          cp schach AppDir/usr/bin/
+          cp ../schach/schach.desktop AppDir/usr/share/applications/
+          cp ../schach/icons/schach.png AppDir/usr/share/icons/hicolor/256x256/apps/
+      
+          # Ensure the binary is executable
+          chmod +x AppDir/usr/bin/schach
+      
+          # Validate the .desktop file
+          sudo apt-get install -y desktop-file-utils
+          desktop-file-validate AppDir/usr/share/applications/schach.desktop
+      
+          # List AppDir contents for debugging
+          echo "Contents of AppDir:"
+          find AppDir
+      
+          # Run linuxdeployqt with the path to the .desktop file
+          ./linuxdeployqt.AppImage AppDir/usr/share/applications/schach.desktop -appimage
+      
+          # Move the generated AppImage to the parent directory
+          mv Schach*.AppImage ../QtChessApp_Linux.AppImage
         shell: /bin/bash -e {0}
 
       # Build Project for Windows
