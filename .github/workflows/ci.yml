@@ -173,7 +173,7 @@ jobs:
           wget -O linuxdeployqt.AppImage https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
           chmod +x linuxdeployqt.AppImage
           mkdir -p AppDir/usr/bin
-          cp schach schach.desktop AppDir/usr/bin/
+          cp schach ../schach.desktop AppDir/usr/bin/
           ./linuxdeployqt.AppImage AppDir/usr/bin/schach -appimage
           mv schach-x86_64.AppImage ../QtChessApp_Linux.AppImage
         shell: /bin/bash -e {0}
@@ -245,6 +245,3 @@ jobs:
         with:
           name: QtChessApp-${{ matrix.os }}
           path: |
-            QtChessApp_*.zip
-            QtChessApp_*.AppImage
-          retention-days: 30
