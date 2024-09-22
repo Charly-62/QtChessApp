@@ -206,7 +206,7 @@ jobs:
           ./linuxdeployqt.AppImage AppDir/usr/share/applications/schach.desktop -appimage
       
           # List files after running linuxdeployqt
-          echo "Files in build directory after running linuxdeployqt:"
+          echo "Files in build dir after linuxdeployqt:"
           ls -l
       
           # Move the generated AppImage to the parent directory
