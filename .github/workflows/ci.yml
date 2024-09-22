@@ -148,6 +148,13 @@ jobs:
           choco install cmake -y
         shell: powershell
 
+      # Setup MSVC environment for Windows
+      - name: Setup MSVC
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
       # Build Project for Linux and macOS
       - name: Build Project (Linux/macOS)
         if: runner.os != 'Windows'
@@ -163,11 +170,10 @@ jobs:
         if: runner.os == 'Windows'
         shell: cmd
         run: |
-          call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvars64.bat"
           mkdir build
           cd build
           qmake ../schach/schach.pro
-          nmake  # or 'jom' if using
+          nmake
 
       # Package Build for Linux and macOS
       - name: Package Build (Linux/macOS)
