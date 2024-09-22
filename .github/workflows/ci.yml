@@ -261,6 +261,20 @@ jobs:
             exit /b 1
           )
 
+      # Clean Build Directories
+      - name: Clean Build Directory (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          cd build\release
+          del *.obj *.cpp *.h *.o
+
+      - name: Clean Build Directory (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          cd build
+          find . -type f \( -name '*.o' -o -name '*.obj' -o -name '*.cpp' -o -name '*.h' \) -delete
+
       # Package Build for macOS
       - name: Package Build (macOS)
         if: runner.os == 'macOS'
