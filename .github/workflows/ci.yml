@@ -210,7 +210,7 @@ jobs:
           ls -l
       
           # Move the generated AppImage to the parent directory
-          mv Schach*.AppImage ../QtChessApp_Linux.AppImage
+          mv Schach*.AppImage ../Schach-4444bb1-x86_64.AppImage
         shell: /bin/bash -e {0}
 
 
