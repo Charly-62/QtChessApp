@@ -20,22 +20,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Qt and Build Tools
+      - name: Install Qt and Build Tools (Ubuntu)
         run: |
           sudo apt-get update
           sudo apt-get install -y qt5-qmake qtbase5-dev make
 
-      - name: Build Project
+      - name: Build Project (Ubuntu)
         run: |
           mkdir -p build
           cd build
           qmake ../schach/schach.pro
           make
 
-      - name: Upload Build Artifacts
+      - name: Upload Build Artifacts (Ubuntu)
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts
+          name: build-artifacts-ubuntu
           path: build/*
 
   docs:
@@ -69,10 +69,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download Build Artifacts
+      - name: Download Build Artifacts (Ubuntu)
         uses: actions/download-artifact@v4
         with:
-          name: build-artifacts
+          name: build-artifacts-ubuntu
           path: build
 
       - name: Download Docs Artifacts
@@ -111,7 +111,7 @@ jobs:
       - name: Cache Qt Installation
         uses: actions/cache@v3
         with:
-          path: ${{ runner.os == 'Windows' && 'C:\\Qt' || '~/Qt' }}
+          path: ${{ runner.os == 'Windows' && 'C:\\Qt' || (runner.os == 'macOS' && '/Users/runner/Qt') || '/home/runner/Qt' }}
           key: ${{ runner.os }}-qt-5.15.2
           restore-keys: |
             ${{ runner.os }}-qt-
@@ -121,6 +121,7 @@ jobs:
         with:
           version: '5.15.2'
           cached: true
+          dir: ${{ runner.os == 'Windows' && 'C:\\Qt' || (runner.os == 'macOS' && '/Users/runner/Qt') || '/home/runner/Qt' }}
         env:
           AQT_GITHUB_TOKEN: ${{ secrets.AQT_PAT }}
 
