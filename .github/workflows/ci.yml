@@ -174,7 +174,7 @@ jobs:
           mkdir build
           cd build
           qmake ../schach/schach.pro
-          nmake  # or 'jom' if using
+          nmake
 
       # Package Build for Linux and macOS
       - name: Package Build (Linux/macOS)
