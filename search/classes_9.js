@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['schachapp_140',['SchachApp',['../classSchachApp.html',1,'']]]
+  ['schachapp_141',['SchachApp',['../classSchachApp.html',1,'']]]
 ];

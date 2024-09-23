@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Qt Chess App: /home/runner/work/QtChessApp/QtChessApp/schach/game.h File Reference</title>
+<title>Qt Chess App: /home/runner/work/QtChessApp/QtChessApp/schach/schachapp.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -69,47 +69,50 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a>  </div>
   <div class="headertitle">
-<div class="title">game.h File Reference</div>  </div>
+<div class="title">schachapp.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This file contains the declaration of the <a class="el" href="classGame.html" title="Manages the state of the chess game.">Game</a> class which manages the chessboard and game logic.  
+<p>This file contains the declaration of the schachapp class, which manages the gui and user interaction.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="logik_8h_source.html">logik.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="piece_8h_source.html">piece.h</a>&quot;</code><br />
-<code>#include &lt;memory&gt;</code><br />
-<code>#include &lt;QObject&gt;</code><br />
+<div class="textblock"><code>#include &lt;QPushButton&gt;</code><br />
+<code>#include &lt;QGridLayout&gt;</code><br />
 <code>#include &lt;QWidget&gt;</code><br />
-<code>#include &lt;QTcpSocket&gt;</code><br />
-<code>#include &lt;QDataStream&gt;</code><br />
-<code>#include &lt;iostream&gt;</code><br />
-<code>#include &lt;QString&gt;</code><br />
+<code>#include &lt;QHostAddress&gt;</code><br />
+<code>#include &lt;QStyle&gt;</code><br />
+<code>#include &lt;QTimer&gt;</code><br />
 <code>#include &lt;QComboBox&gt;</code><br />
-<code>#include &lt;QEvent&gt;</code><br />
+<code>#include &lt;QStackedWidget&gt;</code><br />
+<code>#include &lt;QStack&gt;</code><br />
+<code>#include &lt;QMetaEnum&gt;</code><br />
+<code>#include &lt;QDebug&gt;</code><br />
+<code>#include &lt;QEventLoop&gt;</code><br />
+<code>#include &lt;QFile&gt;</code><br />
+<code>#include &quot;<a class="el" href="mytcpserver_8h_source.html">mytcpserver.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="mytcpclient_8h_source.html">mytcpclient.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="game_8h_source.html">game.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="piece_8h_source.html">piece.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
-Include dependency graph for game.h:</div>
+Include dependency graph for schachapp.h:</div>
 <div class="dyncontent">
-<div class="center"><img src="game_8h__incl.png" border="0" usemap="#a_2home_2runner_2work_2QtChessApp_2QtChessApp_2schach_2game_8h" alt=""/></div>
+<div class="center"><img src="schachapp_8h__incl.png" border="0" usemap="#a_2home_2runner_2work_2QtChessApp_2QtChessApp_2schach_2schachapp_8h" alt=""/></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><img src="game_8h__dep__incl.png" border="0" usemap="#a_2home_2runner_2work_2QtChessApp_2QtChessApp_2schach_2game_8hdep" alt=""/></div>
+<div class="center"><img src="schachapp_8h__dep__incl.png" border="0" usemap="#a_2home_2runner_2work_2QtChessApp_2QtChessApp_2schach_2schachapp_8hdep" alt=""/></div>
 </div>
 </div>
-<p><a href="game_8h_source.html">Go to the source code of this file.</a></p>
+<p><a href="schachapp_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMoveInfo.html">MoveInfo</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct containing information for each move.  <a href="structMoveInfo.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGame.html">Game</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages the state of the chess game.  <a href="classGame.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSchachApp.html">SchachApp</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manages the user interface for the chess game, displaying the board and interacting with the user.  <a href="classSchachApp.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This file contains the declaration of the <a class="el" href="classGame.html" title="Manages the state of the chess game.">Game</a> class which manages the chessboard and game logic. </p>
+<div class="textblock"><p>This file contains the declaration of the schachapp class, which manages the gui and user interaction. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
