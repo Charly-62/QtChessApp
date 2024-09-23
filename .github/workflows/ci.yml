@@ -297,7 +297,7 @@ jobs:
         shell: powershell
         run: |
           # Define an intermediate deployment folder
-          $deployFolder = "Deploy"
+          $deployFolder = "QtChessApp_Windows"
           
           # Create the deployment folder
           mkdir $deployFolder
@@ -306,7 +306,7 @@ jobs:
           Copy-Item -Path "build\release\*" -Destination $deployFolder -Recurse
           
           # Compress the deployment folder into a zip file
-          Compress-Archive -Path "$deployFolder\*" -DestinationPath "QtChessApp_Windows.zip" -Force
+          Compress-Archive -Path "$deployFolder" -DestinationPath "QtChessApp_Windows.zip" -Force
           
           # (Optional) Remove the deployment folder after zipping
           Remove-Item -Recurse -Force $deployFolder
