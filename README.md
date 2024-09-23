@@ -104,6 +104,18 @@ Pre-built binaries for Windows, macOS, and Linux are available in the [latest re
    ./Schach-*.AppImage
    ```
 
+
+### **Note on Third-Party Antivirus Protection**
+
+Some third-party antivirus programs (such as ESET) may flag or block `schach.exe` due to it being an unsigned executable. If you encounter issues running the application, you may need to temporarily disable protection or add `schach.exe` to ESET's exclusions. Windows Defender is not a problem, just some external protection programs.
+
+If you still have concerns about the safety of the executable, you can:
+
+- **Verify the Build Process:** The executable is generated using a public GitHub Actions workflow, which you can review in the [Actions tab](https://github.com/Charly-62/QtChessApp/actions) of this repository. This workflow runs the build process openly and securely.
+  
+- **Build the Program Yourself:** You can follow the steps in the next section to build the application from source using Qt. This ensures you have full control over the build process and can verify its integrity.
+
+
 ## Build and run from Source (Alternatively)
 
 To build and run the project from source, ensure you have Qt5 (or higher) installed.
