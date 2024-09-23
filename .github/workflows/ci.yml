@@ -179,10 +179,17 @@ jobs:
           mkdir -p AppDir/usr/share/applications
           mkdir -p AppDir/usr/share/icons/hicolor/256x256/apps
       
-          # Copy the binary, .desktop file, and icon into AppDir
+          # Copy the binary and .desktop file into AppDir
           cp schach AppDir/usr/bin/
           cp ../schach/schach.desktop AppDir/usr/share/applications/
-          cp ../schach/icons/schach.png AppDir/usr/share/icons/hicolor/256x256/apps/
+      
+          # Copy the icon if it exists
+          ICON_PATH="../schach/icons/schach.png"
+          if [ -f "$ICON_PATH" ]; then
+            cp "$ICON_PATH" AppDir/usr/share/icons/hicolor/256x256/apps/
+          else
+            echo "Icon file not found at $ICON_PATH, skipping icon copy."
+          fi
       
           # Ensure the binary is executable
           chmod +x AppDir/usr/bin/schach
@@ -190,6 +197,10 @@ jobs:
           # Validate the .desktop file
           sudo apt-get install -y desktop-file-utils
           desktop-file-validate AppDir/usr/share/applications/schach.desktop
+          if [ $? -ne 0 ]; then
+            echo "Invalid .desktop file."
+            exit 1
+          fi
       
           # List AppDir contents for debugging
           echo "Contents of AppDir:"
@@ -198,8 +209,19 @@ jobs:
           # Run linuxdeployqt with the path to the .desktop file
           ./linuxdeployqt.AppImage AppDir/usr/share/applications/schach.desktop -appimage
       
-          # Move the generated AppImage to the parent directory
-          mv Schach*.AppImage ../QtChessApp_Linux.AppImage
+          # List files after running linuxdeployqt
+          echo "Files in build dir after linuxdeployqt:"
+          ls -l
+      
+          # Check if the AppImage was created
+          if [ -f Schach*.AppImage ]; then
+            echo "AppImage created successfully."
+            # Move the generated AppImage to the parent directory
+            mv Schach*.AppImage ../Schach-4444bb1-x86_64.AppImage
+          else
+            echo "AppImage not found. linuxdeployqt may have failed."
+            exit 1
+          fi
         shell: /bin/bash -e {0}
 
       # Build Project for Windows
@@ -239,6 +261,20 @@ jobs:
             exit /b 1
           )
 
+      # Clean Build Directories
+      - name: Clean Build Directory (Windows)
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          cd build\release
+          del *.obj *.cpp *.h *.o
+
+      - name: Clean Build Directory (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          cd build
+          find . -type f \( -name '*.o' -o -name '*.obj' -o -name '*.cpp' -o -name '*.h' \) -delete
+
       # Package Build for macOS
       - name: Package Build (macOS)
         if: runner.os == 'macOS'
@@ -251,9 +287,7 @@ jobs:
       - name: Package Build (Linux)
         if: runner.os == 'Linux'
         run: |
-          cd build
-          mv QtChessApp_Linux.AppImage ../QtChessApp_Linux.AppImage
-          chmod +x ../QtChessApp_Linux.AppImage
+          chmod +x Schach-4444bb1-x86_64.AppImage
         shell: /bin/bash -e {0}
 
       # Package Build for Windows
@@ -263,12 +297,12 @@ jobs:
         run: |
           Compress-Archive -Path build\release\* -DestinationPath QtChessApp_Windows.zip
 
-      # Upload Binaries
+      # Upload Binaries (Adjusted Paths)
       - name: Upload Binaries
         uses: actions/upload-artifact@v4
         with:
           name: QtChessApp-${{ matrix.os }}
           path: |
+            Schach-4444bb1-x86_64.AppImage
             QtChessApp_*.zip
-            QtChessApp_*.AppImage
           retention-days: 30
