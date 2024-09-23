@@ -52,3 +52,12 @@ RESOURCES += \
 
 DISTFILES += \
     List_of_banned_words/de.txt
+
+mac {
+    ICON = schach.icns
+    QMAKE_INFO_PLIST = Info.plist
+}
+
+win32 {
+    RC_FILE += schach.rc
+}

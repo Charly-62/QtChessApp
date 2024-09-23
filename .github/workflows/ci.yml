@@ -135,23 +135,63 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
+          brew install png2icns
           brew list pkg-config || brew install pkg-config
           brew list openssl@3 || brew install openssl@3
+        shell: /bin/bash -e {0}
+
+      # Convert PNG to ICNS
+      - name: Convert schach.png to schach.icns (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p icons.iconset
+          sips -z 16 16     schach.png --out icons.iconset/icon_16x16.png
+          sips -z 32 32     schach.png --out icons.iconset/icon_16x16@2x.png
+          sips -z 32 32     schach.png --out icons.iconset/icon_32x32.png
+          sips -z 64 64     schach.png --out icons.iconset/icon_32x32@2x.png
+          sips -z 128 128   schach.png --out icons.iconset/icon_128x128.png
+          sips -z 256 256   schach.png --out icons.iconset/icon_128x128@2x.png
+          sips -z 256 256   schach.png --out icons.iconset/icon_256x256.png
+          sips -z 512 512   schach.png --out icons.iconset/icon_256x256@2x.png
+          sips -z 512 512   schach.png --out icons.iconset/icon_512x512.png
+          cp schach.png icons.iconset/icon_512x512@2x.png
+          iconutil -c icns icons.iconset -o schach.icns
+          rm -r icons.iconset
         shell: /bin/bash -e {0}
 
       # Install Dependencies for Windows
       - name: Install Dependencies (Windows)
         if: runner.os == 'Windows'
         run: |
+          choco install imagemagick -params "/InstallPath:C:\ImageMagick" -y
           choco install git -y
           choco install cmake -y
         shell: powershell
 
-      # Build Project for Linux and macOS
-      - name: Build Project (Linux/macOS)
-        if: runner.os != 'Windows'
+      # Convert schach.png to schach.ico (Windows)
+      - name: Convert schach.png to schach.ico (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          & "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\magick.exe" convert schach.png -define icon:auto-resize=256,128,96,64,48,32,16 schach.ico
+
+      # Build Project for Linux
+      - name: Build Project (Linux)
+        if: runner.os == 'Linux'
         run: |
           mkdir build
+          cd build
+          qmake ../schach/schach.pro "CONFIG+=release"
+          make
+        shell: /bin/bash -e {0}
+
+      # Build Project for macOS
+      - name: Build Project (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir build
+          cp schach.icns build/
+          cp Info.plist build/
           cd build
           qmake ../schach/schach.pro "CONFIG+=release"
           make
@@ -233,6 +273,8 @@ jobs:
           set /p VS_PATH=<vs_path.txt
           call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
           mkdir build
+          copy schach.ico build\
+          copy schach.rc build\
           cd build
           qmake ../schach/schach.pro -spec win32-msvc "CONFIG+=release"
           nmake
