@@ -72,17 +72,65 @@ The `move metadata` byte is divided into two 4-bit nibbles:
 - Utilizes **smart pointers** (`std::unique_ptr`, `std::shared_ptr`) for automatic memory management and prevention of memory leaks.
 - Memory issues were tracked and resolved using **Valgrind**.
 
-## Build and Run
+## Build and Run with automatically generated executables
 
-To build and run the project, use **Qt Creator** with Qt5 installed:
+### **Windows**
 
-1. Clone the repository:
+1. **Download** the latest Windows ZIP file.
+2. **Extract** the contents of the ZIP file.
+3. **Run** `schach.exe` to start the application.
+
+### **macOS**
+
+1. **Download** the latest macOS ZIP file.
+2. **Extract** the ZIP file.
+3. **Run** `Schach.app`. If prompted, confirm that you want to open the app.
+
+### **Linux**
+
+1. **Download** the latest AppImage file.
+2. **Make the AppImage executable**:
+
+   ```bash
+   chmod +x Schach-*.AppImage
+
+3. **Run the AppImage**:
+
+   ```bash
+   ./Schach-*.AppImage
+
+## Build from Source (Alternatively)
+
+To build and run the project from source, ensure you have at Qt5 (or higher) installed.
+
+### **Build**
+
+1. **Clone the repository**
+
    ```bash
    git clone https://github.com/Charly-62/QtChessApp.git QtChessApp
 
-2. Open `schach.pro` in Qt Creator.
+2. **Open the project file schach.pro in Qt Creator and build the project.
 
-3. Build and run the project within Qt Creator.
+### **Alternatively, build from the command line:**
+
+**Linux and macOS**
+   ```bash
+   cd QtChessApp
+   mkdir build
+   cd build
+   qmake ../schach/schach.pro
+   make
+   ./schach
+
+**Windows**
+   ```bash
+   cd QtChessApp
+   mkdir build
+   cd build
+   qmake ..\schach\schach.pro
+   nmake
+   schach.exe
 
 ## Continuous Documentation
 
