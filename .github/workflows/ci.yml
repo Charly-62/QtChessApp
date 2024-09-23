@@ -143,9 +143,7 @@ jobs:
       - name: Convert schach.png to schach.icns (macOS)
         if: runner.os == 'macOS'
         run: |
-          # Copy schach.png from its location to the current directory
           cp schach/icons/schach.png .
-          # Ensure schach.png is in the current directory
           if [ ! -f schach.png ]; then
             echo "schach.png not found!"
             exit 1
@@ -163,6 +161,7 @@ jobs:
           sips -z 1024 1024 schach.png --out icons.iconset/icon_512x512@2x.png
           iconutil -c icns icons.iconset -o schach.icns
           rm -r icons.iconset
+          mv schach.icns schach/
         shell: /bin/bash -e {0}
 
       # Install Dependencies for Windows
@@ -206,7 +205,7 @@ jobs:
           cp schach.icns build/
           cp schach/Info.plist build/
           cd build
-          qmake ../schach/schach.pro "CONFIG+=release"
+          qmake ../schach/schach.pro "CONFIG+=release sdk_no_version_check"
           make
         shell: /bin/bash -e {0}
 

@@ -4,6 +4,6 @@
 <plist version="1.0">
   <dict>
     <key>CFBundleIconFile</key>
-    <string>schach</string>
+    <string>schach.icns</string>
   </dict>
 </plist>
