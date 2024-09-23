@@ -60,7 +60,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build, docs]
+    needs: docs
 
     steps:
       - name: Checkout repository
@@ -288,6 +288,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           chmod +x Schach-4444bb1-x86_64.AppImage
+          mv Schach-4444bb1-x86_64.AppImage QtChessApp_Linux.AppImage
         shell: /bin/bash -e {0}
 
       # Package Build for Windows
@@ -305,7 +306,7 @@ jobs:
           path: |
             QtChessApp_Windows.zip
             QtChessApp_macOS.zip
-            Schach-4444bb1-x86_64.AppImage
+            QtChessApp_Linux.AppImage
           retention-days: 30
 
   deploy-release:
@@ -377,6 +378,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./linux/Schach-4444bb1-x86_64.AppImage
-          asset_name: Schach-4444bb1-x86_64.AppImage
+          asset_path: ./linux/QtChessApp_Linux.AppImage
+          asset_name: QtChessApp_Linux.AppImage
           asset_content_type: application/octet-stream

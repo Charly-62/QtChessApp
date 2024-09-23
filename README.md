@@ -75,21 +75,23 @@ The `move metadata` byte is divided into two 4-bit nibbles:
 
 ## Build and Run with Automatically Generated Executables
 
+Pre-built binaries for Windows, macOS, and Linux are available in the [latest release](https://github.com/Charly-62/QtChessApp/releases/latest).
+
 ### **Windows**
 
-1. **Download** the latest Windows ZIP file.
+1. **Download** the latest Windows ZIP file from [here](https://github.com/Charly-62/QtChessApp/releases/latest/download/QtChessApp_Windows.zip).
 2. **Extract** the contents of the ZIP file.
 3. **Run** `schach.exe` to start the application.
 
 ### **macOS**
 
-1. **Download** the latest macOS ZIP file.
+1. **Download** the latest macOS ZIP file from [here](https://github.com/Charly-62/QtChessApp/releases/latest/download/QtChessApp_macOS.zip).
 2. **Extract** the ZIP file.
 3. **Run** `Schach.app`. If prompted, confirm that you want to open the app.
 
 ### **Linux**
 
-1. **Download** the latest AppImage file.
+1. **Download** the latest AppImage file from [here](https://github.com/Charly-62/QtChessApp/releases/latest/download/QtChessApp_Linux.AppImage).
 2. **Make the AppImage executable**:
 
    ```bash
