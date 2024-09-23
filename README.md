@@ -86,8 +86,9 @@ Pre-built binaries for Windows, macOS, and Linux are available in the [latest re
 ### **macOS**
 
 1. **Download** the latest macOS ZIP file from [here](https://github.com/Charly-62/QtChessApp/releases/latest/download/QtChessApp_macOS.zip).
-2. **Extract** the ZIP file.
-3. **Run** `Schach.app`. If prompted, confirm that you want to open the app.
+2. **Open the app**:
+   - **Right-click** (not left-click!) `Schach.app` and select **Open**.
+   - If you see a message saying "the developer cannot be verified" click **Open** again to run the app. 
 
 ### **Linux**
 
