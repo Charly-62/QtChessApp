@@ -162,6 +162,9 @@ jobs:
           iconutil -c icns icons.iconset -o schach.icns
           rm -r icons.iconset
           mv schach.icns schach/
+          # List contents of schach/ to verify schach.icns is there
+          echo "Contents of schach/ directory after moving schach.icns:"
+          ls -l schach/
         shell: /bin/bash -e {0}
 
       # Install Dependencies for Windows
@@ -202,8 +205,6 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           mkdir build
-          cp schach.icns build/
-          cp schach/Info.plist build/
           cd build
           qmake ../schach/schach.pro "CONFIG+=release sdk_no_version_check"
           make
