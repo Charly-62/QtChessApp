@@ -1,3 +1,8 @@
+/**
+ * @file schachapp.h
+ * @brief This file contains the declaration of the schachapp class, which manages the gui and user interaction.
+ */
+
 #ifndef SCHACHAPP_H
 #define SCHACHAPP_H
 
@@ -6,10 +11,6 @@
 #include <QWidget>
 #include <QHostAddress>
 #include <QStyle>
-#include "mytcpserver.h"
-#include "mytcpclient.h"
-#include "game.h"
-#include "piece.h"
 #include <QTimer>
 #include <QComboBox>
 #include <QStackedWidget>
@@ -19,6 +20,11 @@
 #include <QEventLoop>
 #include <QComboBox>
 #include <QFile>
+
+#include "mytcpserver.h"
+#include "mytcpclient.h"
+#include "game.h"
+#include "piece.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
