@@ -139,10 +139,13 @@ jobs:
           brew list openssl@3 || brew install openssl@3
         shell: /bin/bash -e {0}
 
-      # Convert PNG to ICNS
+      # Convert schach.png to schach.icns (macOS)
       - name: Convert schach.png to schach.icns (macOS)
         if: runner.os == 'macOS'
         run: |
+          # Copy schach.png from its location to the current directory
+          cp schach/icons/schach.png .
+          # Ensure schach.png is in the current directory
           if [ ! -f schach.png ]; then
             echo "schach.png not found!"
             exit 1
@@ -176,11 +179,14 @@ jobs:
         if: runner.os == 'Windows'
         shell: powershell
         run: |
+          # Copy schach.png from its location to the current directory
+          Copy-Item schach/icons/schach.png .
+          # Ensure schach.png is in the current directory
           if (-Not (Test-Path -Path "schach.png")) {
-          Write-Error "schach.png not found!"
-          exit 1
+            Write-Error "schach.png not found!"
+            exit 1
           }
-          magick convert schach.png -define icon:auto-resize=256,128,96,64,48,32,16 schach.ico  
+          magick convert schach.png -define icon:auto-resize=256,128,96,64,48,32,16 schach.ico
         
       # Build Project for Linux
       - name: Build Project (Linux)
@@ -198,7 +204,7 @@ jobs:
         run: |
           mkdir build
           cp schach.icns build/
-          cp Info.plist build/
+          cp schach/Info.plist build/
           cd build
           qmake ../schach/schach.pro "CONFIG+=release"
           make
@@ -281,7 +287,7 @@ jobs:
           call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
           mkdir build
           copy schach.ico build\
-          copy schach.rc build\
+          copy schach\schach.rc build\
           cd build
           qmake ../schach/schach.pro -spec win32-msvc "CONFIG+=release"
           nmake
