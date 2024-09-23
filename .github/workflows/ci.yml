@@ -296,7 +296,20 @@ jobs:
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          Compress-Archive -Path build\release\* -DestinationPath QtChessApp_Windows.zip
+          # Define an intermediate deployment folder
+          $deployFolder = "Schach"
+          
+          # Create the deployment folder
+          mkdir $deployFolder
+          
+          # Copy all build artifacts into the deployment folder
+          Copy-Item -Path "build\release\*" -Destination $deployFolder -Recurse
+          
+          # Compress the deployment folder into a zip file
+          Compress-Archive -Path "$deployFolder\*" -DestinationPath "QtChessApp_Windows.zip" -Force
+          
+          # (Optional) Remove the deployment folder after zipping
+          Remove-Item -Recurse -Force $deployFolder
 
       # Upload Binaries
       - name: Upload Binaries
@@ -316,68 +329,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Download Windows Build Artifact
-      - name: Download Windows Build Artifact
+      # Download Artifacts
+      - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
           name: QtChessApp-windows-latest
           path: ./windows
-
-      # Download macOS Build Artifact
       - name: Download macOS Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: QtChessApp-macos-latest
           path: ./macos
-
-      # Download Linux Build Artifact
       - name: Download Linux Build Artifact
         uses: actions/download-artifact@v4
         with:
           name: QtChessApp-ubuntu-20.04
           path: ./linux
 
-      # Create GitHub Release
+      # Create Release and Upload Assets
       - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: 'v1.0.${{ github.run_number }}'  # Customize your versioning
-          release_name: 'Release v1.0.${{ github.run_number }}'
+          artifacts: |
+            ./windows/QtChessApp_Windows.zip
+            ./macos/QtChessApp_macOS.zip
+            ./linux/QtChessApp_Linux.AppImage
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: 'v1.0.${{ github.run_number }}'
+          name: 'Release v1.0.${{ github.run_number }}'
           draft: false
           prerelease: false
-
-      # Upload Windows Binary to Release
-      - name: Upload Windows Binary to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./windows/QtChessApp_Windows.zip
-          asset_name: QtChessApp_Windows.zip
-          asset_content_type: application/zip
-
-      # Upload macOS Binary to Release
-      - name: Upload macOS Binary to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./macos/QtChessApp_macOS.zip
-          asset_name: QtChessApp_macOS.zip
-          asset_content_type: application/zip
-
-      # Upload Linux Binary to Release
-      - name: Upload Linux Binary to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./linux/QtChessApp_Linux.AppImage
-          asset_name: QtChessApp_Linux.AppImage
-          asset_content_type: application/octet-stream
