@@ -297,7 +297,7 @@ jobs:
         shell: powershell
         run: |
           # Define an intermediate deployment folder
-          $deployFolder = "Schach"
+          $deployFolder = "Deploy"
           
           # Create the deployment folder
           mkdir $deployFolder
