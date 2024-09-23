@@ -72,7 +72,8 @@ The `move metadata` byte is divided into two 4-bit nibbles:
 - Utilizes **smart pointers** (`std::unique_ptr`, `std::shared_ptr`) for automatic memory management and prevention of memory leaks.
 - Memory issues were tracked and resolved using **Valgrind**.
 
-## Build and Run with automatically generated executables
+
+## Build and Run with Automatically Generated Executables
 
 ### **Windows**
 
@@ -93,28 +94,32 @@ The `move metadata` byte is divided into two 4-bit nibbles:
 
    ```bash
    chmod +x Schach-*.AppImage
+   ```
 
 3. **Run the AppImage**:
 
    ```bash
    ./Schach-*.AppImage
+   ```
 
-## Build from Source (Alternatively)
+## Build and run from Source (Alternatively)
 
-To build and run the project from source, ensure you have at Qt5 (or higher) installed.
+To build and run the project from source, ensure you have Qt5 (or higher) installed.
 
 ### **Build**
 
-1. **Clone the repository**
+1. **Clone the repository**:
 
    ```bash
    git clone https://github.com/Charly-62/QtChessApp.git QtChessApp
+   ```
 
-2. **Open the project file schach.pro in Qt Creator and build the project.
+2. **Open the project file `schach.pro` in Qt Creator and build the project.**
 
 ### **Alternatively, build from the command line:**
 
-**Linux and macOS**
+**Linux and macOS**:
+
    ```bash
    cd QtChessApp
    mkdir build
@@ -122,8 +127,10 @@ To build and run the project from source, ensure you have at Qt5 (or higher) ins
    qmake ../schach/schach.pro
    make
    ./schach
+   ```
 
-**Windows**
+**Windows**:
+
    ```bash
    cd QtChessApp
    mkdir build
@@ -131,6 +138,7 @@ To build and run the project from source, ensure you have at Qt5 (or higher) ins
    qmake ..\schach\schach.pro
    nmake
    schach.exe
+   ```
 
 ## Continuous Documentation
 
