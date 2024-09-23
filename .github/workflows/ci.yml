@@ -135,7 +135,6 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install png2icns
           brew list pkg-config || brew install pkg-config
           brew list openssl@3 || brew install openssl@3
         shell: /bin/bash -e {0}
@@ -144,6 +143,10 @@ jobs:
       - name: Convert schach.png to schach.icns (macOS)
         if: runner.os == 'macOS'
         run: |
+          if [ ! -f schach.png ]; then
+            echo "schach.png not found!"
+            exit 1
+          fi
           mkdir -p icons.iconset
           sips -z 16 16     schach.png --out icons.iconset/icon_16x16.png
           sips -z 32 32     schach.png --out icons.iconset/icon_16x16@2x.png
@@ -154,7 +157,7 @@ jobs:
           sips -z 256 256   schach.png --out icons.iconset/icon_256x256.png
           sips -z 512 512   schach.png --out icons.iconset/icon_256x256@2x.png
           sips -z 512 512   schach.png --out icons.iconset/icon_512x512.png
-          cp schach.png icons.iconset/icon_512x512@2x.png
+          sips -z 1024 1024 schach.png --out icons.iconset/icon_512x512@2x.png
           iconutil -c icns icons.iconset -o schach.icns
           rm -r icons.iconset
         shell: /bin/bash -e {0}
@@ -162,19 +165,23 @@ jobs:
       # Install Dependencies for Windows
       - name: Install Dependencies (Windows)
         if: runner.os == 'Windows'
+        shell: powershell
         run: |
           choco install imagemagick -params "/InstallPath:C:\ImageMagick" -y
           choco install git -y
           choco install cmake -y
-        shell: powershell
 
       # Convert schach.png to schach.ico (Windows)
       - name: Convert schach.png to schach.ico (Windows)
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          & "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\magick.exe" convert schach.png -define icon:auto-resize=256,128,96,64,48,32,16 schach.ico
-
+          if (-Not (Test-Path -Path "schach.png")) {
+          Write-Error "schach.png not found!"
+          exit 1
+          }
+          magick convert schach.png -define icon:auto-resize=256,128,96,64,48,32,16 schach.ico  
+        
       # Build Project for Linux
       - name: Build Project (Linux)
         if: runner.os == 'Linux'
