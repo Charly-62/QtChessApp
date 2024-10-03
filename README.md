@@ -96,13 +96,20 @@ Pre-built binaries for Windows, macOS, and Linux are available in the [latest re
 2. **Make the AppImage executable**:
 
    ```bash
-   chmod +x Schach-*.AppImage
+   chmod +x QtChessApp_Linux.AppImage
    ```
 
-3. **Run the AppImage**:
+3. **Install FUSE if not allready installed**
 
    ```bash
-   ./Schach-*.AppImage
+   sudo pacman -S fuse2 -y
+   ```
+
+
+4. **Run the AppImage**:
+
+   ```bash
+   ./QtChessApp_Linux.AppImage
    ```
 
 
