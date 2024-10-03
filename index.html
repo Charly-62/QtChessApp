@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Qt Chess App: Main Page</title>
+<title>Qt Chess App: QtChessApp</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,11 +61,167 @@ $(function() {
 </iframe>
 </div>
 
-<div class="header">
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">Qt Chess App Documentation</div>  </div>
+<div class="title">QtChessApp </div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p><a class="anchor" id="md__home_runner_work_QtChessApp_QtChessApp_README"></a> <b>QtChessApp</b> is a C++ and Qt-based chess game that allows two players to compete over a network in real time. The project focuses on enforcing chess rules, efficient network communication, and an interactive GUI, making it ideal for studying networked game development.</p>
+<h1>Features</h1>
+<h2>Chess Rules and <a class="el" href="classGame.html" title="Manages the state of the chess game.">Game</a> Logic</h2>
+<ul>
+<li>Full implementation of chess rules:<ul>
+<li><b>Castling</b> (short and long)</li>
+<li><b>En Passant</b></li>
+<li><b><a class="el" href="classPawn.html">Pawn</a> Promotion</b> (<a class="el" href="classQueen.html">Queen</a>, <a class="el" href="classRook.html">Rook</a>, <a class="el" href="classBishop.html">Bishop</a>, <a class="el" href="classKnight.html">Knight</a>)</li>
+<li><b>Pinning</b></li>
+</ul>
+</li>
+<li>Move validation via the <code>logik</code> class ensures all moves are legal before execution.</li>
+<li><b>Turn Management</b>: Alternates turns and prevents illegal moves.</li>
+<li><b><a class="el" href="classPiece.html">Piece</a> Classes</b>: Each piece has its own class with specific movement rules, derived from the base <code>piece</code> class.</li>
+<li><b>Undo Moves</b>: Undo moves is supported in both local and network mode. In network mode, undo requires the opponent’s acceptance.</li>
+</ul>
+<h2>Graphical User Interface (GUI)</h2>
+<ul>
+<li>Built with Qt widgets, providing a responsive chessboard display.</li>
+<li><b>Key Features</b>:<ul>
+<li>Mouse-based move input with visual highlights for possible moves.</li>
+<li>Real-time updates of the board state.</li>
+<li>Integrated game controls for setting roles (Server/Client) and managing connections.</li>
+<li>Timer, score tracking, and display of captured pieces.</li>
+</ul>
+</li>
+<li>Managed by the <code><a class="el" href="classSchachApp.html" title="Manages the user interface for the chess game, displaying the board and interacting with the user.">SchachApp</a></code> class.</li>
+</ul>
+<h2>Networking</h2>
+<ul>
+<li><b>TCP/IP Protocol</b>: Reliable transmission of game data between clients.</li>
+<li><b>Client/Server Architecture</b>:<ul>
+<li>One player acts as a server, and the other connects as a client.</li>
+<li>The server initiates and broadcasts moves.</li>
+</ul>
+</li>
+<li>Uses <b>QTcpSocket</b> and <b>QDataStream</b> for cross-platform, robust communication.</li>
+<li><b>Reconnection Support</b>: Automatic client reconnection after unexpected disconnection.</li>
+<li><b>Chat &amp; Names</b>: In-game chat with built-in censorship for English and German swear words.</li>
+<li><b>Safety</b>: Packet validation, buffering, controlled disconnections, and DoS protection.</li>
+</ul>
+<h2>Custom TCP Protocol</h2>
+<p>A custom protocol handles move and game state transmission, serialized via <code>QDataStream</code>. The protocol ensures minimal yet comprehensive data transfer for each action.</p>
+<h3>Protocol Message Structure</h3>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>Command</b>   </th><th class="markdownTableHeadNone"><b>Length (Bytes)</b>   </th><th class="markdownTableHeadNone"><b>Data</b>   </th><th class="markdownTableHeadNone"><b>Direction</b>    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>0x01</code> - <a class="el" href="classGame.html" title="Manages the state of the chess game.">Game</a> Start   </td><td class="markdownTableBodyNone"><code>0x02</code>   </td><td class="markdownTableBodyNone"><code>quint8</code>: Who starts (<code>0x00</code> - Server, <code>0x01</code> - Client) <br  />
+ <code>quint8</code>: Group number   </td><td class="markdownTableBodyNone">Server → Client    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>0x02</code> - Response   </td><td class="markdownTableBodyNone"><code>0x01</code>   </td><td class="markdownTableBodyNone"><code>quint8</code>: Group number   </td><td class="markdownTableBodyNone">Client → Server    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>0x03</code> - Move   </td><td class="markdownTableBodyNone"><code>0x05</code>   </td><td class="markdownTableBodyNone"><code>quint8</code>: Start column <br  />
+ <code>quint8</code>: Start row <br  />
+ <code>quint8</code>: Target column <br  />
+ <code>quint8</code>: Target row <br  />
+ <code>quint8</code>: Move metadata (castling, etc.)   </td><td class="markdownTableBodyNone">Bi-directional    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>0x04</code> - Move Response   </td><td class="markdownTableBodyNone"><code>0x01</code>   </td><td class="markdownTableBodyNone"><code>quint8</code>: Move status (<code>0x00</code> - OK, <code>0x01</code> - Illegal move, <code>0x02</code> - Checkmate, etc.)   </td><td class="markdownTableBodyNone">Bi-directional   </td></tr>
+</table>
+<h2>Move Metadata Encoding</h2>
+<p>The <code>move metadata</code> byte is divided into two 4-bit nibbles:</p><ul>
+<li><b>MSN (Most Significant Nibble)</b>: Encodes special moves (e.g., pawn promotion).</li>
+<li><b>LSN (Least Significant Nibble)</b>: Encodes move consequences (e.g., capture, checkmate, castling).</li>
+</ul>
+<h2>Key Classes</h2>
+<ol type="1">
+<li><b><a class="el" href="classGame.html" title="Manages the state of the chess game.">Game</a> Logic</b>:<ul>
+<li><code>game</code>: Manages the board, piece movement, and turn management.</li>
+<li><code>piece</code> and derived classes (e.g., <code>pawn</code>, <code>rook</code>, <code>knight</code>): Define specific movement rules for each piece.</li>
+<li><code>logik</code>: Validates the legality of moves before they are executed.</li>
+</ul>
+</li>
+<li><b>Networking</b>:<ul>
+<li><code>netzwerk</code>: Handles network connections and sends/receives moves.</li>
+<li><b>QTcpSocket</b> and <b>QDataStream</b>: Facilitate TCP communication and data transfer.</li>
+</ul>
+</li>
+<li><b>GUI</b>:<ul>
+<li><code><a class="el" href="classSchachApp.html" title="Manages the user interface for the chess game, displaying the board and interacting with the user.">SchachApp</a></code>: Provides the interface for player interaction, game control, and visual display.</li>
+<li>Built using <code>QWidget</code> and Qt’s event handling system.</li>
+</ul>
+</li>
+</ol>
+<h2>Memory Management</h2>
+<ul>
+<li>Utilizes <b>smart pointers</b> (<code>std::unique_ptr</code>, <code>std::shared_ptr</code>) for automatic memory management and prevention of memory leaks.</li>
+<li>Memory issues were tracked and resolved using <b>Valgrind</b>.</li>
+</ul>
+<h1>Build and Run with Automatically Generated Executables</h1>
+<p>Pre-built binaries for Windows, macOS, and Linux are available in the <a href="https://github.com/Charly-62/QtChessApp/releases/latest">latest release</a>.</p>
+<h2><b>Windows</b></h2>
+<ol type="1">
+<li><b>Download</b> the latest Windows ZIP file from <a href="https://github.com/Charly-62/QtChessApp/releases/latest/download/QtChessApp_Windows.zip">here</a>.</li>
+<li><b>Extract</b> the contents of the ZIP file.</li>
+<li><b>Run</b> <code>schach.exe</code> to start the application.</li>
+</ol>
+<h2><b>macOS</b></h2>
+<ol type="1">
+<li><b>Download</b> the latest macOS ZIP file from <a href="https://github.com/Charly-62/QtChessApp/releases/latest/download/QtChessApp_macOS.zip">here</a>.</li>
+<li><b>Open the app</b>:<ul>
+<li><b>Right-click</b> (not left-click!) <code>Schach.app</code> and select <b>Open</b>.</li>
+<li>If you see a message saying "the developer cannot be verified" click <b>Open</b> again to run the app.</li>
+</ul>
+</li>
+</ol>
+<h2><b>Linux</b></h2>
+<ol type="1">
+<li><b>Download</b> the latest AppImage file from <a href="https://github.com/Charly-62/QtChessApp/releases/latest/download/QtChessApp_Linux.AppImage">here</a>.</li>
+<li><b>Make the AppImage executable</b>:</li>
+</ol>
+<div class="fragment"><div class="line">chmod +x QtChessApp_Linux.AppImage</div>
+</div><!-- fragment --><ol type="1">
+<li><b>Install FUSE if not allready installed</b></li>
+</ol>
+<div class="fragment"><div class="line">sudo pacman -S fuse2 -y</div>
+</div><!-- fragment --><ol type="1">
+<li><b>Run the AppImage</b>:</li>
+</ol>
+<div class="fragment"><div class="line">./QtChessApp_Linux.AppImage</div>
+</div><!-- fragment --><h2><b>Note on Third-Party Antivirus Protection</b></h2>
+<p>Some third-party antivirus programs (such as ESET) may flag or block <code>schach.exe</code> due to it being an unsigned executable. If you encounter issues running the application, you may need to temporarily disable protection or add <code>schach.exe</code> to ESET's exclusions. Windows Defender is not a problem, just some external protection programs.</p>
+<p>If you still have concerns about the safety of the executable, you can:</p>
+<ul>
+<li><b>Verify the Build Process:</b> The executable is generated using a public GitHub Actions workflow, which you can review in the <a href="https://github.com/Charly-62/QtChessApp/actions">Actions tab</a> of this repository. This workflow runs the build process openly and securely.</li>
+<li><b>Build the Program Yourself:</b> You can follow the steps in the next section to build the application from source using Qt. This ensures you have full control over the build process and can verify its integrity.</li>
+</ul>
+<h1>Build and run from Source (Alternatively)</h1>
+<p>To build and run the project from source, ensure you have Qt5 (or higher) installed.</p>
+<h2><b>Build</b></h2>
+<ol type="1">
+<li><b>Clone the repository</b>:</li>
+</ol>
+<div class="fragment"><div class="line">git clone https://github.com/Charly-62/QtChessApp.git QtChessApp</div>
+</div><!-- fragment --><ol type="1">
+<li><b>Open the project file <code>schach.pro</code> in Qt Creator and build the project.</b></li>
+</ol>
+<h2><b>Alternatively, build from the command line:</b></h2>
+<p><b>Linux and macOS</b>:</p>
+<div class="fragment"><div class="line">cd QtChessApp</div>
+<div class="line">mkdir build</div>
+<div class="line">cd build</div>
+<div class="line">qmake ../schach/schach.pro</div>
+<div class="line">make</div>
+<div class="line">./schach</div>
+</div><!-- fragment --><p><b>Windows</b>:</p>
+<div class="fragment"><div class="line">cd QtChessApp</div>
+<div class="line">mkdir build</div>
+<div class="line">cd build</div>
+<div class="line">qmake ..\schach\schach.pro</div>
+<div class="line">nmake</div>
+<div class="line">schach.exe</div>
+</div><!-- fragment --><h1>Continuous Documentation</h1>
+<p>The project is documented with Doxygen, and documentation is automatically generated and published with every push using GitHub Actions and a CI Workflow. The latest documentation is available at: <a href="https://Charly-62.github.io/QtChessApp/">https://Charly-62.github.io/QtChessApp/</a>. </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
